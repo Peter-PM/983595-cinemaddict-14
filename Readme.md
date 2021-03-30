@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Петр Масляный](https://up.htmlacademy.ru/ecmascript/14/user/983595).
-* Наставник: `Неизвестно`.
+* Наставник: [Алексей Корякин](https://htmlacademy.ru/profile/alexeycorr).
 
 ---
 
