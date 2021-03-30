@@ -3,7 +3,7 @@ import {createSiteUserRatingTemplate} from './view/user-rating.js';
 import {createFilmListTemplate} from './view/film-list.js';
 import {createFilmCardTemplate} from './view/film-card.js';
 import {createShowMoreButtonTemplate} from './view/show-more.js';
-import {createFilmPopupTemplate} from './view/film-details-popup.js';
+//import {createFilmPopupTemplate} from './view/film-details-popup.js';
 import {createFooterStatisticTemplate} from './view/footer-statistic.js';
 import {createFilmListTopTemplate} from './view/film-list-top.js';
 import {createFilmListCommentTemplate} from './view/film-list-comment.js';
@@ -28,7 +28,7 @@ const filmListContainer = document.querySelector('.films-list__container');
 
 for (let i = 0; i < TASK_COUNT; i++) {
   render(filmListContainer, createFilmCardTemplate());
-};
+}
 
 render(filmList, createShowMoreButtonTemplate());
 //render(siteMainElement, createFilmPopupTemplate());
@@ -38,12 +38,11 @@ render(filmSection, createFilmListCommentTemplate());
 
 const filmsList = document.querySelectorAll('.films-list--extra');
 
-console.log(filmsList)
 filmsList.forEach((el) => {
   for (let i = 0; i < 2; i++) {
-    let cont = el.querySelector('.films-list__container');
-    render(cont, createFilmCardTemplate());
-  };
-})
+    const container = el.querySelector('.films-list__container');
+    render(container, createFilmCardTemplate());
+  }
+});
 
 render(siteFooterStatisticElement, createFooterStatisticTemplate());
