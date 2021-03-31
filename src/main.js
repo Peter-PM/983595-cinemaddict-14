@@ -37,7 +37,7 @@ const siteFooterStatisticElement = document.querySelector('.footer__statistics')
 render(siteHeaderLogoElement, createSiteUserRatingTemplate());
 render(siteMainElement, createSiteMenuTemplate());
 render(siteMainElement, createSortFilmsTemplate());
-render(siteMainElement, createFilmListContainerTemplate())
+render(siteMainElement, createFilmListContainerTemplate());
 
 const filmSection = document.querySelector('.films');
 
