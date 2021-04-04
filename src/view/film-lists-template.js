@@ -1,4 +1,5 @@
-export const createFilmListsTemplate = (title, secondClass, titleClass) => {
+export const createFilmListsTemplate = (FilmListType) => {
+ const {secondClass, titleClass, title} = FilmListType;
   return `
   <section class="films-list ${secondClass}">
     <h2 class="films-list__title ${titleClass}">${title}</h2>

@@ -132,6 +132,10 @@ const createPoster = () => {
   return posters[getRandomNumber(0, posters.length - 1)]
 }
 
+const createComments = () => {
+  return new Array(getRandomNumber(0,5))
+}
+
 export const createFilmContent = () => {
   return {
     poster: createPoster(),
@@ -147,7 +151,7 @@ export const createFilmContent = () => {
     genre: createGenre(),
     description: createDescription(),
     ageRating: getRandomNumber(6,18) + '+',
-    quantityComments: [],
+    quantityComments: createComments(),
     isWatchlist: Boolean(getRandomNumber(0,1)),
     isWatched: Boolean(getRandomNumber(0,1)),
     isFavorite: Boolean(getRandomNumber(0,1)),
