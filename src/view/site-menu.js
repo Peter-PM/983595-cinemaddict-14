@@ -1,14 +1,14 @@
 export const createSiteMenuTemplate = (films) => {
 
   const watchlistNumbers = films.filter((item) => {
-    return item.isWatchlist === true
-  })
+    return item.isWatchlist === true;
+  });
   const watchedNumbers = films.filter((item) => {
-    return item.isWatched === true
-  })
+    return item.isWatched === true;
+  });
   const favoriteNumbers = films.filter((item) => {
-    return item.isFavorite === true
-  })
+    return item.isFavorite === true;
+  });
 
   return `
   <nav class="main-navigation">

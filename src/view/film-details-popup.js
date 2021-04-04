@@ -1,20 +1,17 @@
-import dayjs from 'dayjs';
-
 export const createFilmPopupTemplate = (filmCard) => {
   const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, quantityComments, isWatchlist, isWatched, isFavorite} = filmCard;
   const genres = genre.split(', ');
-  console.log(genres);
 
   const createGenreList = () => {
     let strigGenre = '';
     genres.forEach((item) => {
-      strigGenre = strigGenre + `<span class="film-details__genre">${item}</span>`
-    })
-    return strigGenre
-  }
+      strigGenre = strigGenre + `<span class="film-details__genre">${item}</span>`;
+    });
+    return strigGenre;
+  };
   const createPluralGenre = () => {
-    return genres.length > 1 ? 'Genres' : 'Genre'
-  }
+    return genres.length > 1 ? 'Genres' : 'Genre';
+  };
 
   const activeWatchlist = isWatchlist ? 'checked' : '' ;
   const activeWatched = isWatched ? 'checked' : '' ;

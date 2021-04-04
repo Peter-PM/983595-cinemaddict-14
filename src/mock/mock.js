@@ -1,19 +1,19 @@
 import dayjs from 'dayjs';
 
-export const getRandomNumber = function(min, max) {
+export const getRandomNumber = function (min, max) {
 
   if (min > max) {
-    [min, max] = [max, min]
+    [min, max] = [max, min];
   }
 
   return Math.floor(min + Math.random() * (max + 1 - min));
-}
+};
 
 const randomArrayLength = (arr, separator) => {
   const Length = getRandomNumber(1, arr.length);
   const newArr = arr.slice(0, Length).join(separator);
-  return newArr
-}
+  return newArr;
+};
 
 const createTitle = () => {
   const title = [
@@ -21,10 +21,10 @@ const createTitle = () => {
     'справедливости',
     'Зака',
     'Снайдера',
-  ]
+  ];
 
-  return randomArrayLength(title, ' ')
-}
+  return randomArrayLength(title, ' ');
+};
 
 const createAltTitle = () => {
   const altTitle = [
@@ -32,10 +32,10 @@ const createAltTitle = () => {
     'Snyders',
     'Justice',
     'League',
-  ]
+  ];
 
-  return randomArrayLength(altTitle, ' ')
-}
+  return randomArrayLength(altTitle, ' ');
+};
 
 const createDirector = () => {
   const directors = [
@@ -45,27 +45,27 @@ const createDirector = () => {
     'Стивен Спилберг',
     'Стэнли Кубрик',
     'Альфред Хичкок',
-  ]
+  ];
 
-  return directors[getRandomNumber(0, directors.length - 1)]
-}
+  return directors[getRandomNumber(0, directors.length - 1)];
+};
 
 const createActors = () => {
   const actors = [
-  'Бен Аффлек',
-  'Галь Гадот',
-  'Генри Кавилл',
-  'Джейсон Момоа',
-  'Эзра Миллер',
-  'Рэй Фишер',
-  'Эми Адамс',
-  'Джереми Айронс',
-  'Дайан Лэйн',
-  'Джаред Лето',
-];
+    'Бен Аффлек',
+    'Галь Гадот',
+    'Генри Кавилл',
+    'Джейсон Момоа',
+    'Эзра Миллер',
+    'Рэй Фишер',
+    'Эми Адамс',
+    'Джереми Айронс',
+    'Дайан Лэйн',
+    'Джаред Лето',
+  ];
 
-  return randomArrayLength(actors, ', ')
-}
+  return randomArrayLength(actors, ', ');
+};
 
 const createDescription = () => {
   const description = [
@@ -76,28 +76,28 @@ const createDescription = () => {
     'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
   ];
 
-  return randomArrayLength(description, '')
-}
+  return randomArrayLength(description, '');
+};
 
 const createCountry = () => {
   const countrys = [
     'США',
     'Великобритания',
     'Россия',
-  ]
+  ];
 
-  return countrys[getRandomNumber(0, countrys.length - 1)]
-}
+  return countrys[getRandomNumber(0, countrys.length - 1)];
+};
 
 const createGenre = () => {
   const genres = [
     'фантастика',
     'боевик',
     'фэнтези',
-  ]
+  ];
 
-  return randomArrayLength(genres, ', ')
-}
+  return randomArrayLength(genres, ', ');
+};
 
 const createWriters = () => {
   const writers = [
@@ -106,21 +106,21 @@ const createWriters = () => {
     'Джо Шустер',
     'Зак Снайдер',
     'Уилл Билл',
-  ]
+  ];
 
-  return randomArrayLength(writers, ', ')
-}
+  return randomArrayLength(writers, ', ');
+};
 
 const generateDate = () => {
 
   const maxDaysGap = 10;
   const daysGap = getRandomNumber(-maxDaysGap, maxDaysGap);
-  return dayjs(dayjs().add(daysGap, 'day').toDate()).format('DD MMMM YYYY')
+  return dayjs(dayjs().add(daysGap, 'day').toDate()).format('DD MMMM YYYY');
 };
 
 const generateDuratuion = () => {
-  return getRandomNumber(1,4) + 'h ' + getRandomNumber(1,59) + 'm'
-}
+  return getRandomNumber(1, 4) + 'h ' + getRandomNumber(1, 59) + 'm';
+};
 
 const createPoster = () => {
   const posters = [
@@ -128,20 +128,21 @@ const createPoster = () => {
     './images/posters/league2.webp',
     './images/posters/league3.webp',
     './images/posters/league4.webp',
-  ]
-  return posters[getRandomNumber(0, posters.length - 1)]
-}
+  ];
+
+  return posters[getRandomNumber(0, posters.length - 1)];
+};
 
 const createComments = () => {
-  return new Array(getRandomNumber(0,5))
-}
+  return new Array(getRandomNumber(0, 5));
+};
 
 export const createFilmContent = () => {
   return {
     poster: createPoster(),
     title: createTitle(),
     originalTitle: createAltTitle(),
-    rating: (Math.random()*10).toFixed(1),
+    rating: (Math.random() * 10).toFixed(1),
     director: createDirector(),
     writers: createWriters(),
     actors: createActors(),
@@ -150,10 +151,10 @@ export const createFilmContent = () => {
     country: createCountry(),
     genre: createGenre(),
     description: createDescription(),
-    ageRating: getRandomNumber(6,18) + '+',
+    ageRating: getRandomNumber(6, 18) + '+',
     quantityComments: createComments(),
-    isWatchlist: Boolean(getRandomNumber(0,1)),
-    isWatched: Boolean(getRandomNumber(0,1)),
-    isFavorite: Boolean(getRandomNumber(0,1)),
+    isWatchlist: Boolean(getRandomNumber(0, 1)),
+    isWatched: Boolean(getRandomNumber(0, 1)),
+    isFavorite: Boolean(getRandomNumber(0, 1)),
   };
-}
+};

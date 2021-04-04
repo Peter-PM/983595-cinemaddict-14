@@ -17,7 +17,6 @@ const films = new Array(FILMS_COUNT).fill().map(createFilmContent);
 const topRatedFilms = new Array(FILMS_COUNT).fill().map(createFilmContent);
 const topCommentFilms = new Array(FILMS_COUNT).fill().map(createFilmContent);
 
-console.log(films);
 
 const FilmListTypes = {
   ALL_MOVIES: {
