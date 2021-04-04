@@ -7,9 +7,13 @@ import {createShowMoreButtonTemplate} from './view/show-more.js';
 //import {createFilmPopupTemplate} from './view/film-details-popup.js';
 import {createFooterStatisticTemplate} from './view/footer-statistic.js';
 import {createFilmListsTemplate} from './view/film-lists-template.js';
+import {createFilmContent} from './mock/mock.js';
 
-const FILMS_COUNT = 5;
+const FILMS_COUNT = 10;
 const TOP_FILMS_COUNT = 2;
+
+const films = new Array(FILMS_COUNT).fill().map(createFilmContent);
+console.log(films);
 
 const FilmListTypes = {
   ALL_MOVIES: {
@@ -47,7 +51,7 @@ const filmListContainer = filmSection.querySelector('.films-list__container');
 const filmList = document.querySelector('.films-list');
 
 for (let i = 0; i < FILMS_COUNT; i++) {
-  render(filmListContainer, createFilmCardTemplate());
+  render(filmListContainer, createFilmCardTemplate(films[i]));
 }
 
 render(filmList, createShowMoreButtonTemplate());
