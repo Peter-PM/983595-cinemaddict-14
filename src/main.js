@@ -21,18 +21,18 @@ const topCommentFilms = new Array(FILMS_COUNT).fill().map(createFilmContent);
 const FilmListTypes = {
   ALL_MOVIES: {
     title: 'All movies. Upcoming',
-    titleClass: 'visually-hidden',
-    secondClass: '',
+    isHidden: true,
+    isExtra: false,
   },
   TOP_MOVIES: {
     title: 'Top rated',
-    titleClass: '',
-    secondClass: 'films-list--extra',
+    isHidden: false,
+    isExtra: true,
   },
   COMMENTED_MOVIES: {
     title: 'Most commented',
-    titleClass: '',
-    secondClass: 'films-list--extra',
+    isHidden: false,
+    isExtra: true,
   },
 };
 
@@ -41,10 +41,10 @@ const render = (container, template, place = 'beforeend') => {
 };
 
 const siteMainElement = document.querySelector('.main');
-const siteHeaderLogoElement = document.querySelector('.header__logo');
+const siteHeader = document.querySelector('.header');
 const siteFooterStatisticElement = document.querySelector('.footer__statistics');
 
-render(siteHeaderLogoElement, createSiteUserRatingTemplate());
+render(siteHeader, createSiteUserRatingTemplate());
 render(siteMainElement, createSiteMenuTemplate(films));
 render(siteMainElement, createSortFilmsTemplate());
 render(siteMainElement, createFilmListContainerTemplate());
