@@ -69,6 +69,7 @@ export const createFilmPopupTemplate = (filmCard) => {
         check: isFavorite ? 'checked' : '',
       },
     ];
+
     return inputsCustom.map(({id, title, check}) => `
       <input type="checkbox" class="film-details__control-input visually-hidden" id="${id}" name="${id}" ${check}>
       <label for="${id}" class="film-details__control-label film-details__control-label--${id}">${title}</label>`).join('');
@@ -82,44 +83,6 @@ export const createFilmPopupTemplate = (filmCard) => {
         <img src="./images/emoji/${item}.png" width="30" height="30" alt="emoji">
       </label>`).join('');
   };
-
-
-  // const arr = [
-  //   {
-  //     term: 'Director',
-  //     cell: director,
-  //   },
-  //   {
-  //     term: 'Writers',
-  //     cell: writers,
-  //   },
-  //   {
-  //     term: 'Actors',
-  //     cell: actors,
-  //   },
-  //   {
-  //     term: 'Release Date',
-  //     cell: reliseDate,
-  //   },
-  //   {
-  //     term: 'Runtime',
-  //     cell: timeAdapter(duration),
-  //   },
-  //   {
-  //     term: 'Country',
-  //     cell: country,
-  //   },
-  //   {
-  //     term: genres.length === 1 ? 'Genre' : 'Genres',
-  //     cell: createGenreList(),
-  //   },
-  // ]
-
-  // console.log(arr.map(({term,cell}) => { return `<tr class="film-details__row">
-  //   <td class="film-details__term">${term}</td>
-  //   <td class="film-details__cell">${cell}</td>
-  // </tr>`}).join(''));
-
 
   return (
     `<section class="film-details">

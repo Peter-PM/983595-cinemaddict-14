@@ -6,27 +6,27 @@ export const createFilmCardTemplate = (filmCard) => {
   const date = dateFormatYYYY(reliseDate);
   const numberComments = quantityComments.length;
 
-  const buttonsCustom =  {
-    watchlist: [
-      'film-card__controls-item--add-to-watchlist',
-      isWatchlist ? 'film-card__controls-item--active' : '',
-      'Add to watchlist',
-    ],
-    watched: [
-      'film-card__controls-item--mark-as-watched',
-      isWatched ? 'film-card__controls-item--active' : '',
-      'Mark as watched',
-    ],
-    favorite: [
-      'film-card__controls-item--favorite',
-      isFavorite ? 'film-card__controls-item--active' : '',
-      'Mark as favorite',
-    ],
+  const createButtons = () => {
+    const buttonsCustom =  [
+      {
+        modifier: 'film-card__controls-item--add-to-watchlist',
+        activ: isWatchlist ? 'film-card__controls-item--active' : '',
+        title: 'Add to watchlist',
+      },
+      {
+        modifier: 'film-card__controls-item--mark-as-watched',
+        activ: isWatched ? 'film-card__controls-item--active' : '',
+        title: 'Mark as watched',
+      },
+      {
+        modifier: 'film-card__controls-item--favorite',
+        activ: isFavorite ? 'film-card__controls-item--active' : '',
+        title: 'Mark as favorite',
+      },
+    ];
+    return buttonsCustom.map(({modif, activ, title}) => `<button class="film-card__controls-item button ${modif} ${activ}" type="button" >${title}</button>`).join('');
   };
 
-  const createButtons = (item) =>{
-    return Object.values(item).map(([modifier, activ, title]) => `<button class="film-card__controls-item button ${modifier} ${activ}" type="button" >${title}</button>`).join('');
-  };
   const createDiscription = () => {
     return description.length >= MAX_LENGTH_DESCRIPTION ? description.slice(0, MAX_LENGTH_DESCRIPTION) + '...' : description;
   };
@@ -45,7 +45,7 @@ export const createFilmCardTemplate = (filmCard) => {
       ${createDiscription()}</p>
       <a class="film-card__comments">${numberComments} comments</a>
       <div class="film-card__controls">
-        ${createButtons(buttonsCustom)}
+        ${createButtons()}
       </div>
     </article>`
   );
