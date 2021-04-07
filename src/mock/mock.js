@@ -1,13 +1,5 @@
-import dayjs from 'dayjs';
-
-export const getRandomNumber = function (min, max) {
-
-  if (min > max) {
-    [min, max] = [max, min];
-  }
-
-  return Math.floor(min + Math.random() * (max + 1 - min));
-};
+import {generateDate} from '../utils/date.js';
+import {getRandomNumber} from '../utils/util.js';
 
 const randomArrayLength = (arr, separator) => {
   const Length = getRandomNumber(1, arr.length);
@@ -111,15 +103,8 @@ const createWriters = () => {
   return randomArrayLength(writers, ', ');
 };
 
-const generateDate = () => {
-
-  const maxDaysGap = 10;
-  const daysGap = getRandomNumber(-maxDaysGap, maxDaysGap);
-  return dayjs(dayjs().add(daysGap, 'day').toDate()).format('DD MMMM YYYY');
-};
-
 const generateDuratuion = () => {
-  return getRandomNumber(1, 4) + 'h ' + getRandomNumber(1, 59) + 'm';
+  return getRandomNumber(90, 250);
 };
 
 const createPoster = () => {
@@ -134,7 +119,7 @@ const createPoster = () => {
 };
 
 const createComments = () => {
-  return new Array(getRandomNumber(0, 5));
+  return new Array(getRandomNumber(0, 100));
 };
 
 export const createFilmContent = () => {

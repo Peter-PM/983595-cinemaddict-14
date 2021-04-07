@@ -1,12 +1,35 @@
-import dayjs from 'dayjs';
+import {dateFormatYYYY, timeAdapter} from '../utils/date.js';
 
 export const createFilmCardTemplate = (filmCard) => {
+  const MAX_LENGTH_DESCRIPTION = 139;
   const {poster, title, rating, duration, genre, reliseDate, description, quantityComments, isWatchlist, isWatched, isFavorite} = filmCard;
-  const date = dayjs(reliseDate).format('YYYY');
+  const date = dateFormatYYYY(reliseDate);
   const numberComments = quantityComments.length;
-  const activeWatchlistClass = isWatchlist ? 'film-card__controls-item--active' : '' ;
-  const activeWatchedClass = isWatched ? 'film-card__controls-item--active' : '' ;
-  const activeFavoriteClass = isFavorite ? 'film-card__controls-item--active' : '' ;
+
+  const buttonsCustom =  {
+    watchlist: [
+      'film-card__controls-item--add-to-watchlist',
+      isWatchlist ? 'film-card__controls-item--active' : '',
+      'Add to watchlist',
+    ],
+    watched: [
+      'film-card__controls-item--mark-as-watched',
+      isWatched ? 'film-card__controls-item--active' : '',
+      'Mark as watched',
+    ],
+    favorite: [
+      'film-card__controls-item--favorite',
+      isFavorite ? 'film-card__controls-item--active' : '',
+      'Mark as favorite',
+    ],
+  };
+
+  const createButtons = (item) =>{
+    return Object.values(item).map(([modifier, activ, title]) => `<button class="film-card__controls-item button ${modifier} ${activ}" type="button" >${title}</button>`).join('');
+  };
+  const createDiscription = () => {
+    return description.length >= MAX_LENGTH_DESCRIPTION ? description.slice(0, MAX_LENGTH_DESCRIPTION) + '...' : description;
+  };
 
   return (
     `<article class="film-card">
@@ -14,17 +37,15 @@ export const createFilmCardTemplate = (filmCard) => {
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${date}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${timeAdapter(duration)}</span>
         <span class="film-card__genre">${genre}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">
       <p class="film-card__description">
-      ${description.length > 140 ? description.slice(0, 139) + '...' : description}</p>
+      ${createDiscription()}</p>
       <a class="film-card__comments">${numberComments} comments</a>
       <div class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${activeWatchlistClass}" type="button" >Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${activeWatchedClass}" type="button">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite ${activeFavoriteClass}" type="button">Mark as favorite</button>
+        ${createButtons(buttonsCustom)}
       </div>
     </article>`
   );

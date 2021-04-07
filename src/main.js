@@ -14,9 +14,16 @@ const FILMS_COUNT_STEP = 5;
 const TOP_FILMS_COUNT = 2;
 
 const films = new Array(FILMS_COUNT).fill().map(createFilmContent);
-const topRatedFilms = new Array(FILMS_COUNT).fill().map(createFilmContent);
-const topCommentFilms = new Array(FILMS_COUNT).fill().map(createFilmContent);
+const topRatedFilms = Array.from(films);
+const topCommentFilms = Array.from(films);
 
+topRatedFilms.sort((item1, item2) => {
+  return item2.rating - item1.rating;
+});
+
+topCommentFilms.sort((item1, item2) => {
+  return item2.quantityComments.length - item1.quantityComments.length;
+});
 
 const FilmListTypes = {
   ALL_MOVIES: {
@@ -77,4 +84,4 @@ for (let i = 0; i < TOP_FILMS_COUNT; i++) {
   render(container2, createFilmCardTemplate(topCommentFilms[i]));
 }
 
-render(siteFooterStatisticElement, createFooterStatisticTemplate());
+render(siteFooterStatisticElement, createFooterStatisticTemplate(FILMS_COUNT));
