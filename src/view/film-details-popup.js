@@ -1,4 +1,4 @@
-import {timeAdapter} from '../utils/date.js';
+import {timeAdapter, dateFormatDDMMMMYYYY} from '../utils/date.js';
 
 export const createFilmPopupTemplate = (filmCard) => {
   const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, quantityComments, isWatchlist, isWatched, isFavorite} = filmCard;
@@ -13,37 +13,38 @@ export const createFilmPopupTemplate = (filmCard) => {
   };
 
   const createDetailsTable = () => {
-    const filmDetails = {
-      director: [
-        'Director',
-        director,
-      ],
-      writers: [
-        'Writers',
-        writers,
-      ],
-      actors: [
-        'Actors',
-        actors,
-      ],
-      relise: [
-        'Release Date',
-        reliseDate,
-      ],
-      runtime: [
-        'Runtime',
-        timeAdapter(duration),
-      ],
-      country: [
-        'Country',
-        country,
-      ],
-      genre: [
-        genres.length === 1 ? 'Genre' : 'Genres',
-        createGenreList(),
-      ],
-    };
-    return Object.values(filmDetails).map(([term, cell]) => `
+    const filmDetails = [
+      {
+        term: 'Director',
+        cell: director,
+      },
+      {
+        term: 'Writers',
+        cell: writers,
+      },
+      {
+        term: 'Actors',
+        cell: actors,
+      },
+      {
+        term: 'Release Date',
+        cell: dateFormatDDMMMMYYYY(reliseDate),
+      },
+      {
+        term: 'Runtime',
+        cell: timeAdapter(duration),
+      },
+      {
+        term: 'Country',
+        cell: country,
+      },
+      {
+        term: genres.length === 1 ? 'Genre' : 'Genres',
+        cell: createGenreList(),
+      },
+    ];
+
+    return filmDetails.map(({term, cell}) => `
       <tr class="film-details__row">
         <td class="film-details__term">${term}</td>
         <td class="film-details__cell">${cell}</td>
@@ -51,23 +52,26 @@ export const createFilmPopupTemplate = (filmCard) => {
   };
 
   const createInput = () => {
-    const inputsCustom = {
-      watchlist: [
-        'Add to watchlist',
-        isWatchlist ? 'checked' : '',
-      ],
-      watched: [
-        'Already watched',
-        isWatched ? 'checked' : '',
-      ],
-      favorite: [
-        'Add to favorites',
-        isFavorite ? 'checked' : '',
-      ],
-    };
-    return Object.entries(inputsCustom).map(([key, [caption, check]]) => `
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="${key}" name="${key}" ${check}>
-      <label for="${key}" class="film-details__control-label film-details__control-label--${key}">${caption}</label>`).join('');
+    const inputsCustom = [
+      {
+        id: 'watchlist',
+        title: 'Add to watchlist',
+        check: isWatchlist ? 'checked' : '',
+      },
+      {
+        id: 'watched',
+        title: 'Already watched',
+        check: isWatched ? 'checked' : '',
+      },
+      {
+        id: 'favorite',
+        title: 'Add to favorites',
+        check: isFavorite ? 'checked' : '',
+      },
+    ];
+    return inputsCustom.map(({id, title, check}) => `
+      <input type="checkbox" class="film-details__control-input visually-hidden" id="${id}" name="${id}" ${check}>
+      <label for="${id}" class="film-details__control-label film-details__control-label--${id}">${title}</label>`).join('');
   };
 
   const createEmoji = () => {
@@ -78,6 +82,44 @@ export const createFilmPopupTemplate = (filmCard) => {
         <img src="./images/emoji/${item}.png" width="30" height="30" alt="emoji">
       </label>`).join('');
   };
+
+
+  // const arr = [
+  //   {
+  //     term: 'Director',
+  //     cell: director,
+  //   },
+  //   {
+  //     term: 'Writers',
+  //     cell: writers,
+  //   },
+  //   {
+  //     term: 'Actors',
+  //     cell: actors,
+  //   },
+  //   {
+  //     term: 'Release Date',
+  //     cell: reliseDate,
+  //   },
+  //   {
+  //     term: 'Runtime',
+  //     cell: timeAdapter(duration),
+  //   },
+  //   {
+  //     term: 'Country',
+  //     cell: country,
+  //   },
+  //   {
+  //     term: genres.length === 1 ? 'Genre' : 'Genres',
+  //     cell: createGenreList(),
+  //   },
+  // ]
+
+  // console.log(arr.map(({term,cell}) => { return `<tr class="film-details__row">
+  //   <td class="film-details__term">${term}</td>
+  //   <td class="film-details__cell">${cell}</td>
+  // </tr>`}).join(''));
+
 
   return (
     `<section class="film-details">
@@ -143,3 +185,5 @@ export const createFilmPopupTemplate = (filmCard) => {
     </section>`
   );
 };
+
+
