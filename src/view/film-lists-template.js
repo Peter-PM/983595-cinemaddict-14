@@ -1,4 +1,6 @@
-export const createFilmListsTemplate = (FilmListType) => {
+import {createElement} from '../utils/render.js';
+
+const createFilmListsTemplate = (FilmListType) => {
   const {isHidden, isExtra, title} = FilmListType;
   return (
     `<section class="films-list ${isExtra ? 'films-list--extra' : ''}">
@@ -7,3 +9,26 @@ export const createFilmListsTemplate = (FilmListType) => {
     </section>`
   );
 };
+
+export default class FilmList {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate(elem) {
+    return createFilmListsTemplate(elem);
+  }
+
+  getElement(elem) {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(elem));
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+

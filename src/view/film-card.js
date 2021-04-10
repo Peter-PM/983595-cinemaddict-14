@@ -1,6 +1,7 @@
 import {dateFormatYYYY, timeAdapter} from '../utils/date.js';
+import {createElement} from '../utils/render.js';
 
-export const createFilmCardTemplate = (filmCard) => {
+const createFilmCardTemplate = (filmCard) => {
   const MAX_LENGTH_DESCRIPTION = 139;
   const {poster, title, rating, duration, genre, reliseDate, description, quantityComments, isWatchlist, isWatched, isFavorite} = filmCard;
   const date = dateFormatYYYY(reliseDate);
@@ -24,7 +25,7 @@ export const createFilmCardTemplate = (filmCard) => {
         title: 'Mark as favorite',
       },
     ];
-    return buttonsCustom.map(({modif, activ, title}) => `<button class="film-card__controls-item button ${modif} ${activ}" type="button" >${title}</button>`).join('');
+    return buttonsCustom.map(({modifier, activ, title}) => `<button class="film-card__controls-item button ${modifier} ${activ}" type="button" >${title}</button>`).join('');
   };
 
   const createDiscription = () => {
@@ -50,3 +51,25 @@ export const createFilmCardTemplate = (filmCard) => {
     </article>`
   );
 };
+
+export default class FilmCard {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate(elem) {
+    return createFilmCardTemplate(elem);
+  }
+
+  getElement(elem) {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(elem));
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
