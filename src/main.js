@@ -29,18 +29,19 @@ topCommentFilms.sort((item1, item2) => {
 const renderFilmCard = (parentElement, film) => {
   const filmCard = new FilmCardView().getElement(film);
   const filmPopup = new FilmPopupView().getElement(film);
-  filmCard.querySelector('.film-card__title').style = 'cursor: pointer'
+
+  filmCard.querySelector('.film-card__title').style = 'cursor: pointer';
+
   filmCard.querySelector('.film-card__title').addEventListener('click', () => {
     render(siteMainElement, filmPopup);
   });
-  console.log(filmCard.querySelector('.film-card__title'));
 
   filmPopup.querySelector('.film-details__close-btn').addEventListener('click', (evt) => {
     evt.preventDefault();
     filmPopup.remove();
   });
 
-  render(parentElement, filmCard)
+  render(parentElement, filmCard);
 };
 
 const siteMainElement = document.querySelector('.main');
@@ -64,7 +65,6 @@ for (let i = 0; i < FILMS_COUNT_STEP; i++) {
 }
 
 render(filmList, new ShowMoreBottonView().getElement());
-//render(siteMainElement, new FilmPopupView().getElement(films[0]));
 
 render(filmSection, new FilmListView().getElement(FilmListTypes.TOP_MOVIES));
 render(filmSection, new FilmListView().getElement(FilmListTypes.COMMENTED_MOVIES));
