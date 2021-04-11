@@ -53,6 +53,12 @@ const renderFilmCard = (parentElement, film) => {
     render(siteMainElement, filmPopup);
   });
 
+  filmCard.querySelector('.film-card__comments').addEventListener('click', () => {
+    //parentElement.appendChild(filmPopup);
+    document.addEventListener('keydown', onEscKeyDown);
+    render(siteMainElement, filmPopup);
+  });
+
   filmPopup.querySelector('.film-details__close-btn').addEventListener('click', (evt) => {
     evt.preventDefault();
     //parentElement.replaceChild(filmCard, filmPopup);
