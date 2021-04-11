@@ -4,7 +4,7 @@ import UserRatingView from './view/user-rating.js';
 import FilmContainerView from './view/film-list-container.js';
 import FilmCardView from './view/film-card.js';
 import ShowMoreBottonView from './view/show-more.js';
-//import {createFilmPopupTemplate} from './view/film-details-popup.js';
+import FilmPopupView from './view/film-details-popup.js';
 import FooterFilmInfo from './view/footer-statistic.js';
 import FilmListView from './view/film-lists-template.js';
 import {createFilmContent} from './mock/mock.js';
@@ -26,6 +26,23 @@ topCommentFilms.sort((item1, item2) => {
   return item2.quantityComments.length - item1.quantityComments.length;
 });
 
+const renderFilmCard = (parentElement, film) => {
+  const filmCard = new FilmCardView().getElement(film);
+  const filmPopup = new FilmPopupView().getElement(film);
+  filmCard.querySelector('.film-card__title').style = 'cursor: pointer'
+  filmCard.querySelector('.film-card__title').addEventListener('click', () => {
+    render(siteMainElement, filmPopup);
+  });
+  console.log(filmCard.querySelector('.film-card__title'));
+
+  filmPopup.querySelector('.film-details__close-btn').addEventListener('click', (evt) => {
+    evt.preventDefault();
+    filmPopup.remove();
+  });
+
+  render(parentElement, filmCard)
+};
+
 const siteMainElement = document.querySelector('.main');
 const siteHeader = document.querySelector('.header');
 const siteFooterStatisticElement = document.querySelector('.footer__statistics');
@@ -43,11 +60,11 @@ const filmListContainer = filmSection.querySelector('.films-list__container');
 const filmList = document.querySelector('.films-list');
 
 for (let i = 0; i < FILMS_COUNT_STEP; i++) {
-  render(filmListContainer, new FilmCardView().getElement(films[i]));
+  renderFilmCard(filmListContainer, films[i]);
 }
 
 render(filmList, new ShowMoreBottonView().getElement());
-//render(siteMainElement, createFilmPopupTemplate(films[0]));
+//render(siteMainElement, new FilmPopupView().getElement(films[0]));
 
 render(filmSection, new FilmListView().getElement(FilmListTypes.TOP_MOVIES));
 render(filmSection, new FilmListView().getElement(FilmListTypes.COMMENTED_MOVIES));
@@ -56,11 +73,11 @@ const filmsList = document.querySelectorAll('.films-list--extra');
 
 const containerRating = filmsList[0].querySelector('.films-list__container');
 for (let i = 0; i < TOP_FILMS_COUNT; i++) {
-  render(containerRating, new FilmCardView().getElement(topRatedFilms[i]));
+  renderFilmCard(containerRating, topRatedFilms[i]);
 }
 const containerComment = filmsList[1].querySelector('.films-list__container');
 for (let i = 0; i < TOP_FILMS_COUNT; i++) {
-  render(containerComment, new FilmCardView().getElement(topCommentFilms[i]));
+  renderFilmCard(containerComment, topCommentFilms[i]);
 }
 
 render(siteFooterStatisticElement, new FooterFilmInfo().getElement(FILMS_COUNT));

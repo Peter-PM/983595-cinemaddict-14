@@ -1,6 +1,7 @@
 import {timeAdapter, dateFormatDDMMMMYYYY} from '../utils/date.js';
+import {createElement} from '../utils/render.js';
 
-export const createFilmPopupTemplate = (filmCard) => {
+const createFilmPopupTemplate = (filmCard) => {
   const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, quantityComments, isWatchlist, isWatched, isFavorite} = filmCard;
   const genres = genre.split(', ');
 
@@ -149,4 +150,24 @@ export const createFilmPopupTemplate = (filmCard) => {
   );
 };
 
+export default class FilmPopup {
+  constructor() {
+    this._element = null;
+  }
 
+  getTemplate(elem) {
+    return createFilmPopupTemplate(elem);
+  }
+
+  getElement(elem) {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(elem));
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
