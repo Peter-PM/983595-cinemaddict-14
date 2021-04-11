@@ -30,21 +30,34 @@ const renderFilmCard = (parentElement, film) => {
   const filmCard = new FilmCardView().getElement(film);
   const filmPopup = new FilmPopupView().getElement(film);
 
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      // parentElement.replaceChild(filmCard, filmPopup);
+      filmPopup.remove();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
   filmCard.querySelector('.film-card__title').style = 'cursor: pointer';
   filmCard.querySelector('.film-card__title').addEventListener('click', () => {
-    parentElement.appendChild(filmPopup);
+    //parentElement.appendChild(filmPopup);
+    document.addEventListener('keydown', onEscKeyDown);
+    render(siteMainElement, filmPopup);
   });
 
   filmCard.querySelector('.film-card__poster').style = 'cursor: pointer';
   filmCard.querySelector('.film-card__poster').addEventListener('click', () => {
-    parentElement.appendChild(filmPopup);
-    //render(siteMainElement, filmPopup);
+    //parentElement.appendChild(filmPopup);
+    document.addEventListener('keydown', onEscKeyDown);
+    render(siteMainElement, filmPopup);
   });
 
   filmPopup.querySelector('.film-details__close-btn').addEventListener('click', (evt) => {
     evt.preventDefault();
-    parentElement.replaceChild(filmCard, filmPopup);
-    //filmPopup.remove();
+    //parentElement.replaceChild(filmCard, filmPopup);
+    document.removeEventListener('keydown', onEscKeyDown);
+    filmPopup.remove();
   });
 
   render(parentElement, filmCard);
