@@ -31,14 +31,20 @@ const renderFilmCard = (parentElement, film) => {
   const filmPopup = new FilmPopupView().getElement(film);
 
   filmCard.querySelector('.film-card__title').style = 'cursor: pointer';
-
   filmCard.querySelector('.film-card__title').addEventListener('click', () => {
-    render(siteMainElement, filmPopup);
+    parentElement.appendChild(filmPopup);
+  });
+
+  filmCard.querySelector('.film-card__poster').style = 'cursor: pointer';
+  filmCard.querySelector('.film-card__poster').addEventListener('click', () => {
+    parentElement.appendChild(filmPopup);
+    //render(siteMainElement, filmPopup);
   });
 
   filmPopup.querySelector('.film-details__close-btn').addEventListener('click', (evt) => {
     evt.preventDefault();
-    filmPopup.remove();
+    parentElement.replaceChild(filmCard, filmPopup);
+    //filmPopup.remove();
   });
 
   render(parentElement, filmCard);
