@@ -1,30 +1,41 @@
-export const createSiteMenuTemplate = (films) => {
+import {generateFilter} from '../utils/filter.js';
+import {createElement} from '../utils/render.js';
 
-  const watchlistNumbers = films.filter((item) => {
-    return item.isWatchlist === true;
-  });
-  const watchedNumbers = films.filter((item) => {
-    return item.isWatched === true;
-  });
-  const favoriteNumbers = films.filter((item) => {
-    return item.isFavorite === true;
-  });
-  const filrersList = {
-    Watchlist: watchlistNumbers.length,
-    History: watchedNumbers.length,
-    Favorites: favoriteNumbers.length,
-  };
+const createSiteMenuTemplate = (films) => {
+
   const createFilters = (item) => {
-    return Object.entries(item).map(([key, value]) => `<a href="#watchlist" class="main-navigation__item">${key} <span class="main-navigation__item-count">${value}</span></a>`).join('');
+    return item.map(({title, href, count}) => `<a href="#${href}" class="main-navigation__item">${title} <span class="main-navigation__item-count">${count}</span></a>`).join('');
   };
 
   return (
     `<nav class="main-navigation">
       <div class="main-navigation__items">
         <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-        ${createFilters(filrersList)}
+        ${createFilters(generateFilter(films))}
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
     </nav>`
   );
 };
+
+export default class FilterMenu {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate(elem) {
+    return createSiteMenuTemplate(elem);
+  }
+
+  getElement(elem) {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate(elem));
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

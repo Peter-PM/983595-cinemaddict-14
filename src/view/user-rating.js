@@ -1,4 +1,6 @@
-export const createSiteUserRatingTemplate = () => {
+import {createElement} from '../utils/render.js';
+
+const createSiteUserRatingTemplate = () => {
   return (
     `<section class="header__profile profile">
       <p class="profile__rating">Movie Buff</p>
@@ -6,3 +8,26 @@ export const createSiteUserRatingTemplate = () => {
     </section>`
   );
 };
+
+export default class UserRating {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteUserRatingTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
