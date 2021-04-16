@@ -19,17 +19,18 @@ const createSiteMenuTemplate = (films) => {
 };
 
 export default class FilterMenu {
-  constructor() {
+  constructor(film) {
     this._element = null;
+    this._filters = film;
   }
 
-  getTemplate(elem) {
-    return createSiteMenuTemplate(elem);
+  getTemplate() {
+    return createSiteMenuTemplate(this._filters);
   }
 
-  getElement(elem) {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate(elem));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

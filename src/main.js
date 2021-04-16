@@ -8,13 +8,10 @@ import FilmPopupView from './view/film-details-popup.js';
 import FooterFilmInfo from './view/footer-statistic.js';
 import FilmListView from './view/film-lists-template.js';
 import {createFilmContent} from './mock/mock.js';
-import {render, FilmListTypes} from './utils/render.js';
+import {render} from './utils/render.js';
+import {FilmListTypes, FilmCount} from './utils/constants.js';
 
-const FILMS_COUNT = 20;
-const FILMS_COUNT_STEP = 5;
-const TOP_FILMS_COUNT = 2;
-
-const films = new Array(FILMS_COUNT).fill().map(createFilmContent);
+const films = new Array(FilmCount.MAIN).fill().map(createFilmContent);
 const topRatedFilms = Array.from(films);
 const topCommentFilms = Array.from(films);
 
@@ -33,35 +30,28 @@ const renderFilmCard = (parentElement, film) => {
   const onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      // parentElement.replaceChild(filmCard, filmPopup);
       filmPopup.remove();
       document.removeEventListener('keydown', onEscKeyDown);
     }
   };
 
-  filmCard.querySelector('.film-card__title').style = 'cursor: pointer';
   filmCard.querySelector('.film-card__title').addEventListener('click', () => {
-    //parentElement.appendChild(filmPopup);
     document.addEventListener('keydown', onEscKeyDown);
     render(siteMainElement, filmPopup);
   });
 
-  filmCard.querySelector('.film-card__poster').style = 'cursor: pointer';
   filmCard.querySelector('.film-card__poster').addEventListener('click', () => {
-    //parentElement.appendChild(filmPopup);
     document.addEventListener('keydown', onEscKeyDown);
     render(siteMainElement, filmPopup);
   });
 
   filmCard.querySelector('.film-card__comments').addEventListener('click', () => {
-    //parentElement.appendChild(filmPopup);
     document.addEventListener('keydown', onEscKeyDown);
     render(siteMainElement, filmPopup);
   });
 
   filmPopup.querySelector('.film-details__close-btn').addEventListener('click', (evt) => {
     evt.preventDefault();
-    //parentElement.replaceChild(filmCard, filmPopup);
     document.removeEventListener('keydown', onEscKeyDown);
     filmPopup.remove();
   });
@@ -74,36 +64,36 @@ const siteHeader = document.querySelector('.header');
 const siteFooterStatisticElement = document.querySelector('.footer__statistics');
 
 render(siteHeader, new UserRatingView().getElement());
-render(siteMainElement, new FilterMenuView().getElement(films));
+render(siteMainElement, new FilterMenuView(films).getElement());
 render(siteMainElement, new SortFilmView().getElement());
 render(siteMainElement, new FilmContainerView().getElement());
 
 const filmSection = document.querySelector('.films');
 
-render(filmSection, new FilmListView().getElement(FilmListTypes.ALL_MOVIES));
+render(filmSection, new FilmListView(FilmListTypes.ALL_MOVIES).getElement());
 
 const filmListContainer = filmSection.querySelector('.films-list__container');
 const filmList = document.querySelector('.films-list');
 
-for (let i = 0; i < FILMS_COUNT_STEP; i++) {
+for (let i = 0; i < FilmCount.STEP; i++) {
   renderFilmCard(filmListContainer, films[i]);
 }
 
 render(filmList, new ShowMoreBottonView().getElement());
 
-render(filmSection, new FilmListView().getElement(FilmListTypes.TOP_MOVIES));
-render(filmSection, new FilmListView().getElement(FilmListTypes.COMMENTED_MOVIES));
+render(filmSection, new FilmListView(FilmListTypes.TOP_MOVIES).getElement());
+render(filmSection, new FilmListView(FilmListTypes.COMMENTED_MOVIES).getElement());
 
 const filmsList = document.querySelectorAll('.films-list--extra');
 
 const containerRating = filmsList[0].querySelector('.films-list__container');
-for (let i = 0; i < TOP_FILMS_COUNT; i++) {
+for (let i = 0; i < FilmCount.EXTRA; i++) {
   renderFilmCard(containerRating, topRatedFilms[i]);
 }
 const containerComment = filmsList[1].querySelector('.films-list__container');
-for (let i = 0; i < TOP_FILMS_COUNT; i++) {
+for (let i = 0; i < FilmCount.EXTRA; i++) {
   renderFilmCard(containerComment, topCommentFilms[i]);
 }
 
-render(siteFooterStatisticElement, new FooterFilmInfo().getElement(FILMS_COUNT));
+render(siteFooterStatisticElement, new FooterFilmInfo(FilmCount.MAIN).getElement());
 

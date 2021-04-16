@@ -5,17 +5,18 @@ const createFooterStatisticTemplate = (number) => {
 };
 
 export default class FooterFilmInfo {
-  constructor() {
+  constructor(films) {
     this._element = null;
+    this._films = films;
   }
 
-  getTemplate(elem) {
-    return createFooterStatisticTemplate(elem);
+  getTemplate() {
+    return createFooterStatisticTemplate(this._films);
   }
 
-  getElement(elem) {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate(elem));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

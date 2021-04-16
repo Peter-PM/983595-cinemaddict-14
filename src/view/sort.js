@@ -3,12 +3,23 @@ import {createElement} from '../utils/render.js';
 const createSortFilmsTemplate = () => {
 
   const sortList = [
-    'Sort by default',
-    'Sort by date',
-    'Sort by rating',
+    {
+      title: 'Sort by default',
+      type: 'data-sort-type="default"',
+
+    },
+    {
+      title: 'Sort by date',
+      type: 'data-sort-type="date"',
+    },
+    {
+      title: 'Sort by rating',
+      type: 'data-sort-type="rating"',
+    },
   ];
+
   const createSorting = (list) => {
-    return list.map((title) => `<li><a href="#" class="sort__button">${title}</a></li>`).join('');
+    return list.map(({title, type}) => `<li><a href="#" class="sort__button" ${type}>${title}</a></li>`).join('');
   };
 
   return (

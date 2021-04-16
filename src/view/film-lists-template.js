@@ -11,17 +11,18 @@ const createFilmListsTemplate = (FilmListType) => {
 };
 
 export default class FilmList {
-  constructor() {
+  constructor(type) {
     this._element = null;
+    this._filmListType = type;
   }
 
-  getTemplate(elem) {
-    return createFilmListsTemplate(elem);
+  getTemplate() {
+    return createFilmListsTemplate(this._filmListType);
   }
 
-  getElement(elem) {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate(elem));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;
