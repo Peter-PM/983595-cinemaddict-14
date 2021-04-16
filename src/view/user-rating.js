@@ -1,33 +1,35 @@
-import {createElement} from '../utils/render.js';
+import AbstractView from './abstract.js';
 
-const createSiteUserRatingTemplate = () => {
+const createSiteUserRatingTemplate = (number) => {
+  const calculationRating = () => {
+    if (number === 0) {
+      return '';
+    }
+    if (number > 0 && number <= 10) {
+      return '<p class="profile__rating">Novice</p>';
+    }
+    if (number > 11 && number <= 20) {
+      return '<p class="profile__rating">Fan</p>';
+    }
+    return '<p class="profile__rating">Movie Buff</p>';
+  };
+
   return (
     `<section class="header__profile profile">
-      <p class="profile__rating">Movie Buff</p>
+      ${calculationRating()}
       <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
     </section>`
   );
 };
 
-export default class UserRating {
-  constructor() {
-    this._element = null;
+export default class UserRating extends AbstractView {
+  constructor(rating) {
+    super();
+    this._userRating = rating;
   }
 
   getTemplate() {
-    return createSiteUserRatingTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    return createSiteUserRatingTemplate(this._userRating);
   }
 }
 

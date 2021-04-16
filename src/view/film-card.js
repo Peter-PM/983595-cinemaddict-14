@@ -1,5 +1,5 @@
 import {dateFormatYYYY, timeAdapter} from '../utils/date.js';
-import {createElement} from '../utils/render.js';
+import AbstractView from './abstract.js';
 
 const createFilmCardTemplate = (filmCard) => {
   const MAX_LENGTH_DESCRIPTION = 139;
@@ -52,24 +52,35 @@ const createFilmCardTemplate = (filmCard) => {
   );
 };
 
-export default class FilmCard {
-  constructor() {
-    this._element = null;
+export default class FilmCard extends AbstractView {
+  constructor(film) {
+    super();
+    this._filmCard = film;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
-  getTemplate(elem) {
-    return createFilmCardTemplate(elem);
+  getTemplate() {
+    return createFilmCardTemplate(this._filmCard);
   }
 
-  getElement(elem) {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate(elem));
-    }
-
-    return this._element;
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.clickFilmCard();
+    document.querySelector('body').classList.add('hide-overflow');
   }
 
-  removeElement() {
-    this._element = null;
+  setClickTitleHandler(callback) {
+    this._callback.clickFilmCard = callback;
+    this.getElement().querySelector('.film-card__title').addEventListener('click', this._clickHandler);
+  }
+
+  setClickPosterHandler(callback) {
+    this._callback.clickFilmCard = callback;
+    this.getElement().querySelector('.film-card__poster').addEventListener('click', this._clickHandler);
+  }
+
+  setClickCommentsHandler(callback) {
+    this._callback.clickFilmCard = callback;
+    this.getElement().querySelector('.film-card__comments').addEventListener('click', this._clickHandler);
   }
 }

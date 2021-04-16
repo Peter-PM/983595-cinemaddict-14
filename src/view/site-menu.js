@@ -1,5 +1,5 @@
 import {generateFilter} from '../utils/filter.js';
-import {createElement} from '../utils/render.js';
+import AbstractView from './abstract.js';
 
 const createSiteMenuTemplate = (films) => {
 
@@ -18,25 +18,13 @@ const createSiteMenuTemplate = (films) => {
   );
 };
 
-export default class FilterMenu {
+export default class FilterMenu extends AbstractView {
   constructor(film) {
-    this._element = null;
+    super();
     this._filters = film;
   }
 
   getTemplate() {
     return createSiteMenuTemplate(this._filters);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

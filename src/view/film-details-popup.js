@@ -1,5 +1,5 @@
 import {timeAdapter, dateFormatDDMMMMYYYY} from '../utils/date.js';
-import {createElement} from '../utils/render.js';
+import AbstractView from './abstract.js';
 
 const createFilmPopupTemplate = (filmCard) => {
   const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, quantityComments, isWatchlist, isWatched, isFavorite} = filmCard;
@@ -150,24 +150,25 @@ const createFilmPopupTemplate = (filmCard) => {
   );
 };
 
-export default class FilmPopup {
-  constructor() {
-    this._element = null;
+export default class FilmPopup extends AbstractView {
+  constructor(film) {
+    super();
+    this._filmPopup = film;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
-  getTemplate(elem) {
-    return createFilmPopupTemplate(elem);
+  getTemplate() {
+    return createFilmPopupTemplate(this._filmPopup);
   }
 
-  getElement(elem) {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate(elem));
-    }
-
-    return this._element;
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.clickPopup();
+    document.querySelector('body').classList.remove('hide-overflow');
   }
 
-  removeElement() {
-    this._element = null;
+  setClickCrossHandler(callback) {
+    this._callback.clickPopup = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
   }
 }
