@@ -21,3 +21,7 @@ export const FilmCount = {
   STEP: 5,
   EXTRA: 2,
 };
+
+export const clickEsc = (evt) => {
+  return evt.key === ('Escape' || 'Esc');
+};

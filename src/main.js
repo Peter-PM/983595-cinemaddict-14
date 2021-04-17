@@ -9,7 +9,7 @@ import FooterFilmInfo from './view/footer-statistic.js';
 import FilmListView from './view/film-lists-template.js';
 import {createFilmContent} from './mock/mock.js';
 import {render} from './utils/render.js';
-import {FilmListTypes, FilmCount} from './utils/constants.js';
+import {FilmListTypes, FilmCount, clickEsc} from './utils/constants.js';
 
 const films = new Array(FilmCount.MAIN).fill().map(createFilmContent);
 const topRatedFilms = Array.from(films);
@@ -28,7 +28,7 @@ const renderFilmCard = (parentElement, film) => {
   const filmPopup = new FilmPopupView(film);
 
   const onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (clickEsc(evt)) {
       evt.preventDefault();
       filmPopup.getElement().remove();
       document.removeEventListener('keydown', onEscKeyDown);
