@@ -17,7 +17,7 @@ export const FilmListTypes = {
 };
 
 export const FilmCount = {
-  MAIN: 20,
+  MAIN: 9,
   STEP: 5,
   EXTRA: 2,
 };

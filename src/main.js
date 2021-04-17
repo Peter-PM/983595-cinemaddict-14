@@ -75,11 +75,30 @@ render(filmSection, new FilmListView(FilmListTypes.ALL_MOVIES));
 const filmListContainer = filmSection.querySelector('.films-list__container');
 const filmList = document.querySelector('.films-list');
 
-for (let i = 0; i < FilmCount.STEP; i++) {
+for (let i = 0; i < Math.min(FilmCount.STEP, FilmCount.MAIN) ; i++) {
   renderFilmCard(filmListContainer, films[i]);
 }
 
-render(filmList, new ShowMoreBottonView());
+if (films.length > FilmCount.STEP) {
+  let renderedFilmCount = FilmCount.STEP;
+  const buttonShowMore = new ShowMoreBottonView();
+  render(filmList, buttonShowMore);
+
+  buttonShowMore.setClickShowMoreHandler(() => {
+    films
+      .slice(renderedFilmCount, renderedFilmCount + FilmCount.STEP)
+      .forEach((film) => {
+        renderFilmCard(filmListContainer, film);
+      });
+
+    renderedFilmCount += FilmCount.STEP;
+
+    if (renderedFilmCount >= films.length) {
+      buttonShowMore.getElement().remove();
+    }
+  });
+}
+
 
 render(filmSection, new FilmListView(FilmListTypes.TOP_MOVIES));
 render(filmSection, new FilmListView(FilmListTypes.COMMENTED_MOVIES));
