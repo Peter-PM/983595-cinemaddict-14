@@ -57,22 +57,22 @@ const createFilmPopupTemplate = (filmCard) => {
       {
         id: 'watchlist',
         title: 'Add to watchlist',
-        check: isWatchlist ? 'checked' : '',
+        isChecked: isWatchlist,
       },
       {
         id: 'watched',
         title: 'Already watched',
-        check: isWatched ? 'checked' : '',
+        isChecked: isWatched,
       },
       {
         id: 'favorite',
         title: 'Add to favorites',
-        check: isFavorite ? 'checked' : '',
+        isChecked: isFavorite,
       },
     ];
 
-    return inputsCustom.map(({id, title, check}) => `
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="${id}" name="${id}" ${check}>
+    return inputsCustom.map(({id, title, isChecked}) => `
+      <input type="checkbox" class="film-details__control-input visually-hidden" id="${id}" name="${id}" ${isChecked ? 'checked' : ''}>
       <label for="${id}" class="film-details__control-label film-details__control-label--${id}">${title}</label>`).join('');
   };
 
