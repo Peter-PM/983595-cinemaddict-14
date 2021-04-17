@@ -51,7 +51,7 @@ const renderFilmCard = (parentElement, film) => {
     render(siteMainElement, filmPopup);
   });
 
-  filmPopup.setClickCrossHandler(() => {
+  filmPopup.setClickCloseBtnHandler(() => {
     document.removeEventListener('keydown', onEscKeyDown);
     filmPopup.getElement().remove();
   });
