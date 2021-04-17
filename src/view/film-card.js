@@ -10,22 +10,23 @@ const createFilmCardTemplate = (filmCard) => {
   const createButtons = () => {
     const buttonsCustom =  [
       {
-        modifier: 'film-card__controls-item--add-to-watchlist',
-        activ: isWatchlist ? 'film-card__controls-item--active' : '',
+        modifier: 'add-to-watchlist',
+        activ: isWatchlist,
         title: 'Add to watchlist',
       },
       {
-        modifier: 'film-card__controls-item--mark-as-watched',
-        activ: isWatched ? 'film-card__controls-item--active' : '',
+        modifier: 'mark-as-watched',
+        activ: isWatched,
         title: 'Mark as watched',
       },
       {
-        modifier: 'film-card__controls-item--favorite',
-        activ: isFavorite ? 'film-card__controls-item--active' : '',
+        modifier: 'favorite',
+        activ: isFavorite,
         title: 'Mark as favorite',
       },
     ];
-    return buttonsCustom.map(({modifier, activ, title}) => `<button class="film-card__controls-item button ${modifier} ${activ}" type="button" >${title}</button>`).join('');
+    return buttonsCustom.map(({modifier, activ, title}) => `<button class="film-card__controls-item button film-card__controls-item--${modifier} ${activ ? 'film-card__controls-item--active' : ''}" type="button" >${title}</button>`).join('');
+    //return buttonsCustom.map(({modifier, activ, title}) => `<button class="film-card__controls-item button ${modifier} ${activ}" type="button" >${title}</button>`).join('');
   };
 
   const createDiscription = () => {
