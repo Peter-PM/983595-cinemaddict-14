@@ -66,14 +66,15 @@ const siteFooterStatisticElement = document.querySelector('.footer__statistics')
 render(siteHeader, new UserRatingView(films.filter((item) => item.isWatchlist).length));
 render(siteMainElement, new FilterMenuView(films));
 render(siteMainElement, new SortFilmView());
-render(siteMainElement, new FilmContainerView());
 
-const filmSection = document.querySelector('.films');
+//const filmSection = document.querySelector('.films');
+const filmSection = new FilmContainerView().getElement();
+render(siteMainElement, filmSection);
 
 render(filmSection, new FilmListView(FilmListTypes.ALL_MOVIES));
 
 const filmListContainer = filmSection.querySelector('.films-list__container');
-const filmList = document.querySelector('.films-list');
+const filmList = filmSection.querySelector('.films-list');
 
 for (let i = 0; i < Math.min(FilmCount.STEP, FilmCount.MAIN) ; i++) {
   renderFilmCard(filmListContainer, films[i]);
@@ -99,11 +100,10 @@ if (films.length > FilmCount.STEP) {
   });
 }
 
-
 render(filmSection, new FilmListView(FilmListTypes.TOP_MOVIES));
 render(filmSection, new FilmListView(FilmListTypes.COMMENTED_MOVIES));
 
-const filmsList = document.querySelectorAll('.films-list--extra');
+const filmsList = filmSection.querySelectorAll('.films-list--extra');
 
 const containerRating = filmsList[0].querySelector('.films-list__container');
 for (let i = 0; i < FilmCount.EXTRA; i++) {
