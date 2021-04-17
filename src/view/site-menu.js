@@ -6,10 +6,7 @@ const createSiteMenuTemplate = (films) => {
   const createFilters = (item) => {
 
     return item.map(({title, href, count}) => {
-      if (title === 'All movies') {
-        return `<a href="#${href}" class="main-navigation__item main-navigation__item--active">${title}</a>`;
-      }
-      return `<a href="#${href}" class="main-navigation__item">${title} <span class="main-navigation__item-count">${count}</span></a>`;
+      return `<a href="#${href}" class="main-navigation__item ${href === 'all' ? 'main-navigation__item--active' : ''}">${title} ${href === 'all' ? '' : `<span class="main-navigation__item-count">${count}</span>`}</a>`;
     }).join('');
   };
 
