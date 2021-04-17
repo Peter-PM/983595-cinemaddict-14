@@ -1,5 +1,10 @@
 export const generateFilter = (films) => {
   const filrerLists = {
+    All: [
+      'All movies',
+      'all',
+      (arr) => arr.length,
+    ],
     Watchlist: [
       'Watchlist',
       'watchlist',
