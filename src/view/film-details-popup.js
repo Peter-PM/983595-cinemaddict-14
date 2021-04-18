@@ -1,5 +1,5 @@
 import {timeAdapter, dateFormatDDMMMMYYYY} from '../utils/date.js';
-import {createElement} from '../utils/render.js';
+import AbstractView from './abstract.js';
 
 const createFilmPopupTemplate = (filmCard) => {
   const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, quantityComments, isWatchlist, isWatched, isFavorite} = filmCard;
@@ -57,22 +57,22 @@ const createFilmPopupTemplate = (filmCard) => {
       {
         id: 'watchlist',
         title: 'Add to watchlist',
-        check: isWatchlist ? 'checked' : '',
+        isChecked: isWatchlist,
       },
       {
         id: 'watched',
         title: 'Already watched',
-        check: isWatched ? 'checked' : '',
+        isChecked: isWatched,
       },
       {
         id: 'favorite',
         title: 'Add to favorites',
-        check: isFavorite ? 'checked' : '',
+        isChecked: isFavorite,
       },
     ];
 
-    return inputsCustom.map(({id, title, check}) => `
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="${id}" name="${id}" ${check}>
+    return inputsCustom.map(({id, title, isChecked}) => `
+      <input type="checkbox" class="film-details__control-input visually-hidden" id="${id}" name="${id}" ${isChecked ? 'checked' : ''}>
       <label for="${id}" class="film-details__control-label film-details__control-label--${id}">${title}</label>`).join('');
   };
 
@@ -150,24 +150,25 @@ const createFilmPopupTemplate = (filmCard) => {
   );
 };
 
-export default class FilmPopup {
-  constructor() {
-    this._element = null;
+export default class FilmPopup extends AbstractView {
+  constructor(film) {
+    super();
+    this._filmPopup = film;
+    this._clickCloseHandler = this._clickCloseHandler.bind(this);
   }
 
-  getTemplate(elem) {
-    return createFilmPopupTemplate(elem);
+  getTemplate() {
+    return createFilmPopupTemplate(this._filmPopup);
   }
 
-  getElement(elem) {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate(elem));
-    }
-
-    return this._element;
+  _clickCloseHandler(evt) {
+    evt.preventDefault();
+    this._callback.clickPopup();
+    document.querySelector('body').classList.remove('hide-overflow');
   }
 
-  removeElement() {
-    this._element = null;
+  setClickCloseBtnHandler(callback) {
+    this._callback.clickPopup = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickCloseHandler);
   }
 }

@@ -1,42 +1,34 @@
-import {createElement} from '../utils/render.js';
+import AbstractView from './abstract.js';
 
 const createSortFilmsTemplate = () => {
 
   const sortList = [
-    'Sort by default',
-    'Sort by date',
-    'Sort by rating',
+    {
+      title: 'Sort by default',
+      type: 'default',
+
+    },
+    {
+      title: 'Sort by date',
+      type: 'date',
+    },
+    {
+      title: 'Sort by rating',
+      type: 'rating',
+    },
   ];
-  const createSorting = (list) => {
-    return list.map((title) => `<li><a href="#" class="sort__button">${title}</a></li>`).join('');
-  };
 
   return (
     `<ul class="sort">
-      ${createSorting(sortList)}
+      ${sortList.map(({title, type}) => `<li><a href="#" class="sort__button data-sort-type="${type}">${title}</a></li>`).join('')}
     </ul>`
   );
 };
 
-export default class SortFilm {
-  constructor() {
-    this._element = null;
-  }
+export default class SortFilm extends AbstractView {
 
   getTemplate() {
     return createSortFilmsTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
