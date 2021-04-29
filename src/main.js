@@ -2,6 +2,7 @@ import FilterMenuView from './view/site-menu.js';
 import SortFilmView from './view/sort.js';
 import UserRatingView from './view/user-rating.js';
 import FilmContainerView from './view/film-list-container.js';
+import NoFilmsTitleView from './view/no-films.js';
 import FilmCardView from './view/film-card.js';
 import ShowMoreBottonView from './view/show-more.js';
 import FilmPopupView from './view/film-details-popup.js';
@@ -65,54 +66,59 @@ const siteFooterStatisticElement = document.querySelector('.footer__statistics')
 
 render(siteHeader, new UserRatingView(films.filter((item) => item.isWatchlist).length));
 render(siteMainElement, new FilterMenuView(films));
-render(siteMainElement, new SortFilmView());
 
-//const filmSection = document.querySelector('.films');
+
 const filmSection = new FilmContainerView().getElement();
-render(siteMainElement, filmSection);
 
-render(filmSection, new FilmListView(FilmListTypes.ALL_MOVIES));
 
-const filmListContainer = filmSection.querySelector('.films-list__container');
-const filmList = filmSection.querySelector('.films-list');
+if (films.length === 0) {
+  render(siteMainElement, filmSection);
+  render(filmSection, new NoFilmsTitleView().getElement());
+} else {
+  render(siteMainElement, new SortFilmView());
+  render(siteMainElement, filmSection);
+  render(filmSection, new FilmListView(FilmListTypes.ALL_MOVIES));
 
-for (let i = 0; i < Math.min(FilmCount.STEP, FilmCount.MAIN) ; i++) {
-  renderFilmCard(filmListContainer, films[i]);
-}
+  const filmListContainer = filmSection.querySelector('.films-list__container');
+  const filmList = filmSection.querySelector('.films-list');
 
-if (films.length > FilmCount.STEP) {
-  let renderedFilmCount = FilmCount.STEP;
-  const buttonShowMore = new ShowMoreBottonView();
-  render(filmList, buttonShowMore);
+  for (let i = 0; i < Math.min(FilmCount.STEP, FilmCount.MAIN); i++) {
+    renderFilmCard(filmListContainer, films[i]);
+  }
 
-  buttonShowMore.setClickShowMoreHandler(() => {
-    films
-      .slice(renderedFilmCount, renderedFilmCount + FilmCount.STEP)
-      .forEach((film) => {
-        renderFilmCard(filmListContainer, film);
-      });
+  if (films.length > FilmCount.STEP) {
+    let renderedFilmCount = FilmCount.STEP;
+    const buttonShowMore = new ShowMoreBottonView();
+    render(filmList, buttonShowMore);
 
-    renderedFilmCount += FilmCount.STEP;
+    buttonShowMore.setClickShowMoreHandler(() => {
+      films
+        .slice(renderedFilmCount, renderedFilmCount + FilmCount.STEP)
+        .forEach((film) => {
+          renderFilmCard(filmListContainer, film);
+        });
 
-    if (renderedFilmCount >= films.length) {
-      buttonShowMore.getElement().remove();
-    }
-  });
-}
+      renderedFilmCount += FilmCount.STEP;
 
-render(filmSection, new FilmListView(FilmListTypes.TOP_MOVIES));
-render(filmSection, new FilmListView(FilmListTypes.COMMENTED_MOVIES));
+      if (renderedFilmCount >= films.length) {
+        buttonShowMore.getElement().remove();
+      }
+    });
+  }
 
-const filmsList = filmSection.querySelectorAll('.films-list--extra');
+  render(filmSection, new FilmListView(FilmListTypes.TOP_MOVIES));
+  render(filmSection, new FilmListView(FilmListTypes.COMMENTED_MOVIES));
 
-const containerRating = filmsList[0].querySelector('.films-list__container');
-for (let i = 0; i < FilmCount.EXTRA; i++) {
-  renderFilmCard(containerRating, topRatedFilms[i]);
-}
-const containerComment = filmsList[1].querySelector('.films-list__container');
-for (let i = 0; i < FilmCount.EXTRA; i++) {
-  renderFilmCard(containerComment, topCommentFilms[i]);
+  const filmsList = filmSection.querySelectorAll('.films-list--extra');
+
+  const containerRating = filmsList[0].querySelector('.films-list__container');
+  for (let i = 0; i < FilmCount.EXTRA; i++) {
+    renderFilmCard(containerRating, topRatedFilms[i]);
+  }
+  const containerComment = filmsList[1].querySelector('.films-list__container');
+  for (let i = 0; i < FilmCount.EXTRA; i++) {
+    renderFilmCard(containerComment, topCommentFilms[i]);
+  }
 }
 
 render(siteFooterStatisticElement, new FooterFilmInfo(FilmCount.MAIN));
-
