@@ -12,14 +12,18 @@ import {FilmListTypes, FilmCount, clickEsc} from '../utils/constants.js';
 export default class MovieList {
   constructor(container) {
     this._listContainer = container;
+    this._renderedFilmCount = FilmCount.STEP;
 
     this._filmSection = new FilmContainerView().getElement();
+    this._buttonShowMore = new ShowMoreBottonView();
     this._filmListAll = new FilmListView(FilmListTypes.ALL_MOVIES);
     this._filmContainerAll = this._filmListAll.getElement().querySelector('.films-list__container');
     this._filmListTopRating = new FilmListView(FilmListTypes.TOP_MOVIES);
     this._filmListTopComment = new FilmListView(FilmListTypes.COMMENTED_MOVIES);
     this._filmContainerRating = this._filmListTopRating.getElement().querySelector('.films-list__container');
     this._filmContainerComment = this._filmListTopComment.getElement().querySelector('.films-list__container');
+
+    this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
   }
 
   init(filmsList) {
@@ -100,29 +104,31 @@ export default class MovieList {
 
   _renderShowMoreButton() {
     if (this._films.length > FilmCount.STEP) {
-      let renderedFilmCount = FilmCount.STEP;
 
-      const buttonShowMore = new ShowMoreBottonView();
-      const filmList = this._filmSection.querySelector('.films-list');
+      render(this._filmListAll, this._buttonShowMore);
 
-      render(filmList, buttonShowMore);
-
-      buttonShowMore.setClickShowMoreHandler(() => {
-        this._films
-          .slice(renderedFilmCount, renderedFilmCount + FilmCount.STEP)
-          .forEach((film) => {
-            this._renderFilmCard(this._filmContainerAll, film);
-          });
-
-        renderedFilmCount += FilmCount.STEP;
-
-        if (renderedFilmCount >= this._films.length) {
-          buttonShowMore.getElement().remove();
-        }
-      });
+      this._buttonShowMore.setClickShowMoreHandler(this._handleLoadMoreButtonClick);
     }
 
     this._renderFilmsListExtra();
+  }
+
+  _handleLoadMoreButtonClick() {
+    this._renderFilms(this._renderedFilmCount, this._renderedFilmCount + FilmCount.STEP);
+
+    this._renderedFilmCount += FilmCount.STEP;
+
+    if (this._renderedFilmCount >= this._films.length) {
+      this._buttonShowMore.getElement().remove();
+    }
+  }
+
+  _renderFilms(from, to) {
+    this._films
+      .slice(from, to)
+      .forEach((film) => {
+        this._renderFilmCard(this._filmContainerAll, film);
+      });
   }
 
   _renderFilmsListExtra() {
