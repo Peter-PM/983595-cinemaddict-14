@@ -1,3 +1,4 @@
+import {nanoid} from 'nanoid';
 import {generateDate} from '../utils/date.js';
 
 export const getRandomNumber = function (min, max) {
@@ -132,6 +133,7 @@ const createComments = () => {
 
 export const createFilmContent = () => {
   return {
+    id: nanoid(),
     poster: createPoster(),
     title: createTitle(),
     originalTitle: createAltTitle(),

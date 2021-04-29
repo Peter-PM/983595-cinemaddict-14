@@ -23,3 +23,12 @@ export const render = (container, element, place = RenderPosition.BEFOREEND) => 
       break;
   }
 };
+
+export const remove = (component) => {
+  if (!(component instanceof AbstractView)) {
+    throw new Error('Can remove only components');
+  }
+
+  component.getElement().remove();
+  //component.removeElement();
+};

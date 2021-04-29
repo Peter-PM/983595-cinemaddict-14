@@ -3,16 +3,16 @@ import FilmContainerView from '../view/film-list-container.js';
 import SortFilmView from '../view/sort.js';
 import NoFilmsTitleView from '../view/no-films.js';
 import FilmListView from '../view/film-lists-template.js';
-import FilmCardView from '../view/film-card.js';
-import FilmPopupView from '../view/film-details-popup.js';
 import ShowMoreBottonView from '../view/show-more.js';
-import {FilmListTypes, FilmCount, clickEsc} from '../utils/constants.js';
+import {FilmListTypes, FilmCount} from '../utils/constants.js';
+import MovieCardPresenter from './movie-card.js';
 
 
 export default class MovieList {
   constructor(container) {
     this._listContainer = container;
     this._renderedFilmCount = FilmCount.STEP;
+    this._filmPresenter = {};
 
     this._filmSection = new FilmContainerView().getElement();
     this._buttonShowMore = new ShowMoreBottonView();
@@ -29,6 +29,7 @@ export default class MovieList {
   init(filmsList) {
     this._films = filmsList;
     this._renderMovieList();
+    //this._clearFilmList();
   }
 
   _renderListContainer() {
@@ -40,39 +41,9 @@ export default class MovieList {
   }
 
   _renderFilmCard(parentElement, film) {
-    const filmCard = new FilmCardView(film);
-    const filmPopup = new FilmPopupView(film);
-
-    const onEscKeyDown = (evt) => {
-      if (clickEsc(evt)) {
-        evt.preventDefault();
-        filmPopup.getElement().remove();
-        document.removeEventListener('keydown', onEscKeyDown);
-        document.querySelector('body').classList.remove('hide-overflow');
-      }
-    };
-
-    filmCard.setClickTitleHandler(() => {
-      document.addEventListener('keydown', onEscKeyDown);
-      render(this._listContainer, filmPopup);
-    });
-
-    filmCard.setClickPosterHandler(() => {
-      document.addEventListener('keydown', onEscKeyDown);
-      render(this._listContainer, filmPopup);
-    });
-
-    filmCard.setClickCommentsHandler(() => {
-      document.addEventListener('keydown', onEscKeyDown);
-      render(this._listContainer, filmPopup);
-    });
-
-    filmPopup.setClickCloseBtnHandler(() => {
-      document.removeEventListener('keydown', onEscKeyDown);
-      filmPopup.getElement().remove();
-    });
-
-    render(parentElement, filmCard);
+    const filmPresenter = new MovieCardPresenter(this._listContainer);
+    filmPresenter.init(parentElement, film);
+    this._filmPresenter[film.id] = filmPresenter;
   }
 
   _renderNoFilmsPlug() {
@@ -155,4 +126,12 @@ export default class MovieList {
     }
   }
 
+  _clearFilmList() {
+    Object.values(this._filmPresenter).forEach((elem) => {
+      elem.destroy();
+    });
+    this._filmPresenter = {};
+    this._buttonShowMore.getElement().remove();
+    this._renderedFilmCount = FilmCount.STEP;
+  }
 }
