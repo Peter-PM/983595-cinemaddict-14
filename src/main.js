@@ -106,16 +106,17 @@ if (films.length === 0) {
     });
   }
 
-  render(filmSection, new FilmListView(FilmListTypes.TOP_MOVIES));
-  render(filmSection, new FilmListView(FilmListTypes.COMMENTED_MOVIES));
+  const filmListTopRating = new FilmListView(FilmListTypes.TOP_MOVIES).getElement();
+  const filmListTopComment = new FilmListView(FilmListTypes.COMMENTED_MOVIES).getElement();
 
-  const filmsList = filmSection.querySelectorAll('.films-list--extra');
+  render(filmSection, filmListTopRating);
+  render(filmSection, filmListTopComment);
 
-  const containerRating = filmsList[0].querySelector('.films-list__container');
+  const containerRating = filmListTopRating.querySelector('.films-list__container');
   for (let i = 0; i < FilmCount.EXTRA; i++) {
     renderFilmCard(containerRating, topRatedFilms[i]);
   }
-  const containerComment = filmsList[1].querySelector('.films-list__container');
+  const containerComment = filmListTopComment.querySelector('.films-list__container');
   for (let i = 0; i < FilmCount.EXTRA; i++) {
     renderFilmCard(containerComment, topCommentFilms[i]);
   }
