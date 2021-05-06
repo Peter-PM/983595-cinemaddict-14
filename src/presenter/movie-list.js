@@ -1,7 +1,7 @@
-import {render} from '../utils/render.js';
+import {render, remove} from '../utils/render.js';
+import FilterMenuView from '../view/site-menu.js';
 import FilmContainerView from '../view/film-list-container.js';
 import SortFilmView from '../view/sort.js';
-import NoFilmsTitleView from '../view/no-films.js';
 import FilmListView from '../view/film-lists-template.js';
 import ShowMoreBottonView from '../view/show-more.js';
 import {FilmListTypes, FilmCount} from '../utils/constants.js';
@@ -14,7 +14,7 @@ export default class MovieList {
     this._renderedFilmCount = FilmCount.STEP;
     this._filmPresenter = {};
 
-    this._filmSection = new FilmContainerView().getElement();
+    this._filmSection = new FilmContainerView();
     this._buttonShowMore = new ShowMoreBottonView();
     this._filmListAll = new FilmListView(FilmListTypes.ALL_MOVIES);
     this._filmContainerAll = this._filmListAll.getElement().querySelector('.films-list__container');
@@ -22,14 +22,19 @@ export default class MovieList {
     this._filmListTopComment = new FilmListView(FilmListTypes.COMMENTED_MOVIES);
     this._filmContainerRating = this._filmListTopRating.getElement().querySelector('.films-list__container');
     this._filmContainerComment = this._filmListTopComment.getElement().querySelector('.films-list__container');
+    this._noFilms = new FilmListView(FilmListTypes.NO_MOVIES);
 
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
   }
 
-  init(filmsList) {
-    this._films = filmsList;
+  init(films) {
+    this._films = films;
     this._renderMovieList();
     //this._clearFilmList();
+  }
+
+  _renderMenu() {
+    render(this._listContainer, new FilterMenuView(this._films));
   }
 
   _renderListContainer() {
@@ -41,17 +46,19 @@ export default class MovieList {
   }
 
   _renderFilmCard(parentElement, film) {
-    const filmPresenter = new MovieCardPresenter(this._listContainer);
-    filmPresenter.init(parentElement, film);
+    const filmPresenter = new MovieCardPresenter(parentElement);
+    filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }
 
   _renderNoFilmsPlug() {
-    render(this._filmSection, new NoFilmsTitleView());
+    render(this._filmSection, this._noFilms);
   }
 
   _renderMovieList() {
-    if (this._films.length === 0) {
+    this._renderMenu();
+
+    if (!this._films.length) {
       this._renderListContainer();
       this._renderNoFilmsPlug();
       return;
@@ -60,6 +67,7 @@ export default class MovieList {
     this._renderSort();
     this._renderListContainer();
     this._renderFilmsListAll();
+    this._renderFilmsListExtra();
   }
 
   _renderFilmsListAll() {
@@ -70,18 +78,14 @@ export default class MovieList {
       this._renderFilmCard(this._filmContainerAll, this._films[i]);
     }
 
-    this._renderShowMoreButton();
+    if (this._films.length > FilmCount.STEP) {
+      this._renderShowMoreButton();
+    }
   }
 
   _renderShowMoreButton() {
-    if (this._films.length > FilmCount.STEP) {
-
-      render(this._filmListAll, this._buttonShowMore);
-
-      this._buttonShowMore.setClickShowMoreHandler(this._handleLoadMoreButtonClick);
-    }
-
-    this._renderFilmsListExtra();
+    render(this._filmListAll, this._buttonShowMore);
+    this._buttonShowMore.setClickShowMoreHandler(this._handleLoadMoreButtonClick);
   }
 
   _handleLoadMoreButtonClick() {
@@ -90,7 +94,7 @@ export default class MovieList {
     this._renderedFilmCount += FilmCount.STEP;
 
     if (this._renderedFilmCount >= this._films.length) {
-      this._buttonShowMore.getElement().remove();
+      remove(this._buttonShowMore);
     }
   }
 
@@ -104,8 +108,8 @@ export default class MovieList {
 
   _renderFilmsListExtra() {
 
-    const topRatedFilms = Array.from(this._films);
-    const topCommentFilms = Array.from(this._films);
+    const topRatedFilms = this._films.slice();
+    const topCommentFilms = this._films.slice();
 
     topRatedFilms.sort((item1, item2) => {
       return item2.rating - item1.rating;
@@ -118,12 +122,12 @@ export default class MovieList {
     render(this._filmSection, this._filmListTopRating);
     render(this._filmSection, this._filmListTopComment);
 
-    for (let i = 0; i < FilmCount.EXTRA; i++) {
-      this._renderFilmCard(this._filmContainerRating, topRatedFilms[i]);
-    }
-    for (let i = 0; i < FilmCount.EXTRA; i++) {
-      this._renderFilmCard(this._filmContainerComment, topCommentFilms[i]);
-    }
+    topRatedFilms.slice(0, FilmCount.EXTRA).forEach((item) => {
+      this._renderFilmCard(this._filmContainerRating, item);
+    });
+    topCommentFilms.slice(0, FilmCount.EXTRA).forEach((item) => {
+      this._renderFilmCard(this._filmContainerComment, item);
+    });
   }
 
   _clearFilmList() {

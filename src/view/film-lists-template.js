@@ -1,11 +1,11 @@
 import AbstractView from './abstract.js';
 
 const createFilmListsTemplate = (FilmListType) => {
-  const {isHidden, isExtra, title} = FilmListType;
+  const {isHidden, isExtra, title, movies} = FilmListType;
   return (
     `<section class="films-list ${isExtra ? 'films-list--extra' : ''}">
       <h2 class="films-list__title ${isHidden ? 'visually-hidden' : ''}">${title}</h2>
-      <div class="films-list__container"></div>
+      ${movies ? '<div class="films-list__container"></div>' : ''}
     </section>`
   );
 };

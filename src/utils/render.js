@@ -30,5 +30,5 @@ export const remove = (component) => {
   }
 
   component.getElement().remove();
-  //component.removeElement();
+  component.removeElement();
 };
