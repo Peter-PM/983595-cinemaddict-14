@@ -36,10 +36,9 @@ export default class MovieList {
   }
 
   _handlefilmChange(updatedFilm) {
-    //console.log(this._films);
     this._films = updateItem(this._films, updatedFilm);
-    this.init(this._films);
-    //this._filmPresenter[updatedFilm.id].init(updatedFilm);
+    console.log(updatedFilm);
+    this._filmPresenter[updatedFilm.id].init(updatedFilm); //***
   }
 
   _renderMenu() {
@@ -57,7 +56,7 @@ export default class MovieList {
   _renderFilmCard(parentElement, film) {
     const filmPresenter = new MovieCardPresenter(parentElement, this._handlefilmChange);
     filmPresenter.init(film);
-    this._filmPresenter[film.id] = filmPresenter;
+    this._filmPresenter[film.id] = filmPresenter; //***
   }
 
   _renderNoFilmsPlug() {
