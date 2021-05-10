@@ -26,7 +26,7 @@ export default class MovieCard {
     this._film = film;
 
     const prevFilmCard = this._filmCard;
-    const prevFilmPopup = this._filmPopup;
+    //const prevFilmPopup = this._filmPopup;
 
     this._filmCard = new FilmCardView(film);
     this._filmPopup = new FilmPopupView(film);
@@ -39,10 +39,11 @@ export default class MovieCard {
     }
 
     if (this._filmCardsContainer.contains(prevFilmCard.getElement())) {
-      replace(this._filmCard, prevFilmCard)
+      replace(this._filmCard, prevFilmCard);
     }
 
-    remove(prevFilmCard)
+    remove(prevFilmCard);
+    //remove(prevFilmPopup);
     // render(this._filmCardsContainer, this._filmCard);
   }
 
