@@ -44,7 +44,6 @@ export default class MovieCard {
 
     remove(prevFilmCard);
     //remove(prevFilmPopup);
-    // render(this._filmCardsContainer, this._filmCard);
   }
 
   _renderPopup() {
@@ -89,11 +88,27 @@ export default class MovieCard {
   }
 
   _handleWatchedClick() {
-    this._film.isWatched = !this._film.isWatched;
+    this._changeData(
+      Object.assign(
+        {},
+        this._film,
+        {
+          isWatched: !this._film.isWatched,
+        },
+      ),
+    );
   }
 
   _handleFavoritesClick() {
-    this._film.isFavorite = !this._film.isFavorite;
+    this._changeData(
+      Object.assign(
+        {},
+        this._film,
+        {
+          isFavorite: !this._film.isFavorite,
+        },
+      ),
+    );
   }
 
   destroy() {
