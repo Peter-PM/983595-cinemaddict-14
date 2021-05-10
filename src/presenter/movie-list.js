@@ -36,8 +36,10 @@ export default class MovieList {
   }
 
   _handlefilmChange(updatedFilm) {
+    //console.log(this._films);
     this._films = updateItem(this._films, updatedFilm);
-    this._filmPresenter[updatedFilm.id].init(updatedFilm);
+    this.init(this._films);
+    //this._filmPresenter[updatedFilm.id].init(updatedFilm);
   }
 
   _renderMenu() {

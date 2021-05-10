@@ -73,7 +73,6 @@ export default class MovieCard {
       ),
     );
     //this._changeData(this._film);
-    console.log(this._film);
   }
 
   _handleWatchedClick() {
