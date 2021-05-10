@@ -5,8 +5,9 @@ import {clickEsc} from '../utils/constants.js';
 
 
 export default class MovieCard {
-  constructor(container) {
+  constructor(container, changeData) {
     this._filmCardsContainer = container;
+    this._changeData = changeData;
 
     this._filmCard = null;
     this._filmPopup = null;
@@ -62,7 +63,17 @@ export default class MovieCard {
   }
 
   _handleWatchlistClick() {
-    this._film.isWatchlist = !this._film.isWatchlist;
+    this._changeData(
+      Object.assign(
+        {},
+        this._film,
+        {
+          isWatchlist: !this._film.isWatchlist,
+        },
+      ),
+    );
+    //this._changeData(this._film);
+    console.log(this._film);
   }
 
   _handleWatchedClick() {

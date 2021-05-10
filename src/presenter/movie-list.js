@@ -5,6 +5,7 @@ import SortFilmView from '../view/sort.js';
 import FilmListView from '../view/film-lists-template.js';
 import ShowMoreBottonView from '../view/show-more.js';
 import {FilmListTypes, FilmCount} from '../utils/constants.js';
+import {updateItem} from '../utils/common.js';
 import MovieCardPresenter from './movie-card.js';
 
 
@@ -24,13 +25,19 @@ export default class MovieList {
     this._filmContainerComment = this._filmListTopComment.getElement().querySelector('.films-list__container');
     this._noFilms = new FilmListView(FilmListTypes.NO_MOVIES);
 
+    this._handlefilmChange = this._handlefilmChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
   }
 
   init(films) {
-    this._films = films;
+    this._films = films.slice();
     this._renderMovieList();
     //this._clearFilmList();
+  }
+
+  _handlefilmChange(updatedFilm) {
+    this._films = updateItem(this._films, updatedFilm);
+    this._filmPresenter[updatedFilm.id].init(updatedFilm);
   }
 
   _renderMenu() {
@@ -46,7 +53,7 @@ export default class MovieList {
   }
 
   _renderFilmCard(parentElement, film) {
-    const filmPresenter = new MovieCardPresenter(parentElement);
+    const filmPresenter = new MovieCardPresenter(parentElement, this._handlefilmChange);
     filmPresenter.init(film);
     this._filmPresenter[film.id] = filmPresenter;
   }
@@ -135,7 +142,7 @@ export default class MovieList {
       elem.destroy();
     });
     this._filmPresenter = {};
-    this._buttonShowMore.getElement().remove();
+    remove(this._buttonShowMore);
     this._renderedFilmCount = FilmCount.STEP;
   }
 }

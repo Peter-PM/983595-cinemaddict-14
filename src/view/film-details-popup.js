@@ -165,7 +165,7 @@ export default class FilmPopup extends AbstractView {
   }
 
   _clickWatchlistHandler() {
-    this._callback.clickWatchlistPopup();
+    this._callback.clickWatchlistPopup(this._filmPopup);
   }
   _clickWatchedHandler() {
     this._callback.clickWatchedPopup();
@@ -176,7 +176,7 @@ export default class FilmPopup extends AbstractView {
 
   _clickCloseHandler(evt) {
     evt.preventDefault();
-    this._callback.clickClosePopup();
+    this._callback.clickClosePopup(this._filmPopup);
     document.querySelector('body').classList.remove('hide-overflow');
   }
 
