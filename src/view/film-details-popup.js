@@ -153,7 +153,9 @@ const createFilmPopupTemplate = (filmCard) => {
 export default class FilmPopup extends AbstractView {
   constructor(film) {
     super();
+
     this._filmPopup = film;
+
     this._clickCloseHandler = this._clickCloseHandler.bind(this);
     this._clickWatchlistHandler = this._clickWatchlistHandler.bind(this);
     this._clickWatchedHandler = this._clickWatchedHandler.bind(this);
@@ -187,11 +189,11 @@ export default class FilmPopup extends AbstractView {
 
   setClickWatchlistHandler(callback) {
     this._callback.clickWatchlistPopup = callback;
-    this.getElement().querySelector('.film-details__control-label--watchlist').addEventListener('click', this._clickWatchlistHandler);
+    this.getElement().querySelector('#watchlist').addEventListener('click', this._clickWatchlistHandler);
   }
   setClickWatchedHandler(callback) {
     this._callback.clickWatchedPopup = callback;
-    this.getElement().querySelector('.film-details__control-label--watched').addEventListener('click', this._clickWatchedHandler);
+    this.getElement().querySelector('#watched').addEventListener('click', this._clickWatchedHandler);
   }
   setClickFavoritesHandler(callback) {
     this._callback.clickFavoritesPopup = callback;
