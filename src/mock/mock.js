@@ -180,5 +180,7 @@ export const createFilmContent = () => {
     isWatched: Boolean(getRandomNumber(0, 1)),
     isFavorite: Boolean(getRandomNumber(0, 1)),
     comments: createComments(),
+    localEmotion: null,
+    localDescription: null,
   };
 };
