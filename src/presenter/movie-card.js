@@ -47,15 +47,12 @@ export default class MovieCard {
   _renderPopup() {
     const body = document.querySelector('body');
     const prevPopup = body.querySelector('.film-details');
-    let scroll;
 
     if (prevPopup) {
-      scroll = prevPopup.scrollTop;
       prevPopup.remove();
     }
 
     this._filmPopup = new FilmPopupView(this._film);
-
 
     this._filmPopup.setClickCloseBtnHandler(this._handleCloseBtnClick);
     this._filmPopup.setClickWatchlistHandler(this._handleWatchlistClick);
@@ -63,7 +60,6 @@ export default class MovieCard {
     this._filmPopup.setClickFavoritesHandler(this._handleFavoritesClick);
 
     render(body, this._filmPopup);
-    this._filmPopup.getElement().scrollTop = scroll;
   }
 
   _handleEscKeyDown(evt) {
@@ -95,7 +91,6 @@ export default class MovieCard {
         },
       ),
     );
-    this._renderPopup();
   }
 
   _handleWatchedClick() {
@@ -108,7 +103,6 @@ export default class MovieCard {
         },
       ),
     );
-    this._renderPopup();
   }
 
   _handleFavoritesClick() {
@@ -121,7 +115,6 @@ export default class MovieCard {
         },
       ),
     );
-    this._renderPopup();
   }
 
   destroy() {

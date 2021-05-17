@@ -214,12 +214,21 @@ export default class FilmPopup extends SmartView {
 
   _clickWatchlistHandler() {
     this._callback.clickWatchlistPopup();
+    this.updateData({
+      isWatchlist: !this._film.isWatchlist,
+    });
   }
   _clickWatchedHandler() {
     this._callback.clickWatchedPopup();
+    this.updateData({
+      isWatched: !this._film.isWatched,
+    });
   }
   _clickFavoritesHandler() {
     this._callback.clickFavoritesPopup();
+    this.updateData({
+      isFavorite: !this._film.isFavorite,
+    });
   }
   _clickCloseHandler(evt) {
     evt.preventDefault();

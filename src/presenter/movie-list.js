@@ -19,6 +19,9 @@ export default class MovieList {
 
     this._noFilmsComponent = null;
     this._buttonShowMoreComponent = null;
+    this._filmsListAllComponent = null;
+    this._filmsListTopRatingComponent = null;
+    this._filmsListTopCommentComponent = null;
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
