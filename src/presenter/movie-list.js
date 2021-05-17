@@ -127,7 +127,7 @@ export default class MovieList {
     });
 
     topCommentFilms.sort((item1, item2) => {
-      return item2.quantityComments.length - item1.quantityComments.length;
+      return item2.comments.length - item1.comments.length;
     });
 
     render(this._filmsSectionComponent, this._filmsListTopRatingComponent);

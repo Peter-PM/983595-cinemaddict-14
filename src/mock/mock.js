@@ -127,9 +127,38 @@ const createPoster = () => {
   return posters[getRandomNumber(0, posters.length - 1)];
 };
 
-const createComments = () => {
-  return new Array(getRandomNumber(0, 100));
+const createComment = () => {
+  const description = [
+    'cool',
+    'bad',
+    'not bad',
+    'amazingly',
+  ];
+  const author = [
+    'Garry',
+    'Bred',
+    'Mike',
+    'Freddy',
+  ];
+  const emotion = [
+    'smile',
+    'sleeping',
+    'puke',
+    'angry',
+  ];
+  return {
+    id: nanoid(),
+    author: author[getRandomNumber(0, author.length - 1)],
+    comment: description[getRandomNumber(0, description.length - 1)],
+    date: generateDate(),
+    emotion: emotion[getRandomNumber(0, emotion.length - 1)],
+  };
 };
+
+const createComments = () => {
+  return new Array(getRandomNumber(0, 10)).fill().map(createComment);
+};
+
 
 export const createFilmContent = () => {
   return {
@@ -147,9 +176,9 @@ export const createFilmContent = () => {
     genre: createGenre(),
     description: createDescription(),
     ageRating: getRandomNumber(6, 18) + '+',
-    quantityComments: createComments(),
     isWatchlist: Boolean(getRandomNumber(0, 1)),
     isWatched: Boolean(getRandomNumber(0, 1)),
     isFavorite: Boolean(getRandomNumber(0, 1)),
+    comments: createComments(),
   };
 };

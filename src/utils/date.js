@@ -3,6 +3,7 @@ import duration from 'dayjs/plugin/duration';
 import {getRandomNumber} from '../mock/mock.js';
 
 dayjs.extend(duration);
+
 export const generateDate = () => {
 
   const maxDaysGap = 10;

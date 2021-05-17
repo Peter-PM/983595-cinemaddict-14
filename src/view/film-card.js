@@ -3,9 +3,9 @@ import AbstractView from './abstract.js';
 
 const createFilmCardTemplate = (filmCard) => {
   const MAX_LENGTH_DESCRIPTION = 139;
-  const {poster, title, rating, duration, genre, reliseDate, description, quantityComments, isWatchlist, isWatched, isFavorite} = filmCard;
+  const {poster, title, rating, duration, genre, reliseDate, description, comments, isWatchlist, isWatched, isFavorite} = filmCard;
   const date = dateFormatYYYY(reliseDate);
-  const numberComments = quantityComments.length;
+  const numberComments = comments.length;
 
   const createButtons = () => {
     const buttonsCustom =  [
