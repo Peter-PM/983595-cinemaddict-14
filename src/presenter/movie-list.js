@@ -49,7 +49,7 @@ export default class MovieList {
   _renderFilmCard(parentElement, film) {
     const filmPresenter = new MovieCardPresenter(parentElement, this._handleFilmChange);
     filmPresenter.init(film);
-    this._filmPresenter[film.id] = filmPresenter; //***
+    this._filmPresenter[film.id] = filmPresenter;
   }
 
   _renderNoFilmsPlug() {

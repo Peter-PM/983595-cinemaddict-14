@@ -178,7 +178,7 @@ export default class FilmPopup extends SmartView {
   constructor(film) {
     super();
 
-    this._data = film;
+    this._film = film;
 
     this._clickCloseHandler = this._clickCloseHandler.bind(this);
     this._clickWatchlistHandler = this._clickWatchlistHandler.bind(this);
@@ -209,7 +209,7 @@ export default class FilmPopup extends SmartView {
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._data);
+    return createFilmPopupTemplate(this._film);
   }
 
   _clickWatchlistHandler() {
@@ -247,22 +247,13 @@ export default class FilmPopup extends SmartView {
   setClickWatchlistHandler(callback) {
     this._callback.clickWatchlistPopup = callback;
     this.getElement().querySelector('#watchlist').addEventListener('click', this._clickWatchlistHandler);
-    // this.updateData({
-    //   isWatchlist: this._data.isWatchlist,
-    // }, true);
   }
   setClickWatchedHandler(callback) {
     this._callback.clickWatchedPopup = callback;
     this.getElement().querySelector('#watched').addEventListener('click', this._clickWatchedHandler);
-    // this.updateData({
-    //   isWatched: this._data.isWatched,
-    // }, true);
   }
   setClickFavoritesHandler(callback) {
     this._callback.clickFavoritesPopup = callback;
     this.getElement().querySelector('#favorite').addEventListener('click', this._clickFavoritesHandler);
-    // this.updateData({
-    //   isFavorite: this._data.isFavorite,
-    // }, true);
   }
 }

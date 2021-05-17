@@ -3,7 +3,7 @@ import AbstractView from './abstract.js';
 export default class Smart extends AbstractView {
   constructor() {
     super();
-    this._data = {};
+    this._film = {};
   }
 
   updateData(update, justDataUpdating) {
@@ -11,9 +11,9 @@ export default class Smart extends AbstractView {
       return;
     }
 
-    this._data = Object.assign(
+    this._film = Object.assign(
       {},
-      this._data,
+      this._film,
       update,
     );
 
