@@ -16,16 +16,9 @@ export default class MovieList {
     this._filmPresenter = {};
 
     this._filmsSectionComponent = new FilmContainerView();
-    this._filmsListAllComponent = new FilmListView(FilmListTypes.ALL_MOVIES);
-    this._filmsListTopRatingComponent = new FilmListView(FilmListTypes.TOP_MOVIES);
-    this._filmsListTopCommentComponent = new FilmListView(FilmListTypes.COMMENTED_MOVIES);
+
     this._noFilmsComponent = null;
     this._buttonShowMoreComponent = null;
-
-
-    this._filmAllContainer = this._filmsListAllComponent.getElement().querySelector('.films-list__container');
-    this._filmRatingContainer = this._filmsListTopRatingComponent.getElement().querySelector('.films-list__container');
-    this._filmCommentContainer = this._filmsListTopCommentComponent.getElement().querySelector('.films-list__container');
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
@@ -80,6 +73,8 @@ export default class MovieList {
   }
 
   _renderFilmsListAll() {
+    this._filmsListAllComponent = new FilmListView(FilmListTypes.ALL_MOVIES);
+    this._filmAllContainer = this._filmsListAllComponent.getElement().querySelector('.films-list__container');
 
     render(this._filmsSectionComponent, this._filmsListAllComponent);
 
@@ -118,6 +113,11 @@ export default class MovieList {
   }
 
   _renderFilmsListExtra() {
+    this._filmsListTopRatingComponent = new FilmListView(FilmListTypes.TOP_MOVIES);
+    this._filmsListTopCommentComponent = new FilmListView(FilmListTypes.COMMENTED_MOVIES);
+
+    this._filmRatingContainer = this._filmsListTopRatingComponent.getElement().querySelector('.films-list__container');
+    this._filmCommentContainer = this._filmsListTopCommentComponent.getElement().querySelector('.films-list__container');
 
     const topRatedFilms = this._films.slice();
     const topCommentFilms = this._films.slice();
