@@ -15,8 +15,12 @@ export const dateFormatYYYY = (date) => {
   return dayjs(date).format('YYYY');
 };
 
-export const dateFormatDDMMMMYYYY = (date) => {
+export const dateFormatPopup = (date) => {
   return dayjs(date).format('DD MMMM YYYY');
+};
+
+export const dateFormatComments = (date) => {
+  return dayjs(date).format('YYYY/MM/DD HH:MM');
 };
 
 export const timeAdapter = (minutes) => {

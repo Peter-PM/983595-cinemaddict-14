@@ -1,4 +1,4 @@
-import {timeAdapter, dateFormatDDMMMMYYYY} from '../utils/date.js';
+import {timeAdapter, dateFormatPopup, dateFormatComments} from '../utils/date.js';
 import SmartView from './smart.js';
 
 const createFilmPopupTemplate = (filmCard) => {
@@ -29,7 +29,7 @@ const createFilmPopupTemplate = (filmCard) => {
       },
       {
         term: 'Release Date',
-        cell: dateFormatDDMMMMYYYY(reliseDate),
+        cell: dateFormatPopup(reliseDate),
       },
       {
         term: 'Runtime',
@@ -95,7 +95,7 @@ const createFilmPopupTemplate = (filmCard) => {
           <p class="film-details__comment-text">${comment}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${author}</span>
-            <span class="film-details__comment-day">${dateFormatDDMMMMYYYY(date)}</span>
+            <span class="film-details__comment-day">${dateFormatComments(date)}</span>
             <button class="film-details__comment-delete">Delete</button>
           </p>
         </div>
