@@ -3,9 +3,9 @@ import AbstractView from './abstract.js';
 
 const createFilmCardTemplate = (filmCard) => {
   const MAX_LENGTH_DESCRIPTION = 139;
-  const {poster, title, rating, duration, genre, reliseDate, description, quantityComments, isWatchlist, isWatched, isFavorite} = filmCard;
+  const {poster, title, rating, duration, genre, reliseDate, description, comments, isWatchlist, isWatched, isFavorite} = filmCard;
   const date = dateFormatYYYY(reliseDate);
-  const numberComments = quantityComments.length;
+  const numberComments = comments.length;
 
   const createButtons = () => {
     const buttonsCustom =  [
@@ -69,13 +69,13 @@ export default class FilmCard extends AbstractView {
   }
 
   _clickWatchlistHandler() {
-    this._callback.clickWatchlistPopup();
+    this._callback.clickWatchlist();
   }
   _clickWatchedHandler() {
-    this._callback.clickWatchedPopup();
+    this._callback.clickWatched();
   }
   _clickFavoritesHandler() {
-    this._callback.clickFavoritesPopup();
+    this._callback.clickFavorites();
   }
 
   _clickHandler(evt) {
@@ -91,15 +91,15 @@ export default class FilmCard extends AbstractView {
     this.getElement().querySelector('.film-card__comments').addEventListener('click', this._clickHandler);
   }
   setClickWatchlistHandler(callback) {
-    this._callback.clickWatchlistPopup = callback;
+    this._callback.clickWatchlist = callback;
     this.getElement().querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._clickWatchlistHandler);
   }
   setClickWatchedHandler(callback) {
-    this._callback.clickWatchedPopup = callback;
+    this._callback.clickWatched = callback;
     this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._clickWatchedHandler);
   }
   setClickFavoritesHandler(callback) {
-    this._callback.clickFavoritesPopup = callback;
+    this._callback.clickFavorites = callback;
     this.getElement().querySelector('.film-card__controls-item--favorite').addEventListener('click', this._clickFavoritesHandler);
   }
 

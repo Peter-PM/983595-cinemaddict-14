@@ -3,6 +3,7 @@ import duration from 'dayjs/plugin/duration';
 import {getRandomNumber} from '../mock/mock.js';
 
 dayjs.extend(duration);
+
 export const generateDate = () => {
 
   const maxDaysGap = 10;
@@ -14,8 +15,12 @@ export const dateFormatYYYY = (date) => {
   return dayjs(date).format('YYYY');
 };
 
-export const dateFormatDDMMMMYYYY = (date) => {
+export const dateFormatPopup = (date) => {
   return dayjs(date).format('DD MMMM YYYY');
+};
+
+export const dateFormatComments = (date) => {
+  return dayjs(date).format('YYYY/MM/DD HH:MM');
 };
 
 export const timeAdapter = (minutes) => {

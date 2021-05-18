@@ -91,7 +91,6 @@ export default class MovieCard {
         },
       ),
     );
-    //this._changeData(this._film);
   }
 
   _handleWatchedClick() {
