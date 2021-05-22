@@ -1,4 +1,3 @@
-import {dateFormatYYYY} from '../utils/date.js';
 import {render, remove} from '../utils/render.js';
 import FilterMenuView from '../view/site-menu.js';
 import FilmContainerView from '../view/film-list-container.js';
@@ -9,6 +8,8 @@ import {FilmListTypes, FilmCount} from '../utils/constants.js';
 import {updateItem} from '../utils/common.js';
 import MovieCardPresenter from './movie-card.js';
 import {SortType} from '../utils/constants.js';
+import {sortByDate, sortByRating} from '../utils/sort.js';
+
 
 export default class MovieList {
   constructor(container, filmsModel) {
@@ -16,13 +17,15 @@ export default class MovieList {
     this._renderedFilmCount = FilmCount.STEP;
     this._filmsModel = filmsModel;
     this._filmPresenter = {};
+    this._filmPresenterComment = {};
+    this._filmPresenterRating = {};
     this._currentSortType = SortType.DEFAULT;
 
     this._filmsSectionComponent = new FilmContainerView();
+    this._filmsListAllComponent = new FilmListView(FilmListTypes.ALL_MOVIES);
 
     this._noFilmsComponent = null;
     this._buttonShowMoreComponent = null;
-    this._filmsListAllComponent = null;
     this._filmsListTopRatingComponent = null;
     this._filmsListTopCommentComponent = null;
 
@@ -35,6 +38,8 @@ export default class MovieList {
     this._films = films.slice();
     this._sourcedBoardFilms = films.slice();
 
+    this._renderMenu();
+    this._renderSort();
     this._renderMovieList();
   }
 
@@ -46,6 +51,8 @@ export default class MovieList {
     this._films = updateItem(this._films, updatedFilm);
     this._sourcedBoardFilms = updateItem(this._sourcedBoardFilms, updatedFilm);
     this._filmPresenter[updatedFilm.id].init(updatedFilm);
+    this._filmPresenterComment[updatedFilm.id].init(updatedFilm);
+    this._filmPresenterRating[updatedFilm.id].init(updatedFilm);
   }
 
   _renderMenu() {
@@ -59,14 +66,10 @@ export default class MovieList {
   _sortTasks(sortType) {
     switch (sortType) {
       case SortType.DATE:
-        this._films.sort((item1, item2) => {
-          return dateFormatYYYY(item2.reliseDate) - dateFormatYYYY(item1.reliseDate);
-        });
+        this._films.sort(sortByDate);
         break;
       case SortType.RATING:
-        this._films.sort((item1, item2) => {
-          return item2.rating - item1.rating;
-        });
+        this._films.sort(sortByRating);
         break;
       default:
         this._films = this._sourcedBoardFilms.slice();
@@ -95,13 +98,24 @@ export default class MovieList {
     this._filmPresenter[film.id] = filmPresenter;
   }
 
+  _renderFilmCardComment(parentElement, film) {
+    const filmPresenter = new MovieCardPresenter(parentElement, this._handleFilmChange);
+    filmPresenter.init(film);
+    this._filmPresenterComment[film.id] = filmPresenter;
+  }
+
+  _renderFilmCardRating(parentElement, film) {
+    const filmPresenter = new MovieCardPresenter(parentElement, this._handleFilmChange);
+    filmPresenter.init(film);
+    this._filmPresenterRating[film.id] = filmPresenter;
+  }
+
   _renderNoFilmsPlug() {
     this._noFilmsComponent = new FilmListView(FilmListTypes.NO_MOVIES);
     render(this._filmsSectionComponent, this._noFilmsComponent);
   }
 
   _renderMovieList() {
-    this._renderMenu();
 
     if (!this._films.length) {
       this._renderListContainer();
@@ -109,14 +123,12 @@ export default class MovieList {
       return;
     }
 
-    this._renderSort();
     this._renderListContainer();
     this._renderFilmsListAll();
     this._renderFilmsListExtra();
   }
 
   _renderFilmsListAll() {
-    this._filmsListAllComponent = new FilmListView(FilmListTypes.ALL_MOVIES);
     this._filmAllContainer = this._filmsListAllComponent.getElement().querySelector('.films-list__container');
 
     render(this._filmsSectionComponent, this._filmsListAllComponent);
@@ -177,10 +189,10 @@ export default class MovieList {
     render(this._filmsSectionComponent, this._filmsListTopCommentComponent);
 
     topRatedFilms.slice(0, FilmCount.EXTRA).forEach((item) => {
-      this._renderFilmCard(this._filmRatingContainer, item);
+      this._renderFilmCardRating(this._filmRatingContainer, item);
     });
     topCommentFilms.slice(0, FilmCount.EXTRA).forEach((item) => {
-      this._renderFilmCard(this._filmCommentContainer, item);
+      this._renderFilmCardComment(this._filmCommentContainer, item);
     });
   }
 
