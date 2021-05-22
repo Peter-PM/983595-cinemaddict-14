@@ -1,7 +1,7 @@
 import {render, replace, remove} from '../utils/render.js';
 import FilmCardView from '../view/film-card.js';
 import FilmPopupView from '../view/film-details-popup.js';
-import {clickEsc} from '../utils/constants.js';
+import {clickEsc, UpdateType, UserAction} from '../utils/constants.js';
 
 
 export default class MovieCard {
@@ -83,6 +83,8 @@ export default class MovieCard {
 
   _handleWatchlistClick() {
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._film,
@@ -95,6 +97,8 @@ export default class MovieCard {
 
   _handleWatchedClick() {
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._film,
@@ -107,6 +111,8 @@ export default class MovieCard {
 
   _handleFavoritesClick() {
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._film,

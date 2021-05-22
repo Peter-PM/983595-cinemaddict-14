@@ -3,22 +3,6 @@ import {SortType} from '../utils/constants.js';
 
 const createSortFilmsTemplate = () => {
 
-  // const sortList = [
-  //   {
-  //     title: 'Sort by default',
-  //     type: 'default',
-
-  //   },
-  //   {
-  //     title: 'Sort by date',
-  //     type: 'date',
-  //   },
-  //   {
-  //     title: 'Sort by rating',
-  //     type: 'rating',
-  //   },
-  // ];
-  // ${sortList.map(({title, type}) => `<li><a href="#" class="sort__button data-sort-type="${type}">${title}</a></li>`).join('')}
   return (
     `<ul class="sort">
       <li><a href="#" class="sort__button" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
