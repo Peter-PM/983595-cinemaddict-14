@@ -74,6 +74,8 @@ export default class MovieList {
       default:
         this._films = this._sourcedBoardFilms.slice();
     }
+
+    this._currentSortType = sortType;
   }
 
   _handleSortTypeChange(sortType) {
@@ -83,7 +85,9 @@ export default class MovieList {
 
     this._sortTasks(sortType);
     this._clearFilmList();
-    this._renderFilmsListAll();
+    remove(this._filmsListTopRatingComponent);
+    remove(this._filmsListTopCommentComponent);
+    this._renderMovieList();
   }
 
   _renderSort() {
@@ -200,7 +204,15 @@ export default class MovieList {
     Object.values(this._filmPresenter).forEach((elem) => {
       elem.destroy();
     });
+    Object.values(this._filmPresenterComment).forEach((elem) => {
+      elem.destroy();
+    });
+    Object.values(this._filmPresenterRating).forEach((elem) => {
+      elem.destroy();
+    });
     this._filmPresenter = {};
+    this._filmPresenterRating = {};
+    this._filmPresenterRating = {};
     remove(this._buttonShowMoreComponent);
     this._renderedFilmCount = FilmCount.STEP;
   }
