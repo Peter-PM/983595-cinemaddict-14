@@ -34,3 +34,9 @@ export const FilmCount = {
 export const clickEsc = (evt) => {
   return evt.key === ('Escape' || 'Esc');
 };
+
+export const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating',
+};

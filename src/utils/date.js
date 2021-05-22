@@ -6,7 +6,7 @@ dayjs.extend(duration);
 
 export const generateDate = () => {
 
-  const maxDaysGap = 10;
+  const maxDaysGap = 10000;
   const daysGap = getRandomNumber(-maxDaysGap, maxDaysGap);
   return dayjs(dayjs().add(daysGap, 'day').toDate()).format('YYYY-MM-DDTHH:mm:ssZ');
 };
