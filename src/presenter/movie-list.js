@@ -141,6 +141,17 @@ export default class MovieList {
     }
   }
 
+  _renderSort() {
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
+
+    this._sortComponent = new SortFilmView(this._currentSortType);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+
+    render(this._listContainer, this._sortComponent);
+  }
+
   _handleSortTypeChange(sortType) {
     if (this._currentSortType === sortType) {
       return;
@@ -153,18 +164,7 @@ export default class MovieList {
     this._renderMovieList();
   }
 
-  _renderSort() {
-    if (this._sortComponent !== null) {
-      this._sortComponent = null;
-    }
-
-    this._sortComponent = new SortFilmView(this._currentSortType);
-    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
-
-    render(this._listContainer, this._sortComponent);
-  }
-
-  _renderFilmCard(parentElement, film, presenter) {
+    _renderFilmCard(parentElement, film, presenter) {
     const filmPresenter = new MovieCardPresenter(parentElement, this._handleViewAction);
     filmPresenter.init(film);
     presenter[film.id] = filmPresenter;
