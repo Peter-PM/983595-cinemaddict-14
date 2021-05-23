@@ -118,9 +118,27 @@ export default class MovieList {
     this._destroyFilms(this._filmPresenter);
     this._destroyFilms(this._filmRatingContainer);
     this._destroyFilms(this._filmCommentContainer);
+  }
 
+  _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
+    const filmCount = this._getFilms().length;
+
+    this._clearFilmList();
+
+    remove(this._filmsListTopRatingComponent);
+    remove(this._filmsListTopCommentComponent);
     remove(this._buttonShowMoreComponent);
-    this._renderedFilmCount = FilmCount.STEP;
+    remove(this._sortComponent);
+
+    if (resetRenderedFilmCount) {
+      this._renderedFilmCount = FilmCount.STEP;
+    } else {
+      this._renderedFilmCount = Math.min(filmCount, this._renderedFilmCount);
+    }
+
+    if (resetSortType) {
+      this._currentSortType = SortType.DEFAULT;
+    }
   }
 
   _handleSortTypeChange(sortType) {
@@ -129,16 +147,21 @@ export default class MovieList {
     }
 
     this._currentSortType = sortType;
-    this._clearFilmList();
-    remove(this._filmsListTopRatingComponent);
-    remove(this._filmsListTopCommentComponent);
+
+    this._clearBoard({resetRenderedFilmCount: true});
+    this._renderSort();
     this._renderMovieList();
   }
 
   _renderSort() {
-    this._sortComponent = new SortFilmView();
-    render(this._listContainer, this._sortComponent);
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
+
+    this._sortComponent = new SortFilmView(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+
+    render(this._listContainer, this._sortComponent);
   }
 
   _renderFilmCard(parentElement, film, presenter) {
