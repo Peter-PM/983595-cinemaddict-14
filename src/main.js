@@ -17,6 +17,6 @@ filmsModel.setFilms(films);
 render(siteHeader, new UserRatingView(films.filter((item) => item.isWatchlist).length));
 
 const movieList = new MovieListPresenter(siteMain, filmsModel);
-movieList.init(films);
+movieList.init();
 
 render(siteFooterStatistic, new FooterFilmInfoView(FilmCount.MAIN));

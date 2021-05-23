@@ -24,13 +24,11 @@ export default class SortFilm extends AbstractView {
   }
 
   _sortTypeChangeHandler(evt) {
-    if (evt.target.tagName !== 'A') {
-      return;
-    }
-
+    const target = evt.target.closest('.sort__button');
     evt.preventDefault();
-    this._callback.sortTypeChange(evt.target.dataset.sortType);
-
+    if (evt.target.closest('.sort__button')) {
+      this._callback.sortTypeChange(target.dataset.sortType);
+    }
   }
 
   setSortTypeChangeHandler(callback) {
