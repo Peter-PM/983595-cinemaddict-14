@@ -3,14 +3,14 @@ import FilmCardView from '../view/film-card.js';
 import FilmPopupView from '../view/film-details-popup.js';
 import {clickEsc, UpdateType, UserAction} from '../utils/constants.js';
 
-
 export default class MovieCard {
-  constructor(container, changeData) {
+  constructor(container, changeData, filterModel) {
     this._filmCardsContainer = container;
     this._changeData = changeData;
 
     this._filmCard = null;
     this._filmPopup = null;
+    this._filterModel = filterModel;
 
     this._handleClick = this._handleClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
@@ -81,10 +81,18 @@ export default class MovieCard {
     remove(this._filmPopup);
   }
 
+  _handleFilterType(type) {
+    if (this._filterModel.getFilter() === type) {
+      return UpdateType.MINOR;
+    }
+    return UpdateType.PATCH;
+  }
+
+
   _handleWatchlistClick() {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      this._handleFilterType('Watchlist'),
       Object.assign(
         {},
         this._film,
@@ -98,7 +106,7 @@ export default class MovieCard {
   _handleWatchedClick() {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      this._handleFilterType('History'),
       Object.assign(
         {},
         this._film,
@@ -112,7 +120,7 @@ export default class MovieCard {
   _handleFavoritesClick() {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      this._handleFilterType('Favorites'),
       Object.assign(
         {},
         this._film,

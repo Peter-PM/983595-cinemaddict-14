@@ -91,15 +91,6 @@ export default class MovieList {
         }
         break;
       case UpdateType.MINOR:
-        // if (data.id in this._filmPresenter) {
-        //   this._filmPresenter[data.id].init(data);
-        // }
-        // if (data.id in this._filmPresenterComment) {
-        //   this._filmPresenterComment[data.id].init(data);
-        // }
-        // if (data.id in this._filmPresenterRating) {
-        //   this._filmPresenterRating[data.id].init(data);
-        // }
         this._clearBoard();
         this._renderMovieList();
         break;
@@ -108,11 +99,6 @@ export default class MovieList {
         this._renderMovieList();
         break;
     }
-  }
-
-  _renderMenu() {
-    // const filterList = new FilterMenuPresenter(this._listContainer, this._filmsModel, this._filterModel);
-    // filterList.init();
   }
 
   _renderListContainer() {
@@ -128,8 +114,8 @@ export default class MovieList {
 
   _clearFilmList() {
     this._destroyFilms(this._filmPresenter);
-    this._destroyFilms(this._filmRatingContainer);
-    this._destroyFilms(this._filmCommentContainer);
+    this._destroyFilms(this._filmPresenterComment);
+    this._destroyFilms(this._filmPresenterRating);
   }
 
   _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
@@ -176,7 +162,7 @@ export default class MovieList {
   }
 
   _renderFilmCard(parentElement, film, presenter) {
-    const filmPresenter = new MovieCardPresenter(parentElement, this._handleViewAction);
+    const filmPresenter = new MovieCardPresenter(parentElement, this._handleViewAction, this._filterModel);
     filmPresenter.init(film);
     presenter[film.id] = filmPresenter;
   }
@@ -196,8 +182,6 @@ export default class MovieList {
   _renderMovieList() {
     this._renderSort();
     this._renderListContainer();
-    //const films = this._getFilms();
-    //const filmCount = films.length;
 
     if (!this._getFilms().length) {
       this._renderNoFilmsPlug();
@@ -215,13 +199,13 @@ export default class MovieList {
     this._filmAllContainer = this._filmsListAllComponent.getElement().querySelector('.films-list__container');
 
     const filmCount = this._getFilms().length;
-    const films = this._getFilms().slice(0, Math.min(FilmCount.STEP, FilmCount.MAIN));
+    const films = this._getFilms().slice(0, Math.min(filmCount, this._renderedFilmCount));
 
     render(this._filmsSectionComponent, this._filmsListAllComponent);
 
     this._renderFilms(films, this._filmAllContainer, this._filmPresenter);
 
-    if (filmCount > FilmCount.STEP) {
+    if (filmCount > this._renderedFilmCount) {
       this._renderShowMoreButton();
     }
   }
