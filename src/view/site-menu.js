@@ -1,4 +1,3 @@
-//import {generateFilter} from '../utils/filter.js';
 import AbstractView from './abstract.js';
 
 const createSiteMenuTemplate = (films, currentFilterType) => {

@@ -80,9 +80,6 @@ export default class MovieList {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
-        break;
-      case UpdateType.MINOR:
         if (data.id in this._filmPresenter) {
           this._filmPresenter[data.id].init(data);
         }
@@ -92,12 +89,23 @@ export default class MovieList {
         if (data.id in this._filmPresenterRating) {
           this._filmPresenterRating[data.id].init(data);
         }
-        this._clearBoard({resetRenderedFilmCount: true});
+        break;
+      case UpdateType.MINOR:
+        // if (data.id in this._filmPresenter) {
+        //   this._filmPresenter[data.id].init(data);
+        // }
+        // if (data.id in this._filmPresenterComment) {
+        //   this._filmPresenterComment[data.id].init(data);
+        // }
+        // if (data.id in this._filmPresenterRating) {
+        //   this._filmPresenterRating[data.id].init(data);
+        // }
+        this._clearBoard();
         this._renderMovieList();
         break;
       case UpdateType.MAJOR:
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
-        this.init();
+        this._renderMovieList();
         break;
     }
   }
