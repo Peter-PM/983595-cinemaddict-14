@@ -39,7 +39,7 @@ export default class MovieList {
   }
 
   init() {
-    this._renderMenu();
+
     this._renderSort();
     this._renderMovieList();
   }
@@ -97,7 +97,8 @@ export default class MovieList {
         // - обновить список (например, когда задача ушла в архив)
         break;
       case UpdateType.MAJOR:
-        // - обновить всю доску (например, при переключении фильтра)
+        this._clearBoard();
+        this.init();
         break;
     }
   }
