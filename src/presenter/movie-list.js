@@ -39,8 +39,6 @@ export default class MovieList {
   }
 
   init() {
-
-    this._renderSort();
     this._renderMovieList();
   }
 
@@ -94,10 +92,11 @@ export default class MovieList {
         if (data.id in this._filmPresenterRating) {
           this._filmPresenterRating[data.id].init(data);
         }
-        // - обновить список (например, когда задача ушла в архив)
+        this._clearBoard({resetRenderedFilmCount: true});
+        this._renderMovieList();
         break;
       case UpdateType.MAJOR:
-        this._clearBoard();
+        this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this.init();
         break;
     }
@@ -165,7 +164,6 @@ export default class MovieList {
     this._currentSortType = sortType;
 
     this._clearBoard({resetRenderedFilmCount: true});
-    this._renderSort();
     this._renderMovieList();
   }
 
@@ -182,16 +180,23 @@ export default class MovieList {
   }
 
   _renderNoFilmsPlug() {
+
     this._noFilmsComponent = new FilmListView(FilmListTypes.NO_MOVIES);
     render(this._filmsSectionComponent, this._noFilmsComponent);
   }
 
   _renderMovieList() {
+    this._renderSort();
     this._renderListContainer();
+    //const films = this._getFilms();
+    //const filmCount = films.length;
 
     if (!this._getFilms().length) {
       this._renderNoFilmsPlug();
       return;
+    }
+    if (this._noFilmsComponent !== null) {
+      remove(this._noFilmsComponent);
     }
 
     this._renderFilmsListAll();
