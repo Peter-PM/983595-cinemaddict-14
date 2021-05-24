@@ -125,6 +125,6 @@ export default class MovieCard {
 
   destroy() {
     remove(this._filmCard);
-    //remove(this._filmPopup);
+    remove(this._filmPopup);
   }
 }

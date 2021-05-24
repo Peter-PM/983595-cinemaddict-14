@@ -1,5 +1,4 @@
-import {render, remove, replace} from '../utils/render.js';
-import FilterMenuView from '../view/site-menu.js';
+import {render, remove} from '../utils/render.js';
 import FilmContainerView from '../view/film-list-container.js';
 import SortFilmView from '../view/sort.js';
 import FilmListView from '../view/film-lists-template.js';
@@ -8,13 +7,15 @@ import {FilmListTypes, FilmCount} from '../utils/constants.js';
 import MovieCardPresenter from './movie-card.js';
 import {SortType, UpdateType, UserAction} from '../utils/constants.js';
 import {sortByDate, sortByRating, sortByComments} from '../utils/sort.js';
+import {filter} from '../utils/filter.js';
 
 
 export default class MovieList {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, filterModel) {
     this._listContainer = container;
     this._renderedFilmCount = FilmCount.STEP;
     this._filmsModel = filmsModel;
+    this._filterModel = filterModel;
     this._filmPresenter = {};
     this._filmPresenterComment = {};
     this._filmPresenterRating = {};
@@ -23,8 +24,6 @@ export default class MovieList {
     this._filmsSectionComponent = new FilmContainerView();
     this._filmsListAllComponent = new FilmListView(FilmListTypes.ALL_MOVIES);
 
-    this._filterMenu = null;
-    this._newFilterMenu = null;
     this._noFilmsComponent = null;
     this._buttonShowMoreComponent = null;
     this._filmsListTopRatingComponent = null;
@@ -36,6 +35,7 @@ export default class MovieList {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -45,16 +45,24 @@ export default class MovieList {
   }
 
   _getFilms(sortType = this._currentSortType) {
+    const filterType = this._getFilter();
+    const films = this._filmsModel.getFilms();
+    const filtredFilms = filter[filterType](films);
+
     switch (sortType) {
       case SortType.DATE:
-        return this._filmsModel.getFilms().slice().sort(sortByDate);
+        return filtredFilms.sort(sortByDate);
       case SortType.RATING:
-        return this._filmsModel.getFilms().slice().sort(sortByRating);
+        return filtredFilms.sort(sortByRating);
       case SortType.COMMENTED:
-        return this._filmsModel.getFilms().slice().sort(sortByComments);
+        return filtredFilms.sort(sortByComments);
       default:
-        return this._filmsModel.getFilms();
+        return filtredFilms;
     }
+  }
+
+  _getFilter() {
+    return this._filterModel.getFilter();
   }
 
   _handleViewAction(actionType, updateType, update) {
@@ -86,10 +94,6 @@ export default class MovieList {
         if (data.id in this._filmPresenterRating) {
           this._filmPresenterRating[data.id].init(data);
         }
-
-        this._newFilterMenu = new FilterMenuView(this._getFilms());
-        replace(this._newFilterMenu, this._filterMenu);
-        this._filterMenu = this._newFilterMenu;
         // - обновить список (например, когда задача ушла в архив)
         break;
       case UpdateType.MAJOR:
@@ -99,8 +103,8 @@ export default class MovieList {
   }
 
   _renderMenu() {
-    this._filterMenu = new FilterMenuView(this._getFilms());
-    render(this._listContainer, this._filterMenu);
+    // const filterList = new FilterMenuPresenter(this._listContainer, this._filmsModel, this._filterModel);
+    // filterList.init();
   }
 
   _renderListContainer() {
