@@ -11,7 +11,7 @@ import {filter} from '../utils/filter.js';
 
 
 export default class MovieList {
-  constructor(container, filmsModel, filterModel,commentsModel) {
+  constructor(container, filmsModel, filterModel, commentsModel) {
     this._listContainer = container;
     this._renderedFilmCount = FilmCount.STEP;
     this._filmsModel = filmsModel;
@@ -38,6 +38,7 @@ export default class MovieList {
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._commentsModel.addObserver(this._handleModelEvent);
 
   }
 
@@ -72,16 +73,18 @@ export default class MovieList {
         this._filmsModel.updateFilm(updateType, update);
         break;
       case UserAction.ADD_COMMENT:
-        this._filmsModel.addComments(updateType, update);
+        this._commentsModel.addComments(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this._filmsModel.deleteComments(updateType, update);
+        this._commentsModel.deleteComments(updateType, update);
         break;
     }
   }
 
   _handleModelEvent(updateType, data) {
     switch (updateType) {
+      case UpdateType.COMMENT:
+        break;
       case UpdateType.PATCH:
         if (data.id in this._filmPresenter) {
           this._filmPresenter[data.id].init(data);
@@ -165,7 +168,7 @@ export default class MovieList {
   }
 
   _renderFilmCard(parentElement, film, presenter) {
-    const filmPresenter = new MovieCardPresenter(parentElement, this._handleViewAction, this._filterModel, this._commentsModel);
+    const filmPresenter = new MovieCardPresenter(parentElement, this._handleViewAction, this._filterModel, this._commentsModel, this._filmsModel);
     filmPresenter.init(film);
     presenter[film.id] = filmPresenter;
   }

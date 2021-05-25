@@ -4,12 +4,13 @@ import FilmPopupView from '../view/film-details-popup.js';
 import {clickEsc, UpdateType, UserAction} from '../utils/constants.js';
 
 export default class MovieCard {
-  constructor(container, changeData, filterModel, commentsModel) {
+  constructor(container, changeData, filterModel, commentsModel, filmsModel) {
     this._filmCardsContainer = container;
     this._changeData = changeData;
 
     this._filmCard = null;
     this._filmPopup = null;
+    this._filmComments = null;
 
     this._handleClick = this._handleClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
@@ -17,9 +18,14 @@ export default class MovieCard {
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoritesClick = this._handleFavoritesClick.bind(this);
+    this._commentDeleteClick = this._commentDeleteClick.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
 
     this._filterModel = filterModel;
     this._commentsModel = commentsModel;
+    this._filmsModel = filmsModel;
+
+    this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init(film) {
@@ -64,6 +70,7 @@ export default class MovieCard {
     this._filmPopup.setClickWatchlistHandler(this._handleWatchlistClick);
     this._filmPopup.setClickWatchedHandler(this._handleWatchedClick);
     this._filmPopup.setClickFavoritesHandler(this._handleFavoritesClick);
+    this._filmPopup.setCommentDeleteHandler(this._commentDeleteClick);
 
     render(body, this._filmPopup);
   }
@@ -94,6 +101,13 @@ export default class MovieCard {
     return UpdateType.PATCH;
   }
 
+  _handleModelEvent(updateType) {
+    switch (updateType) {
+      case UpdateType.COMMENT:
+        this._renderPopup();
+        break;
+    }
+  }
 
   _handleWatchlistClick() {
     this._changeData(
@@ -134,6 +148,21 @@ export default class MovieCard {
           isFavorite: !this._film.isFavorite,
         },
       ),
+    );
+  }
+
+  _commentDeleteClick(item) {
+    this._changeData(
+      UserAction.DELETE_COMMENT,
+      UpdateType.COMMENT,
+      item,
+      // Object.assign(
+      //   {},
+      //   this._getComments(),
+      //   {
+      //     ,
+      //   },
+      // ),
     );
   }
 

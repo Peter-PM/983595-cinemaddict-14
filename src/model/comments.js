@@ -13,26 +13,26 @@ export default class Comments extends Observer {
   getComments(arr) {
     const comments = [];
     for (const comment of arr) {
-      comments.push(this._comments.find((el) => el.id === comment));
+      comments.push(this._comments.filter((el) => el.id === comment));
     }
-    return comments;
+    return comments.flat();
   }
 
-  updateComments(updateType, update) {
-    const index = this._comments.findIndex((comment) => comment.id === update.id);
+  // updateComments(updateType, update) {
+  //   const index = this._comments.findIndex((comment) => comment.id === update.id);
 
-    if (index === -1) {
-      throw new Error('Can\'t update unexisting film');
-    }
+  //   if (index === -1) {
+  //     throw new Error('Can\'t update unexisting film');
+  //   }
 
-    this._comments = [
-      ...this._comments.slice(0, index),
-      update,
-      ...this._comments.slice(index + 1),
-    ];
+  //   this._comments = [
+  //     ...this._comments.slice(0, index),
+  //     update,
+  //     ...this._comments.slice(index + 1),
+  //   ];
 
-    this._notify(updateType, update);
-  }
+  //   this._notify(updateType, update);
+  // }
 
   addComments(updateType, update) {
     this._comments = [
@@ -44,7 +44,7 @@ export default class Comments extends Observer {
   }
 
   deleteComments(updateType, update) {
-    const index = this._comments.findIndex((comment) => comment.id === update.id);
+    const index = this._comments.findIndex((comment) => comment.id === update);
 
     if (index === -1) {
       throw new Error('Can\'t delete unexisting comment');
@@ -54,7 +54,6 @@ export default class Comments extends Observer {
       ...this._comments.slice(0, index),
       ...this._comments.slice(index + 1),
     ];
-
     this._notify(updateType);
   }
 }

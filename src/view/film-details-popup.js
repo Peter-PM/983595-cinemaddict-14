@@ -86,7 +86,8 @@ const createFilmPopupTemplate = (filmCard, commentary) => {
   };
 
   const createComments = () => {
-    return commentary.map(({author, comment, date, emotion}) =>
+
+    return commentary.map(({id, author, comment, date, emotion}) =>
       `<li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
@@ -96,7 +97,7 @@ const createFilmPopupTemplate = (filmCard, commentary) => {
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${author}</span>
             <span class="film-details__comment-day">${dateFormatComments(date)}</span>
-            <button class="film-details__comment-delete">Delete</button>
+            <button class="film-details__comment-delete" data-comment-id="${id}">Delete</button>
           </p>
         </div>
       </li>`).join('');
@@ -188,6 +189,7 @@ export default class FilmPopup extends SmartView {
 
     this._commentEmotionHandler = this._commentEmotionHandler.bind(this);
     this._commentDescriptionHandler = this._commentDescriptionHandler.bind(this);
+    this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
 
     this._setCommentsHandler();
   }
@@ -198,6 +200,7 @@ export default class FilmPopup extends SmartView {
     this.setClickWatchlistHandler(this._callback.clickWatchlistPopup);
     this.setClickWatchedHandler(this._callback.clickWatchedPopup);
     this.setClickFavoritesHandler(this._callback.clickFavoritesPopup);
+    this.setCommentDeleteHandler(this._callback.clickDeleteComment);
   }
 
   _setCommentsHandler() {
@@ -247,6 +250,20 @@ export default class FilmPopup extends SmartView {
     this.updateData({
       localDescription: evt.target.value,
     }, true);
+  }
+  _commentDeleteHandler(evt) {
+
+    evt.preventDefault();
+    const target = evt.target.closest('.film-details__comment-delete');
+
+    if (target) {
+      this._callback.clickDeleteComment(target.dataset.commentId);
+    }
+  }
+
+  setCommentDeleteHandler(callback) {
+    this._callback.clickDeleteComment = callback;
+    this.getElement().querySelector('.film-details__comments-list').addEventListener('click', this._commentDeleteHandler);
   }
 
   setClickCloseBtnHandler(callback) {

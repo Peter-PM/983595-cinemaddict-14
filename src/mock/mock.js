@@ -157,7 +157,7 @@ const createComment = () => {
 
 export const commentsArray = new Array(1000).fill().map(createComment);
 
-export const randomCommentsArray = () => {
+const randomCommentsArray = () => {
   const fuu = () => {
     return commentsArray[getRandomNumber(0, commentsArray.length - 1)].id;
   };
