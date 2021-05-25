@@ -155,13 +155,8 @@ const createComment = () => {
   };
 };
 
-export const commentsArray = new Array(1000).fill().map(createComment);
-
-const randomCommentsArray = () => {
-  const fuu = () => {
-    return commentsArray[getRandomNumber(0, commentsArray.length - 1)].id;
-  };
-  return new Array(getRandomNumber(0, 10)).fill().map(fuu);
+export const commentsArray = () => {
+  return new Array((getRandomNumber(0, 10))).fill().map(createComment);
 };
 
 export const createFilmContent = () => {
@@ -183,7 +178,7 @@ export const createFilmContent = () => {
     isWatchlist: Boolean(getRandomNumber(0, 1)),
     isWatched: Boolean(getRandomNumber(0, 1)),
     isFavorite: Boolean(getRandomNumber(0, 1)),
-    comments: randomCommentsArray(),
+    comments: commentsArray(),
     localEmotion: null,
     localDescription: null,
   };

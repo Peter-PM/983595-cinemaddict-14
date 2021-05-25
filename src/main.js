@@ -1,6 +1,6 @@
 import UserRatingView from './view/user-rating.js';
 import FooterFilmInfoView from './view/footer-statistic.js';
-import {createFilmContent, commentsArray} from './mock/mock.js';
+import {createFilmContent} from './mock/mock.js';
 import {render} from './utils/render.js';
 import {FilmCount} from './utils/constants.js';
 import MoviesModel from './model/movies.js';
@@ -15,7 +15,6 @@ const siteHeader = document.querySelector('.header');
 const siteFooterStatistic = document.querySelector('.footer__statistics');
 
 const commentsModel = new CommentsModel();
-commentsModel.setComments(commentsArray);
 
 const filmsModel = new MoviesModel();
 filmsModel.setFilms(films);

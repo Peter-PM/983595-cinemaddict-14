@@ -252,13 +252,16 @@ export default class FilmPopup extends SmartView {
     }, true);
   }
   _commentDeleteHandler(evt) {
-
     evt.preventDefault();
-    const target = evt.target.closest('.film-details__comment-delete');
+    this.updateData({
+      comments: null,
+    }, true);
 
-    if (target) {
-      this._callback.clickDeleteComment(target.dataset.commentId);
-    }
+    // const target = evt.target.closest('.film-details__comment-delete');
+
+    // if (target) {
+    //   this._callback.clickDeleteComment(target.dataset.commentId);
+    // }
   }
 
   setCommentDeleteHandler(callback) {

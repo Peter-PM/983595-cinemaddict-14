@@ -10,12 +10,13 @@ export default class Comments extends Observer {
     this._comments = comments.slice();
   }
 
-  getComments(arr) {
-    const comments = [];
-    for (const comment of arr) {
-      comments.push(this._comments.filter((el) => el.id === comment));
-    }
-    return comments.flat();
+  getComments() {
+    return this._comments;
+    // const comments = [];
+    // for (const comment of arr) {
+    //   comments.push(this._comments.filter((el) => el.id === comment));
+    // }
+    // return comments.flat();
   }
 
   // updateComments(updateType, update) {

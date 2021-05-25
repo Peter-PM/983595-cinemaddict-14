@@ -52,19 +52,18 @@ export default class MovieCard {
     remove(prevFilmCard);
   }
 
-  _getComments() {
-    return this._commentsModel.getComments(this._film.comments);
-  }
-
   _renderPopup() {
     const body = document.querySelector('body');
     const prevPopup = body.querySelector('.film-details');
+
+    this._commentsModel.setComments(this._film.comments);
+
 
     if (prevPopup) {
       prevPopup.remove();
     }
 
-    this._filmPopup = new FilmPopupView(this._film, this._getComments());
+    this._filmPopup = new FilmPopupView(this._film, this._commentsModel.getComments());
 
     this._filmPopup.setClickCloseBtnHandler(this._handleCloseBtnClick);
     this._filmPopup.setClickWatchlistHandler(this._handleWatchlistClick);
