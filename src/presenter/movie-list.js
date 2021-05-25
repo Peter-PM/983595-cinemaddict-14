@@ -11,11 +11,13 @@ import {filter} from '../utils/filter.js';
 
 
 export default class MovieList {
-  constructor(container, filmsModel, filterModel) {
+  constructor(container, filmsModel, filterModel,commentsModel) {
     this._listContainer = container;
     this._renderedFilmCount = FilmCount.STEP;
     this._filmsModel = filmsModel;
     this._filterModel = filterModel;
+    this._commentsModel = commentsModel;
+
     this._filmPresenter = {};
     this._filmPresenterComment = {};
     this._filmPresenterRating = {};
@@ -36,6 +38,7 @@ export default class MovieList {
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
   }
 
   init() {
@@ -162,7 +165,7 @@ export default class MovieList {
   }
 
   _renderFilmCard(parentElement, film, presenter) {
-    const filmPresenter = new MovieCardPresenter(parentElement, this._handleViewAction, this._filterModel);
+    const filmPresenter = new MovieCardPresenter(parentElement, this._handleViewAction, this._filterModel, this._commentsModel);
     filmPresenter.init(film);
     presenter[film.id] = filmPresenter;
   }

@@ -4,13 +4,12 @@ import FilmPopupView from '../view/film-details-popup.js';
 import {clickEsc, UpdateType, UserAction} from '../utils/constants.js';
 
 export default class MovieCard {
-  constructor(container, changeData, filterModel) {
+  constructor(container, changeData, filterModel, commentsModel) {
     this._filmCardsContainer = container;
     this._changeData = changeData;
 
     this._filmCard = null;
     this._filmPopup = null;
-    this._filterModel = filterModel;
 
     this._handleClick = this._handleClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
@@ -18,6 +17,9 @@ export default class MovieCard {
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoritesClick = this._handleFavoritesClick.bind(this);
+
+    this._filterModel = filterModel;
+    this._commentsModel = commentsModel;
   }
 
   init(film) {
@@ -44,6 +46,10 @@ export default class MovieCard {
     remove(prevFilmCard);
   }
 
+  _getComments() {
+    return this._commentsModel.getComments(this._film.comments);
+  }
+
   _renderPopup() {
     const body = document.querySelector('body');
     const prevPopup = body.querySelector('.film-details');
@@ -52,7 +58,7 @@ export default class MovieCard {
       prevPopup.remove();
     }
 
-    this._filmPopup = new FilmPopupView(this._film);
+    this._filmPopup = new FilmPopupView(this._film, this._getComments());
 
     this._filmPopup.setClickCloseBtnHandler(this._handleCloseBtnClick);
     this._filmPopup.setClickWatchlistHandler(this._handleWatchlistClick);

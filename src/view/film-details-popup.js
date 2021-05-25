@@ -1,8 +1,8 @@
 import {timeAdapter, dateFormatPopup, dateFormatComments} from '../utils/date.js';
 import SmartView from './smart.js';
 
-const createFilmPopupTemplate = (filmCard) => {
-  const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, comments, isWatchlist, isWatched, isFavorite, localEmotion, localDescription} = filmCard;
+const createFilmPopupTemplate = (filmCard, commentary) => {
+  const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription} = filmCard;
   const genres = genre.split(', ');
 
   const createGenreList = () => {
@@ -86,7 +86,7 @@ const createFilmPopupTemplate = (filmCard) => {
   };
 
   const createComments = () => {
-    return comments.map(({author, comment, date, emotion}) =>
+    return commentary.map(({author, comment, date, emotion}) =>
       `<li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
@@ -149,7 +149,7 @@ const createFilmPopupTemplate = (filmCard) => {
 
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentary.length}</span></h3>
 
             <ul class="film-details__comments-list">
               ${createComments()}
@@ -175,10 +175,11 @@ const createFilmPopupTemplate = (filmCard) => {
 };
 
 export default class FilmPopup extends SmartView {
-  constructor(film) {
+  constructor(film, comments) {
     super();
 
     this._film = film;
+    this._comments = comments;
 
     this._clickCloseHandler = this._clickCloseHandler.bind(this);
     this._clickWatchlistHandler = this._clickWatchlistHandler.bind(this);
@@ -209,7 +210,7 @@ export default class FilmPopup extends SmartView {
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film);
+    return createFilmPopupTemplate(this._film, this._comments);
   }
 
   _clickWatchlistHandler() {
