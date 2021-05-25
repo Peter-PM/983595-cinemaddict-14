@@ -58,7 +58,6 @@ export default class MovieCard {
 
     this._commentsModel.setComments(this._film.comments);
 
-
     if (prevPopup) {
       prevPopup.remove();
     }
@@ -103,6 +102,7 @@ export default class MovieCard {
   _handleModelEvent(updateType) {
     switch (updateType) {
       case UpdateType.COMMENT:
+        //remove(this._filmPopup);
         this._renderPopup();
         break;
     }
@@ -155,13 +155,6 @@ export default class MovieCard {
       UserAction.DELETE_COMMENT,
       UpdateType.COMMENT,
       item,
-      // Object.assign(
-      //   {},
-      //   this._getComments(),
-      //   {
-      //     ,
-      //   },
-      // ),
     );
   }
 

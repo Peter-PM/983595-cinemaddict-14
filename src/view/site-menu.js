@@ -39,7 +39,6 @@ export default class FilterMenu extends AbstractView {
 
     evt.preventDefault();
     if (target) {
-      // console.log(target.dataset.filterType)
       this._callback.filterTypeChange(target.dataset.filterType);
     }
   }
