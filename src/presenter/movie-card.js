@@ -32,6 +32,7 @@ export default class MovieCard {
     this._film = film;
 
     const prevFilmCard = this._filmCard;
+    this._commentsModel.setComments(this._film.comments);
 
     this._filmCard = new FilmCardView(film);
 
@@ -57,12 +58,12 @@ export default class MovieCard {
     const prevPopup = body.querySelector('.film-details');
 
     this._commentsModel.setComments(this._film.comments);
+    this._filmPopup = new FilmPopupView(this._film, this._commentsModel.getComments());
+
 
     if (prevPopup) {
       prevPopup.remove();
     }
-
-    this._filmPopup = new FilmPopupView(this._film, this._commentsModel.getComments());
 
     this._filmPopup.setClickCloseBtnHandler(this._handleCloseBtnClick);
     this._filmPopup.setClickWatchlistHandler(this._handleWatchlistClick);
@@ -107,6 +108,27 @@ export default class MovieCard {
         break;
     }
   }
+  _handleViewAction(actionType, updateType, update) {
+    switch (actionType) {
+      case UserAction.ADD_COMMENT:
+        this._commentsModel.addComments(updateType, update);
+        break;
+      case UserAction.DELETE_COMMENT:
+        this._commentsModel.deleteComments(updateType, update);
+        break;
+    }
+  }
+  _commentDeleteClick(film, commentId) {
+    this._changeData(
+      UserAction.DELETE_COMMENT,
+      UpdateType.COMMENT,
+      film,
+      commentId,
+    );
+    this._filmPopup.updateData({
+      comments: this._commentsModel.getComments(),
+    });
+  }
 
   _handleWatchlistClick() {
     this._changeData(
@@ -147,14 +169,6 @@ export default class MovieCard {
           isFavorite: !this._film.isFavorite,
         },
       ),
-    );
-  }
-
-  _commentDeleteClick(item) {
-    this._changeData(
-      UserAction.DELETE_COMMENT,
-      UpdateType.COMMENT,
-      item,
     );
   }
 
