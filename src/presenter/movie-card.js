@@ -3,6 +3,7 @@ import FilmCardView from '../view/film-card.js';
 import FilmPopupView from '../view/film-details-popup.js';
 import {clickEsc, UpdateType, UserAction} from '../utils/constants.js';
 
+
 export default class MovieCard {
   constructor(container, changeData, filterModel, commentsModel, filmsModel) {
     this._filmCardsContainer = container;
@@ -20,6 +21,7 @@ export default class MovieCard {
     this._handleFavoritesClick = this._handleFavoritesClick.bind(this);
     this._commentDeleteClick = this._commentDeleteClick.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._commentAddClick = this._commentAddClick.bind(this);
 
     this._filterModel = filterModel;
     this._commentsModel = commentsModel;
@@ -71,6 +73,7 @@ export default class MovieCard {
     this._filmPopup.setClickWatchedHandler(this._handleWatchedClick);
     this._filmPopup.setClickFavoritesHandler(this._handleFavoritesClick);
     this._filmPopup.setCommentDeleteHandler(this._commentDeleteClick);
+    this._filmPopup.setCommentAddHandler(this._commentAddClick);
 
     render(body, this._filmPopup);
   }
@@ -107,18 +110,34 @@ export default class MovieCard {
         break;
     }
   }
-  _handleViewAction(actionType, updateType, update) {
-    switch (actionType) {
-      case UserAction.ADD_COMMENT:
-        this._commentsModel.addComments(updateType, update);
-        break;
-      // case UserAction.DELETE_COMMENT:
-      //   this._commentsModel.deleteComments(updateType, update, film);
-      //   break;
-    }
-  }
-  _commentDeleteClick(commentId) {
+  // _handleViewAction(actionType, updateType, update) {
+  //   switch (actionType) {
+  //     case UserAction.ADD_COMMENT:
+  //       this._commentsModel.addComments(updateType, update);
+  //       break;
+  //     case UserAction.DELETE_COMMENT:
+  //       this._commentsModel.deleteComments(updateType, update, film);
+  //       break;
+  //   }
+  // }
 
+  _commentAddClick(evt, film) {
+    if (evt.key === ('Control' && 'Enter')) {
+      this._changeData(
+        UserAction.ADD_COMMENT,
+        UpdateType.COMMENT,
+        film,
+      );
+      this._filmPopup.updateData({
+        comments: this._commentsModel.getComments(),
+      });
+      this._film.comments = this._commentsModel.getComments();
+      this.init(this._film);
+    }
+
+  }
+
+  _commentDeleteClick(commentId) {
     this._changeData(
       UserAction.DELETE_COMMENT,
       UpdateType.COMMENT,

@@ -189,6 +189,7 @@ export default class FilmPopup extends SmartView {
     this._commentEmotionHandler = this._commentEmotionHandler.bind(this);
     this._commentDescriptionHandler = this._commentDescriptionHandler.bind(this);
     this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
+    this._commentAddHandler = this._commentAddHandler.bind(this);
 
     this._setCommentsHandler();
   }
@@ -200,6 +201,7 @@ export default class FilmPopup extends SmartView {
     this.setClickWatchedHandler(this._callback.clickWatchedPopup);
     this.setClickFavoritesHandler(this._callback.clickFavoritesPopup);
     this.setCommentDeleteHandler(this._callback.clickDeleteComment);
+    this.setCommentAddHandler(this._callback.clickAddComment);
   }
 
   _setCommentsHandler() {
@@ -250,7 +252,7 @@ export default class FilmPopup extends SmartView {
       localDescription: evt.target.value,
     }, true);
   }
-  //////////////////////////////////////////
+
   _commentDeleteHandler(evt) {
     evt.preventDefault();
 
@@ -260,10 +262,19 @@ export default class FilmPopup extends SmartView {
       this._callback.clickDeleteComment(target.dataset.commentId);
     }
   }
-  /////////////////////////////////////////
+
+  _commentAddHandler(evt) {
+    this._callback.clickAddComment(evt, this._film);
+  }
+
   setCommentDeleteHandler(callback) {
     this._callback.clickDeleteComment = callback;
     this.getElement().querySelector('.film-details__comments-list').addEventListener('click', this._commentDeleteHandler);
+  }
+
+  setCommentAddHandler(callback) {
+    this._callback.clickAddComment = callback;
+    document.addEventListener('keydown', this._commentAddHandler);
   }
 
   setClickCloseBtnHandler(callback) {

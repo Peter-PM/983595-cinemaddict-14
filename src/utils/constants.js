@@ -35,6 +35,10 @@ export const clickEsc = (evt) => {
   return evt.key === ('Escape' || 'Esc');
 };
 
+export const clickCtrlEnter = (evt) => {
+  return evt.key === ('Control' && 'Enter');
+};
+
 export const SortType = {
   DEFAULT: 'default',
   DATE: 'date',

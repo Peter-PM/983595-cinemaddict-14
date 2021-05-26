@@ -26,3 +26,8 @@ export const dateFormatComments = (date) => {
 export const timeAdapter = (minutes) => {
   return dayjs.duration(minutes, 'm').hours() + 'h ' + dayjs.duration(minutes, 'm').minutes() + 'm';
 };
+
+export const today = () => {
+  const day = dayjs();
+  return dateFormatComments(day);
+};

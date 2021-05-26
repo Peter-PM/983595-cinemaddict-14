@@ -1,4 +1,6 @@
 import Observer from '../utils/observer.js';
+import {today} from '../utils/date.js';
+import {nanoid} from 'nanoid';
 
 export default class Comments extends Observer {
   constructor() {
@@ -12,33 +14,24 @@ export default class Comments extends Observer {
 
   getComments() {
     return this._comments;
-    // const comments = [];
-    // for (const comment of arr) {
-    //   comments.push(this._comments.filter((el) => el.id === comment));
-    // }
-    // return comments.flat();
   }
 
-  // updateComments(updateType, update) {
-  //   const index = this._comments.findIndex((comment) => comment.id === update.id);
+  createComment(updateType, film) {
+    const newComment = {
+      id: nanoid(),
+      author: 'Peter',
+      comment: film.localDescription,
+      date: today(),
+      emotion: film.localEmotion,
+    };
 
-  //   if (index === -1) {
-  //     throw new Error('Can\'t update unexisting film');
-  //   }
-
-  //   this._comments = [
-  //     ...this._comments.slice(0, index),
-  //     update,
-  //     ...this._comments.slice(index + 1),
-  //   ];
-
-  //   this._notify(updateType, update);
-  // }
+    this.addComments(updateType, newComment);
+  }
 
   addComments(updateType, update) {
     this._comments = [
-      update,
       ...this._comments,
+      update,
     ];
 
     this._notify(updateType, update);
