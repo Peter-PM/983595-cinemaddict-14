@@ -1,3 +1,4 @@
+import he from 'he';
 import {timeAdapter, dateFormatPopup, dateFormatComments} from '../utils/date.js';
 import SmartView from './smart.js';
 
@@ -250,7 +251,7 @@ export default class FilmPopup extends SmartView {
   }
   _commentDescriptionHandler(evt) {
     this.updateData({
-      localDescription: evt.target.value,
+      localDescription: he.encode(evt.target.value),
     }, true);
   }
 
