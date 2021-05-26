@@ -239,6 +239,7 @@ export default class FilmPopup extends SmartView {
     evt.preventDefault();
     this._callback.clickClosePopup();
     document.querySelector('body').classList.remove('hide-overflow');
+    document.removeEventListener('keydown', this._commentAddHandler);
   }
 
   _commentEmotionHandler(evt) {

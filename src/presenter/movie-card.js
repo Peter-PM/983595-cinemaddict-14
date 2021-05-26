@@ -81,9 +81,9 @@ export default class MovieCard {
   _handleEscKeyDown(evt) {
     if (clickEsc(evt)) {
       evt.preventDefault();
-      remove(this._filmPopup);
+      this._filmPopup._clickCloseHandler(evt);
       document.removeEventListener('keydown', this._handleEscKeyDown);
-      document.querySelector('body').classList.remove('hide-overflow');
+
     }
   }
 
@@ -123,18 +123,21 @@ export default class MovieCard {
 
   _commentAddClick(evt, film) {
     if (evt.key === ('Control' && 'Enter')) {
-      this._changeData(
-        UserAction.ADD_COMMENT,
-        UpdateType.COMMENT,
-        film,
-      );
-      this._filmPopup.updateData({
-        comments: this._commentsModel.getComments(),
-      });
-      this._film.comments = this._commentsModel.getComments();
-      this.init(this._film);
+      if (film.localEmotion && film.localDescription) {
+        this._changeData(
+          UserAction.ADD_COMMENT,
+          UpdateType.COMMENT,
+          film,
+        );
+        this._filmPopup.updateData({
+          comments: this._commentsModel.getComments(),
+          localEmotion: '',
+          localDescription: '',
+        });
+        this._film.comments = this._commentsModel.getComments();
+        this.init(this._film);
+      }
     }
-
   }
 
   _commentDeleteClick(commentId) {
