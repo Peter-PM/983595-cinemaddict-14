@@ -6,7 +6,7 @@ dayjs.extend(duration);
 
 export const generateDate = () => {
 
-  const maxDaysGap = 10;
+  const maxDaysGap = 10000;
   const daysGap = getRandomNumber(-maxDaysGap, maxDaysGap);
   return dayjs(dayjs().add(daysGap, 'day').toDate()).format('YYYY-MM-DDTHH:mm:ssZ');
 };
@@ -25,4 +25,9 @@ export const dateFormatComments = (date) => {
 
 export const timeAdapter = (minutes) => {
   return dayjs.duration(minutes, 'm').hours() + 'h ' + dayjs.duration(minutes, 'm').minutes() + 'm';
+};
+
+export const today = () => {
+  const day = dayjs();
+  return dateFormatComments(day);
 };

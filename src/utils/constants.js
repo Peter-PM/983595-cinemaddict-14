@@ -31,6 +31,43 @@ export const FilmCount = {
   EXTRA: 2,
 };
 
+const KeyCode = {
+  ENTER: 'Enter',
+  ESC: 'Esc',
+  ESCAPE: 'Escape',
+};
+
 export const clickEsc = (evt) => {
-  return evt.key === ('Escape' || 'Esc');
+  return evt.key === (KeyCode.ESCAPE || KeyCode.ESC);
+};
+
+export const clickCtrlEnter = (evt) => {
+  return evt.ctrlKey && (evt.key === KeyCode.ENTER);
+};
+
+export const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating',
+  COMMENTED: 'commented',
+};
+
+export const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
+};
+
+export const UpdateType = {
+  COMMENT: 'COMMENT',
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+export const FilterType = {
+  ALL: 'All movies',
+  WATCHLIST: 'Watchlist',
+  HISTORY: 'History',
+  FAVORITES: 'Favorites',
 };

@@ -155,10 +155,9 @@ const createComment = () => {
   };
 };
 
-const createComments = () => {
-  return new Array(getRandomNumber(0, 10)).fill().map(createComment);
+export const commentsArray = () => {
+  return new Array((getRandomNumber(0, 10))).fill().map(createComment);
 };
-
 
 export const createFilmContent = () => {
   return {
@@ -179,7 +178,7 @@ export const createFilmContent = () => {
     isWatchlist: Boolean(getRandomNumber(0, 1)),
     isWatched: Boolean(getRandomNumber(0, 1)),
     isFavorite: Boolean(getRandomNumber(0, 1)),
-    comments: createComments(),
+    comments: commentsArray(),
     localEmotion: null,
     localDescription: null,
   };

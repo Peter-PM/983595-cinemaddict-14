@@ -1,8 +1,10 @@
+import he from 'he';
 import {timeAdapter, dateFormatPopup, dateFormatComments} from '../utils/date.js';
 import SmartView from './smart.js';
+import {clickCtrlEnter} from '../utils/constants.js';
 
 const createFilmPopupTemplate = (filmCard) => {
-  const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, comments, isWatchlist, isWatched, isFavorite, localEmotion, localDescription} = filmCard;
+  const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription, comments} = filmCard;
   const genres = genre.split(', ');
 
   const createGenreList = () => {
@@ -86,7 +88,8 @@ const createFilmPopupTemplate = (filmCard) => {
   };
 
   const createComments = () => {
-    return comments.map(({author, comment, date, emotion}) =>
+
+    return comments.map(({id, author, comment, date, emotion}) =>
       `<li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
@@ -96,7 +99,7 @@ const createFilmPopupTemplate = (filmCard) => {
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${author}</span>
             <span class="film-details__comment-day">${dateFormatComments(date)}</span>
-            <button class="film-details__comment-delete">Delete</button>
+            <button class="film-details__comment-delete" data-comment-id="${id}">Delete</button>
           </p>
         </div>
       </li>`).join('');
@@ -180,13 +183,15 @@ export default class FilmPopup extends SmartView {
 
     this._film = film;
 
-    this._clickCloseHandler = this._clickCloseHandler.bind(this);
+    this._clickCloseHandler = this.clickCloseHandler.bind(this);
     this._clickWatchlistHandler = this._clickWatchlistHandler.bind(this);
     this._clickWatchedHandler = this._clickWatchedHandler.bind(this);
     this._clickFavoritesHandler = this._clickFavoritesHandler.bind(this);
 
     this._commentEmotionHandler = this._commentEmotionHandler.bind(this);
     this._commentDescriptionHandler = this._commentDescriptionHandler.bind(this);
+    this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
+    this._commentAddHandler = this._commentAddHandler.bind(this);
 
     this._setCommentsHandler();
   }
@@ -197,6 +202,8 @@ export default class FilmPopup extends SmartView {
     this.setClickWatchlistHandler(this._callback.clickWatchlistPopup);
     this.setClickWatchedHandler(this._callback.clickWatchedPopup);
     this.setClickFavoritesHandler(this._callback.clickFavoritesPopup);
+    this.setCommentDeleteHandler(this._callback.clickDeleteComment);
+    this.setCommentAddHandler(this._callback.clickAddComment);
   }
 
   _setCommentsHandler() {
@@ -230,10 +237,11 @@ export default class FilmPopup extends SmartView {
       isFavorite: !this._film.isFavorite,
     });
   }
-  _clickCloseHandler(evt) {
+  clickCloseHandler(evt) {
     evt.preventDefault();
     this._callback.clickClosePopup();
     document.querySelector('body').classList.remove('hide-overflow');
+    document.removeEventListener('keydown', this._commentAddHandler);
   }
 
   _commentEmotionHandler(evt) {
@@ -244,8 +252,36 @@ export default class FilmPopup extends SmartView {
   }
   _commentDescriptionHandler(evt) {
     this.updateData({
-      localDescription: evt.target.value,
+      localDescription: he.encode(evt.target.value),
     }, true);
+  }
+
+  _commentDeleteHandler(evt) {
+    evt.preventDefault();
+
+    const target = evt.target.closest('.film-details__comment-delete');
+
+    if (target) {
+      this._callback.clickDeleteComment(target.dataset.commentId);
+    }
+  }
+
+  _commentAddHandler(evt) {
+    if (clickCtrlEnter(evt)) {
+      if (this._film.localEmotion && this._film.localDescription) {
+        this._callback.clickAddComment(this._film);
+      }
+    }
+  }
+
+  setCommentDeleteHandler(callback) {
+    this._callback.clickDeleteComment = callback;
+    this.getElement().querySelector('.film-details__comments-list').addEventListener('click', this._commentDeleteHandler);
+  }
+
+  setCommentAddHandler(callback) {
+    this._callback.clickAddComment = callback;
+    document.addEventListener('keydown', this._commentAddHandler);
   }
 
   setClickCloseBtnHandler(callback) {

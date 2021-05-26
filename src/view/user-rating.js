@@ -8,7 +8,7 @@ const createSiteUserRatingTemplate = (number) => {
     if (number > 0 && number <= 10) {
       return '<p class="profile__rating">Novice</p>';
     }
-    if (number > 11 && number <= 20) {
+    if (number >= 11 && number <= 20) {
       return '<p class="profile__rating">Fan</p>';
     }
     return '<p class="profile__rating">Movie Buff</p>';
