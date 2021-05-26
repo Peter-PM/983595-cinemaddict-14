@@ -1,6 +1,7 @@
 import he from 'he';
 import {timeAdapter, dateFormatPopup, dateFormatComments} from '../utils/date.js';
 import SmartView from './smart.js';
+import {clickCtrlEnter} from '../utils/constants.js';
 
 const createFilmPopupTemplate = (filmCard) => {
   const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription, comments} = filmCard;
@@ -182,7 +183,7 @@ export default class FilmPopup extends SmartView {
 
     this._film = film;
 
-    this._clickCloseHandler = this._clickCloseHandler.bind(this);
+    this._clickCloseHandler = this.clickCloseHandler.bind(this);
     this._clickWatchlistHandler = this._clickWatchlistHandler.bind(this);
     this._clickWatchedHandler = this._clickWatchedHandler.bind(this);
     this._clickFavoritesHandler = this._clickFavoritesHandler.bind(this);
@@ -236,7 +237,7 @@ export default class FilmPopup extends SmartView {
       isFavorite: !this._film.isFavorite,
     });
   }
-  _clickCloseHandler(evt) {
+  clickCloseHandler(evt) {
     evt.preventDefault();
     this._callback.clickClosePopup();
     document.querySelector('body').classList.remove('hide-overflow');
@@ -266,7 +267,11 @@ export default class FilmPopup extends SmartView {
   }
 
   _commentAddHandler(evt) {
-    this._callback.clickAddComment(evt, this._film);
+    if (clickCtrlEnter(evt)) {
+      if (this._film.localEmotion && this._film.localDescription) {
+        this._callback.clickAddComment(this._film);
+      }
+    }
   }
 
   setCommentDeleteHandler(callback) {

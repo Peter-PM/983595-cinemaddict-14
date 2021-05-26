@@ -31,12 +31,18 @@ export const FilmCount = {
   EXTRA: 2,
 };
 
+const KeyCode = {
+  ENTER: 'Enter',
+  ESC: 'Esc',
+  ESCAPE: 'Escape',
+};
+
 export const clickEsc = (evt) => {
-  return evt.key === ('Escape' || 'Esc');
+  return evt.key === (KeyCode.ESCAPE || KeyCode.ESC);
 };
 
 export const clickCtrlEnter = (evt) => {
-  return evt.key === ('Control' && 'Enter');
+  return evt.ctrlKey && (evt.key === KeyCode.ENTER);
 };
 
 export const SortType = {
