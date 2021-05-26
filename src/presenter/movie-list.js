@@ -38,7 +38,7 @@ export default class MovieList {
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
-    // this._commentsModel.addObserver(this._handleModelEvent);
+    this._commentsModel.addObserver(this._handleModelEvent);
 
   }
 
@@ -83,8 +83,6 @@ export default class MovieList {
 
   _handleModelEvent(updateType, data) {
     switch (updateType) {
-      case UpdateType.COMMENT:
-        break;
       case UpdateType.PATCH:
         if (data.id in this._filmPresenter) {
           this._filmPresenter[data.id].init(data);

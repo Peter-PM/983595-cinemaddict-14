@@ -44,7 +44,7 @@ export default class Comments extends Observer {
     this._notify(updateType, update);
   }
 
-  deleteComments(updateType, update, film) {
+  deleteComments(updateType, update) {
     const index = this._comments.findIndex((comment) => comment.id === update);
 
     if (index === -1) {
@@ -55,6 +55,6 @@ export default class Comments extends Observer {
       ...this._comments.slice(0, index),
       ...this._comments.slice(index + 1),
     ];
-    this._notify(updateType, film);
+    this._notify(updateType);
   }
 }
