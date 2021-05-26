@@ -58,7 +58,10 @@ export default class MovieCard {
     const prevPopup = body.querySelector('.film-details');
 
     this._commentsModel.setComments(this._film.comments);
-    this._filmPopup = new FilmPopupView(this._film, this._commentsModel.getComments());
+    console.log(this._film.comments);
+    console.log(this._commentsModel.getComments());
+    this._film.comments = this._commentsModel.getComments()
+    this._filmPopup = new FilmPopupView(this._film);
 
 
     if (prevPopup) {
@@ -103,31 +106,31 @@ export default class MovieCard {
   _handleModelEvent(updateType) {
     switch (updateType) {
       case UpdateType.COMMENT:
-        //remove(this._filmPopup);
-        this._renderPopup();
         break;
     }
   }
-  _handleViewAction(actionType, updateType, update) {
+  _handleViewAction(actionType, updateType, update, film) {
     switch (actionType) {
       case UserAction.ADD_COMMENT:
         this._commentsModel.addComments(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this._commentsModel.deleteComments(updateType, update);
+        this._commentsModel.deleteComments(updateType, update, film);
         break;
     }
   }
   _commentDeleteClick(film, commentId) {
+    console.log(commentId);
     this._changeData(
       UserAction.DELETE_COMMENT,
       UpdateType.COMMENT,
-      film,
       commentId,
+      film,
     );
     this._filmPopup.updateData({
       comments: this._commentsModel.getComments(),
     });
+
   }
 
   _handleWatchlistClick() {
