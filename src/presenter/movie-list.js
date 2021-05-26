@@ -53,11 +53,11 @@ export default class MovieList {
 
     switch (sortType) {
       case SortType.DATE:
-        return filtredFilms.sort(sortByDate);
+        return filtredFilms.slice().sort(sortByDate);
       case SortType.RATING:
-        return filtredFilms.sort(sortByRating);
+        return filtredFilms.slice().sort(sortByRating);
       case SortType.COMMENTED:
-        return filtredFilms.sort(sortByComments);
+        return filtredFilms.slice().sort(sortByComments);
       default:
         return filtredFilms;
     }
