@@ -29,7 +29,8 @@ export default class Api {
       body: JSON.stringify(MoviesModel.adaptToServer(film)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
-      .then(Api.toJSON);
+      .then(Api.toJSON)
+      .then(MoviesModel.adaptToClient);
   }
 
   _load({

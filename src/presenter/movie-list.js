@@ -87,10 +87,8 @@ export default class MovieList {
   }
 
   _handleModelEvent(updateType, data) {
-    //MoviesModel.adaptToClient(data);
     switch (updateType) {
       case UpdateType.PATCH:
-
         if (data.id in this._filmPresenter) {
           this._filmPresenter[data.id].init(data);
         }
