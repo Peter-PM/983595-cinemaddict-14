@@ -5,13 +5,14 @@ import {clickEsc, UpdateType, UserAction} from '../utils/constants.js';
 
 
 export default class MovieCard {
-  constructor(container, changeData, filterModel, commentsModel, filmsModel) {
+  constructor(container, changeData, filterModel, commentsModel, filmsModel, api) {
     this._filmCardsContainer = container;
     this._changeData = changeData;
 
     this._filmCard = null;
     this._filmPopup = null;
     this._filmComments = null;
+    this._api = api;
 
     this._handleClick = this._handleClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
@@ -59,23 +60,24 @@ export default class MovieCard {
     const body = document.querySelector('body');
     const prevPopup = body.querySelector('.film-details');
 
-    this._commentsModel.setComments(this._film.comments);
+    this._api.getComments(this._film.id).then((comments) => {
+      this._commentsModel.setComments(comments);
+      this._film.comments = this._commentsModel.getComments();
+      this._filmPopup = new FilmPopupView(this._film);
 
-    this._film.comments = this._commentsModel.getComments();
-    this._filmPopup = new FilmPopupView(this._film);
+      if (prevPopup) {
+        prevPopup.remove();
+      }
 
-    if (prevPopup) {
-      prevPopup.remove();
-    }
+      this._filmPopup.setClickCloseBtnHandler(this._handleCloseBtnClick);
+      this._filmPopup.setClickWatchlistHandler(this._handleWatchlistClick);
+      this._filmPopup.setClickWatchedHandler(this._handleWatchedClick);
+      this._filmPopup.setClickFavoritesHandler(this._handleFavoritesClick);
+      this._filmPopup.setCommentDeleteHandler(this._commentDeleteClick);
+      this._filmPopup.setCommentAddHandler(this._commentAddClick);
 
-    this._filmPopup.setClickCloseBtnHandler(this._handleCloseBtnClick);
-    this._filmPopup.setClickWatchlistHandler(this._handleWatchlistClick);
-    this._filmPopup.setClickWatchedHandler(this._handleWatchedClick);
-    this._filmPopup.setClickFavoritesHandler(this._handleFavoritesClick);
-    this._filmPopup.setCommentDeleteHandler(this._commentDeleteClick);
-    this._filmPopup.setCommentAddHandler(this._commentAddClick);
-
-    render(body, this._filmPopup);
+      render(body, this._filmPopup);
+    });
   }
 
   _handleEscKeyDown(evt) {

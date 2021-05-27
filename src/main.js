@@ -9,11 +9,6 @@ import MovieListPresenter from './presenter/movie-list.js';
 import FilterMenuPresenter from './presenter/movie-filter.js';
 import Api from './api.js';
 
-// import {createFilmContent} from './mock/mock.js';
-// import {FilmCount} from './utils/constants.js';
-// const films = new Array(FilmCount.MAIN).fill().map(createFilmContent);
-// console.log(films[0])
-
 const AUTHORIZATION = 'Basic GtnhGtnhjdbx2021';
 const END_POINT = 'https://14.ecmascript.pages.academy/cinemaddict/';
 
