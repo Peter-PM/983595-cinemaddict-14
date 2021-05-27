@@ -131,16 +131,18 @@ export default class MovieCard {
   }
 
   _commentDeleteClick(commentId) {
-    this._changeData(
-      UserAction.DELETE_COMMENT,
-      UpdateType.COMMENT,
-      commentId,
-    );
-    this._filmPopup.updateData({
-      comments: this._commentsModel.getComments(),
+    this._api.deleteComment(commentId).then(() => {
+      this._changeData(
+        UserAction.DELETE_COMMENT,
+        UpdateType.COMMENT,
+        commentId,
+      );
+      this._filmPopup.updateData({
+        comments: this._commentsModel.getComments(),
+      });
+      this._film.comments = this._commentsModel.getComments();
+      this.init(this._film);
     });
-    this._film.comments = this._commentsModel.getComments();
-    this.init(this._film);
   }
 
   _handleWatchlistClick() {
