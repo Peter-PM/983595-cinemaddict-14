@@ -23,6 +23,12 @@ export const FilmListTypes = {
     isExtra: false,
     movies: false,
   },
+  LOADING: {
+    title: 'Loading...',
+    isHidden: false,
+    isExtra: false,
+    movies: false,
+  },
 };
 
 export const FilmCount = {
@@ -63,6 +69,7 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 export const FilterType = {

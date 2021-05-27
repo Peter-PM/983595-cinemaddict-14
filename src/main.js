@@ -1,32 +1,46 @@
 import UserRatingView from './view/user-rating.js';
 import FooterFilmInfoView from './view/footer-statistic.js';
-import {createFilmContent} from './mock/mock.js';
 import {render} from './utils/render.js';
-import {FilmCount} from './utils/constants.js';
+import {UpdateType} from './utils/constants.js';
 import MoviesModel from './model/movies.js';
 import FilterModel from './model/filter.js';
 import CommentsModel from './model/comments.js';
 import MovieListPresenter from './presenter/movie-list.js';
 import FilterMenuPresenter from './presenter/movie-filter.js';
+import Api from './api.js';
 
-const films = new Array(FilmCount.MAIN).fill().map(createFilmContent);
+// import {createFilmContent} from './mock/mock.js';
+// import {FilmCount} from './utils/constants.js';
+// const films = new Array(FilmCount.MAIN).fill().map(createFilmContent);
+// console.log(films[0])
+
+const AUTHORIZATION = 'Basic GtnhGtnhjdbx2021';
+const END_POINT = 'https://14.ecmascript.pages.academy/cinemaddict/';
+
+const api = new Api(END_POINT, AUTHORIZATION);
+
 const siteMain = document.querySelector('.main');
 const siteHeader = document.querySelector('.header');
 const siteFooterStatistic = document.querySelector('.footer__statistics');
 
+document.querySelector('body').style.maxWidth = '1350px';
+
 const commentsModel = new CommentsModel();
-
-const filmsModel = new MoviesModel();
-filmsModel.setFilms(films);
-
 const filterModel = new FilterModel();
-
-render(siteHeader, new UserRatingView(films.filter((item) => item.isWatchlist).length));
-
+const filmsModel = new MoviesModel();
 const filterList = new FilterMenuPresenter(siteMain, filmsModel, filterModel);
-filterList.init();
 
-const movieList = new MovieListPresenter(siteMain, filmsModel, filterModel, commentsModel);
+api.getFilms().then((films) => {
+  //console.log(films[0])
+  filmsModel.setFilms(UpdateType.INIT, films);
+  render(siteHeader, new UserRatingView(12));
+  filterList.init();
+})
+  .catch(() => {
+    filmsModel.setFilms(UpdateType.INIT, []);
+  });
+
+const movieList = new MovieListPresenter(siteMain, filmsModel, filterModel, commentsModel, api);
 movieList.init();
 
-render(siteFooterStatistic, new FooterFilmInfoView(FilmCount.MAIN));
+render(siteFooterStatistic, new FooterFilmInfoView(30));

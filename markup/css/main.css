@@ -63,7 +63,7 @@ html {
 
 body {
   box-sizing: border-box;
-  max-width: 1240px;
+  max-width: 1400px;
   padding: var(--vertical-gap) var(--horizontal-gap) 0;
   width: 100%;
 }

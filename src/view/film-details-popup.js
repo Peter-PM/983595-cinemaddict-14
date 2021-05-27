@@ -5,7 +5,7 @@ import {clickCtrlEnter} from '../utils/constants.js';
 
 const createFilmPopupTemplate = (filmCard) => {
   const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription, comments} = filmCard;
-  const genres = genre.split(', ');
+  const genres = genre.toString().split(', ');
 
   const createGenreList = () => {
     let strigGenre = '';
