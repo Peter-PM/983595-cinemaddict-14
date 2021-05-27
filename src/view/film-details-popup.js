@@ -5,11 +5,11 @@ import {clickCtrlEnter} from '../utils/constants.js';
 
 const createFilmPopupTemplate = (filmCard) => {
   const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription, comments} = filmCard;
-  const genres = genre.toString().split(', ');
+  const genres = genre;
 
   const createGenreList = () => {
     let strigGenre = '';
-    genres.forEach((item) => {
+    genre.forEach((item) => {
       strigGenre = strigGenre + `<span class="film-details__genre">${item}</span>`;
     });
     return strigGenre;
@@ -23,11 +23,11 @@ const createFilmPopupTemplate = (filmCard) => {
       },
       {
         term: 'Writers',
-        cell: writers,
+        cell: writers.join(', '),
       },
       {
         term: 'Actors',
-        cell: actors,
+        cell: actors.join(', '),
       },
       {
         term: 'Release Date',

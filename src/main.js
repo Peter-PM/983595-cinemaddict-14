@@ -18,7 +18,7 @@ const siteMain = document.querySelector('.main');
 const siteHeader = document.querySelector('.header');
 const siteFooterStatistic = document.querySelector('.footer__statistics');
 
-document.querySelector('body').style.maxWidth = '1350px';
+// document.querySelector('body').style.maxWidth = '1350px';
 
 const commentsModel = new CommentsModel();
 const filterModel = new FilterModel();
