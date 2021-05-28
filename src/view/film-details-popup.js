@@ -4,7 +4,7 @@ import SmartView from './smart.js';
 import {clickCtrlEnter} from '../utils/constants.js';
 
 const createFilmPopupTemplate = (filmCard) => {
-  const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription, comments} = filmCard;
+  const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription, comments, isDisabled,isError} = filmCard;
   const genres = genre;
 
   const createGenreList = () => {
@@ -81,7 +81,7 @@ const createFilmPopupTemplate = (filmCard) => {
   const createEmoji = () => {
     const emojiCustom = ['smile', 'sleeping', 'puke', 'angry'];
     return emojiCustom.map((item) => `
-      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${item}" value="${item}">
+      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${item}" value="${item}" ${isDisabled ? 'disabled' : ''}>
       <label class="film-details__emoji-label" for="emoji-${item}">
         <img src="./images/emoji/${item}.png" width="30" height="30" alt="emoji">
       </label>`).join('');
@@ -89,7 +89,7 @@ const createFilmPopupTemplate = (filmCard) => {
 
   const createComments = () => {
 
-    return comments.map(({id, author, comment, date, emotion}) =>
+    return comments.map(({id, author, comment, date, emotion, isDeleting}) =>
       `<li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
@@ -99,7 +99,7 @@ const createFilmPopupTemplate = (filmCard) => {
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${author}</span>
             <span class="film-details__comment-day">${dateFormatComments(date)}</span>
-            <button class="film-details__comment-delete" data-comment-id="${id}">Delete</button>
+            <button class="film-details__comment-delete" data-comment-id="${id}" ${isDeleting ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
           </p>
         </div>
       </li>`).join('');
@@ -163,7 +163,7 @@ const createFilmPopupTemplate = (filmCard) => {
               ${createEmotion()}</div>
 
               <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${localDescription ? `${localDescription}` : ''}</textarea>
+                <textarea class="film-details__comment-input  ${isError ? 'shake' : ''}" placeholder="Select reaction below and write comment here" name="comment" ${isDisabled ? 'disabled' : ''}>${localDescription ? `${localDescription}` : ''}</textarea>
               </label>
 
               <div class="film-details__emoji-list">

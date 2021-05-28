@@ -3,6 +3,14 @@ import FilmCardView from '../view/film-card.js';
 import FilmPopupView from '../view/film-details-popup.js';
 import {clickEsc, UpdateType, UserAction} from '../utils/constants.js';
 
+const State = {
+  DISABLING: 'DISABLED',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 
 export default class MovieCard {
   constructor(container, changeData, filterModel, commentsModel, filmsModel, api) {
@@ -12,7 +20,6 @@ export default class MovieCard {
     this._filmCard = null;
     this._filmPopup = null;
     this._filmComments = null;
-    this._api = api;
 
     this._handleClick = this._handleClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
@@ -26,7 +33,7 @@ export default class MovieCard {
     this._filterModel = filterModel;
     this._commentsModel = commentsModel;
     this._filmsModel = filmsModel;
-
+    this._api = api;
   }
 
   init(film) {
@@ -54,6 +61,44 @@ export default class MovieCard {
     remove(prevFilmCard);
   }
 
+  setSaving() {
+    this._filmPopup.updateData({
+      isDisabled: true,
+      isError: false,
+    });
+  }
+
+  _setViewState(state) {
+    const resetFormState = () => {
+      this._filmPopup.updateData({
+        isDisabled: false,
+        isError: false,
+      });
+    };
+    switch (state) {
+      case State.DISABLING:
+        this._filmPopup.updateData({
+          isDisabled: true,
+        });
+        break;
+      case State.ABORTING:
+        this._setShake(resetFormState);
+        break;
+    }
+  }
+
+  _setShake(callback) {
+    this._filmPopup.updateData({
+      isError: true,
+    });
+    setTimeout(() => {
+      this._filmPopup.updateData({
+        isError: false,
+      });
+      callback();
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
   _renderPopup() {
     const body = document.querySelector('body');
     const prevPopup = body.querySelector('.film-details');
@@ -61,7 +106,7 @@ export default class MovieCard {
     this._api.getComments(this._film.id).then((comments) => {
       this._commentsModel.setComments(comments);
       this._film.comments = this._commentsModel.getComments();
-      this._filmPopup = new FilmPopupView(this._film);
+      this._filmPopup = new FilmPopupView(this._film, 1);
 
       if (prevPopup) {
         prevPopup.remove();
@@ -105,6 +150,7 @@ export default class MovieCard {
   }
 
   _commentAddClick(film) {
+    this._setViewState(State.DISABLING);
     this._api.addComment(
       film.id,
       {
@@ -121,10 +167,14 @@ export default class MovieCard {
         comments: this._commentsModel.getComments(),
         localEmotion: '',
         localDescription: '',
+        // isDisabled: true,
       });
       this._film.comments = this._commentsModel.getComments();
       this.init(this._film);
-    });
+    })
+      .catch(() => {
+        this._setViewState(State.ABORTING);
+      });
   }
 
   _commentDeleteClick(commentId) {

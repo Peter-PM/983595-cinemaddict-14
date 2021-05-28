@@ -4,6 +4,12 @@ import {UpdateType, FilterType} from '../utils/constants.js';
 import {filter} from '../utils/filter.js';
 import UserRatingView from '../view/user-rating.js';
 
+const UserRank = {
+  ZERO: 0,
+  NOVISE: 10,
+  FAN: 20,
+};
+
 export default class FilterMenu {
   constructor(filterContainer, filmModel, filterModel) {
     this._filterContainer = filterContainer;
@@ -37,10 +43,24 @@ export default class FilterMenu {
   }
 
   _renderUserRating(history) {
+    const calculationRating = (number) => {
+      if (number === UserRank.ZERO) {
+        return '';
+      }
+      if (number > UserRank.ZERO && number <= UserRank.NOVISE) {
+        return 'Novice';
+      }
+      if (number > UserRank.NOVISE && number <= UserRank.FAN) {
+        return 'Fan';
+      }
+      return 'Movie Buff';
+    };
+    const rank = calculationRating(history);
+
     const siteHeader = document.querySelector('.header');
 
     const prevRatingComponent = this._ratingComponent;
-    this._ratingComponent = new UserRatingView(history);
+    this._ratingComponent = new UserRatingView(rank);
 
     if (prevRatingComponent === null) {
       render(siteHeader, this._ratingComponent);
