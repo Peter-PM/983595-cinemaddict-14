@@ -1,7 +1,7 @@
 import {render, replace, remove} from '../utils/render.js';
 import FilmCardView from '../view/film-card.js';
 import FilmPopupView from '../view/film-details-popup.js';
-import {clickEsc, UpdateType, UserAction} from '../utils/constants.js';
+import {clickEsc, UpdateType, UserAction, SHAKE_ANIMATION_TIMEOUT} from '../utils/constants.js';
 
 const State = {
   DISABLING: 'DISABLED',
@@ -58,40 +58,15 @@ export default class MovieCard {
     remove(prevFilmCard);
   }
 
-  setSaving() {
-    this._filmPopup.updateData({
-      isDisabled: true,
-      isError: false,
-    });
-  }
-
-  _setViewState(state) {
-    // const resetFormState = () => {
-    //   this._filmPopup.updateData({
-    //     isDisabled: false,
-    //     isError: false,
-    //   });
-    // };
-    switch (state) {
-      case State.DISABLING:
-        this._filmPopup.updateData({
-          isDisabled: true,
-        });
-        break;
-      case State.ABORTING:
-        this._filmPopup.shake();
-        break;
-    }
-  }
-
   _renderPopup() {
     const body = document.querySelector('body');
     const prevPopup = body.querySelector('.film-details');
 
     this._api.getComments(this._film.id).then((comments) => {
+
       this._commentsModel.setComments(comments);
       this._film.comments = this._commentsModel.getComments();
-      this._filmPopup = new FilmPopupView(this._film, 1);
+      this._filmPopup = new FilmPopupView(this._film);
 
       if (prevPopup) {
         prevPopup.remove();
@@ -134,6 +109,38 @@ export default class MovieCard {
     return UpdateType.PATCH;
   }
 
+  _setReseting(commentId) {
+    setTimeout(() => {
+      this._commentsModel.changeFlagError(commentId);
+      this._commentsModel.changeFlagDeliting(commentId);
+      this._filmPopup.updateData({
+        comments: this._commentsModel.getComments(),
+      });
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  _setViewState(state, commentId) {
+    switch (state) {
+      case State.DISABLING:
+        this._filmPopup.updateData({
+          isDisabled: true,
+        });
+        break;
+      case State.DELETING:
+        this._commentsModel.changeFlagError(commentId);
+        this._filmPopup.updateData({
+          comments: this._commentsModel.getComments(),
+        });
+        break;
+      case State.ABORTING:
+        this._filmPopup.updateData({
+          isDisabled: false,
+        });
+        this._filmPopup.shake();
+        break;
+    }
+  }
+
   _commentAddClick(film) {
     this._setViewState(State.DISABLING);
     this._api.addComment(
@@ -163,18 +170,27 @@ export default class MovieCard {
   }
 
   _commentDeleteClick(commentId) {
-    this._api.deleteComment(commentId).then(() => {
-      this._changeData(
-        UserAction.DELETE_COMMENT,
-        UpdateType.COMMENT,
-        commentId,
-      );
-      this._filmPopup.updateData({
-        comments: this._commentsModel.getComments(),
-      });
-      this._film.comments = this._commentsModel.getComments();
-      this.init(this._film);
+    this._commentsModel.changeFlagDeliting(commentId);
+    this._filmPopup.updateData({
+      comments: this._commentsModel.getComments(),
     });
+    this._api.deleteComment(commentId)
+      .then(() => {
+        this._changeData(
+          UserAction.DELETE_COMMENT,
+          UpdateType.COMMENT,
+          commentId,
+        );
+        this._filmPopup.updateData({
+          comments: this._commentsModel.getComments(),
+        });
+        this._film.comments = this._commentsModel.getComments();
+        this.init(this._film);
+      })
+      .catch(() => {
+        this._setViewState(State.DELETING, commentId);
+        this._setReseting(commentId);
+      });
   }
 
   _handleWatchlistClick() {

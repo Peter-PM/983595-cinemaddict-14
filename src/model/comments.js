@@ -21,12 +21,35 @@ export default class Comments extends Observer {
     this._notify(updateType);
   }
 
+  changeFlagDeliting(commentId) {
+    const index = this._comments.findIndex((comment) => comment.id === commentId);
+
+    if (index === -1) {
+      throw new Error('Can\'t update unexisting film');
+    }
+    this._comments[index].isDeleting = !this._comments[index].isDeleting;
+
+    return this._comments;
+  }
+
+  changeFlagError(commentId) {
+    const index = this._comments.findIndex((comment) => comment.id === commentId);
+
+    if (index === -1) {
+      throw new Error('Can\'t update unexisting film');
+    }
+    this._comments[index].isError = !this._comments[index].isError;
+
+    return this._comments;
+  }
+
   static adaptToClient(comment) {
     const adaptedComment = Object.assign(
       {},
       comment,
       {
         isDeleting: false,
+        isError: false,
       },
     );
 
@@ -41,6 +64,7 @@ export default class Comments extends Observer {
     );
 
     delete adaptedComment.isDisabled;
+    delete adaptedComment.isError;
 
     return adaptedComment;
   }

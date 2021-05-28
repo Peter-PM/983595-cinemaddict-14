@@ -1,12 +1,10 @@
 import he from 'he';
 import {timeAdapter, dateFormatPopup, dateFormatComments} from '../utils/date.js';
 import SmartView from './smart.js';
-import {clickCtrlEnter} from '../utils/constants.js';
-
-const SHAKE_ANIMATION_TIMEOUT = 600;
+import {clickCtrlEnter, SHAKE_ANIMATION_TIMEOUT} from '../utils/constants.js';
 
 const createFilmPopupTemplate = (filmCard) => {
-  const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription, comments, isDisabled,isError} = filmCard;
+  const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription, comments, isDisabled} = filmCard;
   const genres = genre;
 
   const createGenreList = () => {
@@ -91,8 +89,8 @@ const createFilmPopupTemplate = (filmCard) => {
 
   const createComments = () => {
 
-    return comments.map(({id, author, comment, date, emotion, isDeleting}) =>
-      `<li class="film-details__comment">
+    return comments.map(({id, author, comment, date, emotion, isDeleting, isError}) =>
+      `<li class="film-details__comment ${isError ? 'shake' : ''}">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
         </span>
@@ -122,7 +120,7 @@ const createFilmPopupTemplate = (filmCard) => {
             <div class="film-details__poster">
               <img class="film-details__poster-img" src="${poster}" alt="">
 
-              <p class="film-details__age">${ageRating}</p>
+              <p class="film-details__age">${ageRating} +</p>
             </div>
 
             <div class="film-details__info">
@@ -165,7 +163,7 @@ const createFilmPopupTemplate = (filmCard) => {
               ${createEmotion()}</div>
 
               <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input  ${isError ? 'shake' : ''}" placeholder="Select reaction below and write comment here" name="comment" ${isDisabled ? 'disabled' : ''}>${localDescription ? `${localDescription}` : ''}</textarea>
+                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${isDisabled ? 'disabled' : ''}>${localDescription ? `${localDescription}` : ''}</textarea>
               </label>
 
               <div class="film-details__emoji-list">
