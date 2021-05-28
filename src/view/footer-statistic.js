@@ -11,6 +11,6 @@ export default class FooterFilmInfo extends AbstractView {
   }
 
   getTemplate() {
-    return createFooterStatisticTemplate(this._films);
+    return createFooterStatisticTemplate(this._films.length);
   }
 }

@@ -1,11 +1,10 @@
 import Observer from '../utils/observer.js';
-import {today} from '../utils/date.js';
-import {nanoid} from 'nanoid';
 
 export default class Comments extends Observer {
-  constructor() {
+  constructor(api) {
     super();
     this._comments = [];
+    this._api = api;
   }
 
   setComments(comments) {
@@ -16,25 +15,10 @@ export default class Comments extends Observer {
     return this._comments;
   }
 
-  createComment(updateType, film) {
-    const newComment = {
-      id: nanoid(),
-      author: 'Peter',
-      comment: film.localDescription,
-      date: today(),
-      emotion: film.localEmotion,
-    };
-
-    this.addComments(updateType, newComment);
-  }
-
   addComments(updateType, update) {
-    this._comments = [
-      ...this._comments,
-      update,
-    ];
+    this._comments = update;
 
-    this._notify(updateType, update);
+    this._notify(updateType);
   }
 
   deleteComments(updateType, update) {

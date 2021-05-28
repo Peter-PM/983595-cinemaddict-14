@@ -2,9 +2,7 @@ import AbstractView from './abstract.js';
 
 const createSiteUserRatingTemplate = (number) => {
   const calculationRating = () => {
-    if (number === 0) {
-      return '';
-    }
+
     if (number > 0 && number <= 10) {
       return '<p class="profile__rating">Novice</p>';
     }
