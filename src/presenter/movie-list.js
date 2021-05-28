@@ -8,7 +8,6 @@ import MovieCardPresenter from './movie-card.js';
 import {SortType, UpdateType, UserAction} from '../utils/constants.js';
 import {sortByDate, sortByRating, sortByComments} from '../utils/sort.js';
 import {filter} from '../utils/filter.js';
-//import MoviesModel from '../model/movies.js';
 
 export default class MovieList {
   constructor(container, filmsModel, filterModel, commentsModel, api) {
@@ -78,7 +77,7 @@ export default class MovieList {
         });
         break;
       case UserAction.ADD_COMMENT:
-        this._commentsModel.createComment(updateType, update);
+        this._commentsModel.addComments(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
         this._commentsModel.deleteComments(updateType, update);
@@ -206,13 +205,13 @@ export default class MovieList {
       return;
     }
 
-    this._renderSort();
-    this._renderListContainer();
-
     if (!this._getFilms().length) {
       this._renderNoFilmsPlug();
       return;
     }
+    this._renderSort();
+    this._renderListContainer();
+
     if (this._noFilmsComponent !== null) {
       remove(this._noFilmsComponent);
     }

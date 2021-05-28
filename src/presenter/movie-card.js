@@ -21,14 +21,12 @@ export default class MovieCard {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoritesClick = this._handleFavoritesClick.bind(this);
     this._commentDeleteClick = this._commentDeleteClick.bind(this);
-    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._commentAddClick = this._commentAddClick.bind(this);
 
     this._filterModel = filterModel;
     this._commentsModel = commentsModel;
     this._filmsModel = filmsModel;
 
-    this._commentsModel.addObserver(this._handleModelEvent);
   }
 
   init(film) {
@@ -61,7 +59,6 @@ export default class MovieCard {
     const prevPopup = body.querySelector('.film-details');
 
     this._api.getComments(this._film.id).then((comments) => {
-      //console.log(comments)
       this._commentsModel.setComments(comments);
       this._film.comments = this._commentsModel.getComments();
       this._filmPopup = new FilmPopupView(this._film);
@@ -107,27 +104,27 @@ export default class MovieCard {
     return UpdateType.PATCH;
   }
 
-  _handleModelEvent(updateType) {
-    switch (updateType) {
-      case UpdateType.COMMENT:
-
-        break;
-    }
-  }
-
   _commentAddClick(film) {
-    this._changeData(
-      UserAction.ADD_COMMENT,
-      UpdateType.COMMENT,
-      film,
-    );
-    this._filmPopup.updateData({
-      comments: this._commentsModel.getComments(),
-      localEmotion: '',
-      localDescription: '',
+    this._api.addComment(
+      film.id,
+      {
+        comment: film.localDescription,
+        emotion: film.localEmotion,
+      },
+    ).then((response) => {
+      this._changeData(
+        UserAction.ADD_COMMENT,
+        UpdateType.COMMENT,
+        response.comments,
+      );
+      this._filmPopup.updateData({
+        comments: this._commentsModel.getComments(),
+        localEmotion: '',
+        localDescription: '',
+      });
+      this._film.comments = this._commentsModel.getComments();
+      this.init(this._film);
     });
-    this._film.comments = this._commentsModel.getComments();
-    this.init(this._film);
   }
 
   _commentDeleteClick(commentId) {

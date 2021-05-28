@@ -2,7 +2,7 @@ import {render, replace, remove} from '../utils/render.js';
 import FilterMenuView from '../view/site-menu.js';
 import {UpdateType, FilterType} from '../utils/constants.js';
 import {filter} from '../utils/filter.js';
-
+import UserRatingView from '../view/user-rating.js';
 
 export default class FilterMenu {
   constructor(filterContainer, filmModel, filterModel) {
@@ -11,6 +11,7 @@ export default class FilterMenu {
     this._filmModel = filmModel;
 
     this._filterComponent = null;
+    this._ratingComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
@@ -35,6 +36,21 @@ export default class FilterMenu {
     remove(prevFilterComponent);
   }
 
+  _renderUserRating(history) {
+    const siteHeader = document.querySelector('.header');
+
+    const prevRatingComponent = this._ratingComponent;
+    this._ratingComponent = new UserRatingView(history);
+
+    if (prevRatingComponent === null) {
+      render(siteHeader, this._ratingComponent);
+      return;
+    }
+
+    replace(this._ratingComponent, prevRatingComponent);
+    remove(prevRatingComponent);
+  }
+
   _handleModelEvent() {
     this.init();
   }
@@ -49,6 +65,8 @@ export default class FilterMenu {
 
   _getFilters() {
     const films = this._filmModel.getFilms();
+
+    this._renderUserRating(filter[FilterType.HISTORY](films).length);
 
     return [
       {
