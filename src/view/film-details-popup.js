@@ -3,6 +3,8 @@ import {timeAdapter, dateFormatPopup, dateFormatComments} from '../utils/date.js
 import SmartView from './smart.js';
 import {clickCtrlEnter} from '../utils/constants.js';
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 const createFilmPopupTemplate = (filmCard) => {
   const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription, comments, isDisabled,isError} = filmCard;
   const genres = genre;
@@ -300,5 +302,13 @@ export default class FilmPopup extends SmartView {
   setClickFavoritesHandler(callback) {
     this._callback.clickFavoritesPopup = callback;
     this.getElement().querySelector('#favorite').addEventListener('click', this._clickFavoritesHandler);
+  }
+
+  shake() {
+    const textarea = this.getElement().querySelector('.film-details__comment-input');
+    textarea.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      textarea.style.animation = '';
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 }

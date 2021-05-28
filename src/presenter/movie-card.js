@@ -9,9 +9,6 @@ const State = {
   ABORTING: 'ABORTING',
 };
 
-const SHAKE_ANIMATION_TIMEOUT = 600;
-
-
 export default class MovieCard {
   constructor(container, changeData, filterModel, commentsModel, filmsModel, api) {
     this._filmCardsContainer = container;
@@ -69,12 +66,12 @@ export default class MovieCard {
   }
 
   _setViewState(state) {
-    const resetFormState = () => {
-      this._filmPopup.updateData({
-        isDisabled: false,
-        isError: false,
-      });
-    };
+    // const resetFormState = () => {
+    //   this._filmPopup.updateData({
+    //     isDisabled: false,
+    //     isError: false,
+    //   });
+    // };
     switch (state) {
       case State.DISABLING:
         this._filmPopup.updateData({
@@ -82,21 +79,9 @@ export default class MovieCard {
         });
         break;
       case State.ABORTING:
-        this._setShake(resetFormState);
+        this._filmPopup.shake();
         break;
     }
-  }
-
-  _setShake(callback) {
-    this._filmPopup.updateData({
-      isError: true,
-    });
-    setTimeout(() => {
-      this._filmPopup.updateData({
-        isError: false,
-      });
-      callback();
-    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _renderPopup() {
@@ -167,7 +152,7 @@ export default class MovieCard {
         comments: this._commentsModel.getComments(),
         localEmotion: '',
         localDescription: '',
-        // isDisabled: true,
+        isDisabled: false,
       });
       this._film.comments = this._commentsModel.getComments();
       this.init(this._film);
