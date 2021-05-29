@@ -24,6 +24,7 @@ export default class FilterMenu {
 
     this._filmModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
   }
 
   init() {
