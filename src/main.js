@@ -32,7 +32,3 @@ api.getFilms().then((films) => {
   });
 
 movieList.init();
-
-// api.getComments([0]).then((comments) => {
-//   console.log(comments)
-// })
