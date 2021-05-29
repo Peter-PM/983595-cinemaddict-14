@@ -1,12 +1,34 @@
-import AbstractView from './abstract.js';
+// import Chart from 'chart.js';
+// import ChartDataLabels from 'chartjs-plugin-datalabels';
+import SmartView from './smart.js';
+import {calculationRating} from '../utils/common.js';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 
-const createUserStatistic = () => {
+dayjs.extend(duration);
+
+const createUserStatistic = (films) => {
+
+  const createWatchedFilms = () => {
+    return films.filter((item) => item.isWatched);
+  };
+  const watchedFilms = createWatchedFilms();
+
+  const createTotalDurations = () => {
+    let duration = 0;
+    watchedFilms.forEach((element) => {
+      duration += element.duration;
+    });
+    return duration;
+  };
+  const totalTime = createTotalDurations();
+
   return (
     `<section class="statistic">
       <p class="statistic__rank">
         Your rank
         <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-        <span class="statistic__rank-label">Movie buff</span>
+        <span class="statistic__rank-label">${calculationRating(watchedFilms.length)}</span>
       </p>
 
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -31,11 +53,11 @@ const createUserStatistic = () => {
       <ul class="statistic__text-list">
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">You watched</h4>
-          <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
+          <p class="statistic__item-text">${watchedFilms.length} <span class="statistic__item-description">movies</span></p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Total duration</h4>
-          <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
+          <p class="statistic__item-text">${Math.floor(totalTime/60)}<span class="statistic__item-description">h</span> ${dayjs.duration(totalTime, 'm').minutes()} <span class="statistic__item-description">m</span></p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Top genre</h4>
@@ -52,14 +74,14 @@ const createUserStatistic = () => {
 };
 
 
-export default class UserStatistic extends AbstractView {
-  constructor(film) {
+export default class UserStatistic extends SmartView {
+  constructor(films) {
     super();
-    this._filters = film;
-
+    this._films = films;
   }
 
   getTemplate() {
-    return createUserStatistic();
+    return createUserStatistic(this._films);
   }
+
 }

@@ -2,6 +2,7 @@ import {render, replace, remove} from '../utils/render.js';
 import FilterMenuView from '../view/site-menu.js';
 import {UpdateType, FilterType} from '../utils/constants.js';
 import {filter} from '../utils/filter.js';
+import {calculationRating} from '../utils/common.js';
 import UserRatingView from '../view/user-rating.js';
 
 const UserRank = {
@@ -43,25 +44,32 @@ export default class FilterMenu {
     remove(prevFilterComponent);
   }
 
+  _calculationRating(number) {
+    if (number === UserRank.ZERO) {
+      return '';
+    }
+    if (number > UserRank.ZERO && number <= UserRank.NOVISE) {
+      return 'Novice';
+    }
+    if (number > UserRank.NOVISE && number <= UserRank.FAN) {
+      return 'Fan';
+    }
+    return 'Movie Buff';
+  }
+
+  returnUserRank() {
+    return this._rank;
+  }
+
   _renderUserRating(history) {
-    const calculationRating = (number) => {
-      if (number === UserRank.ZERO) {
-        return '';
-      }
-      if (number > UserRank.ZERO && number <= UserRank.NOVISE) {
-        return 'Novice';
-      }
-      if (number > UserRank.NOVISE && number <= UserRank.FAN) {
-        return 'Fan';
-      }
-      return 'Movie Buff';
-    };
-    const rank = calculationRating(history);
+
+
+    this._rank = calculationRating(history);
 
     const siteHeader = document.querySelector('.header');
 
     const prevRatingComponent = this._ratingComponent;
-    this._ratingComponent = new UserRatingView(rank);
+    this._ratingComponent = new UserRatingView(this._rank);
 
     if (prevRatingComponent === null) {
       render(siteHeader, this._ratingComponent);

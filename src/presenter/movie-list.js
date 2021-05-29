@@ -213,7 +213,7 @@ export default class MovieList {
   }
 
   _renderStats() {
-    this._statisticsList = new UserStatisticView();
+    this._statisticsList = new UserStatisticView(this._filmsModel.getFilms());
     render(this._listContainer, this._statisticsList);
   }
 
