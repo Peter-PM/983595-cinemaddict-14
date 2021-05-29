@@ -58,6 +58,7 @@ export default class Movies extends Observer {
         comments: film.comments,
         localEmotion: null,
         localDescription: null,
+        isDisabled: false,
       },
     );
 
@@ -121,6 +122,7 @@ export default class Movies extends Observer {
     delete adaptedFilm.watchedDate;
     delete adaptedFilm.localDescription;
     delete adaptedFilm.localEmotion;
+    delete adaptedFilm.isDisabled;
 
     return adaptedFilm;
   }

@@ -78,3 +78,5 @@ export const FilterType = {
   HISTORY: 'History',
   FAVORITES: 'Favorites',
 };
+
+export const SHAKE_ANIMATION_TIMEOUT = 600;
