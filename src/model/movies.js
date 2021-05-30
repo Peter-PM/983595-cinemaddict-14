@@ -56,13 +56,13 @@ export default class Movies extends Observer {
         isFavorite: film.user_details.favorite,
         watchedDate: film.user_details.watching_date,
         comments: film.comments,
+        localComments: null,
         localEmotion: null,
         localDescription: null,
         isDisabled: false,
       },
     );
 
-    // Ненужные ключи мы удаляем
     delete adaptedFilm.film_info;
     delete adaptedFilm.user_details;
 
@@ -102,7 +102,6 @@ export default class Movies extends Observer {
       },
     );
 
-    // Ненужные ключи мы удаляем
     delete adaptedFilm.poster;
     delete adaptedFilm.title;
     delete adaptedFilm.originalTitle;
@@ -122,6 +121,7 @@ export default class Movies extends Observer {
     delete adaptedFilm.watchedDate;
     delete adaptedFilm.localDescription;
     delete adaptedFilm.localEmotion;
+    delete adaptedFilm.localComments;
     delete adaptedFilm.isDisabled;
 
     return adaptedFilm;

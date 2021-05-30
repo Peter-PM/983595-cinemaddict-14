@@ -4,6 +4,25 @@ export default class Smart extends AbstractView {
   constructor() {
     super();
     this._film = {};
+    this._data = {};
+  }
+
+  updateStats(update, justDataUpdating) {
+    if (!update) {
+      return;
+    }
+
+    this._data = Object.assign(
+      {},
+      this._data,
+      update,
+    );
+
+    if (justDataUpdating) {
+      return;
+    }
+
+    this.updateElement();
   }
 
   updateData(update, justDataUpdating) {

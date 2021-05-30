@@ -1,33 +1,33 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-// import {getRandomNumber} from '../mock/mock.js';
 
 dayjs.extend(duration);
 
-// export const generateDate = () => {
-
-//   const maxDaysGap = 10000;
-//   const daysGap = getRandomNumber(-maxDaysGap, maxDaysGap);
-//   return dayjs(dayjs().add(daysGap, 'day').toDate()).format('YYYY-MM-DDTHH:mm:ssZ');
-// };
-
-export const dateFormatYYYY = (date) => {
+export const formatDateYear = (date) => {
   return dayjs(date).format('YYYY');
 };
 
-export const dateFormatPopup = (date) => {
+export const formatDatePopup = (date) => {
   return dayjs(date).format('DD MMMM YYYY');
 };
 
-export const dateFormatComments = (date) => {
+export const formatDateComments = (date) => {
   return dayjs(date).format('YYYY/MM/DD HH:MM');
 };
 
-export const timeAdapter = (minutes) => {
+export const getTimeAdapter = (minutes) => {
   return dayjs.duration(minutes, 'm').hours() + 'h ' + dayjs.duration(minutes, 'm').minutes() + 'm';
 };
 
-export const today = () => {
+export const getToday = () => {
   const day = dayjs();
-  return dateFormatComments(day);
+  return formatDateComments(day);
+};
+
+export const getStatisticHours = (time) => {
+  return Math.floor(time/60);
+};
+
+export const getStatisticMitutes = (time) => {
+  return dayjs.duration(time, 'm').minutes();
 };

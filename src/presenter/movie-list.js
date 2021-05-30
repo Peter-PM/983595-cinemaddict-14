@@ -3,11 +3,13 @@ import FilmContainerView from '../view/film-list-container.js';
 import SortFilmView from '../view/sort.js';
 import FilmListView from '../view/film-lists-template.js';
 import ShowMoreBottonView from '../view/show-more.js';
-import {FilmListTypes, FilmCount} from '../utils/constants.js';
+import {FilmListTypes, FilmCount, FilterType} from '../utils/constants.js';
 import MovieCardPresenter from './movie-card.js';
 import {SortType, UpdateType, UserAction} from '../utils/constants.js';
 import {sortByDate, sortByRating, sortByComments} from '../utils/sort.js';
 import {filter} from '../utils/filter.js';
+import UserStatisticView from '../view/statistics.js';
+
 
 export default class MovieList {
   constructor(container, filmsModel, filterModel, commentsModel, api) {
@@ -32,6 +34,7 @@ export default class MovieList {
     this._buttonShowMoreComponent = null;
     this._filmsListTopRatingComponent = null;
     this._filmsListTopCommentComponent = null;
+    this._statisticsList = null;
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -51,6 +54,11 @@ export default class MovieList {
   _getFilms(sortType = this._currentSortType) {
     const filterType = this._getFilter();
     const films = this._filmsModel.getFilms();
+
+    if (filterType === FilterType.STATISTIC) {
+      return filter[FilterType.ALL](films);
+    }
+
     const filtredFilms = filter[filterType](films);
 
     switch (sortType) {
@@ -103,6 +111,11 @@ export default class MovieList {
         this._renderMovieList();
         break;
       case UpdateType.MAJOR:
+        if (data === FilterType.STATISTIC) {
+          this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
+          this._renderStats();
+          break;
+        }
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this._renderMovieList();
         break;
@@ -141,6 +154,8 @@ export default class MovieList {
     remove(this._filmsListTopCommentComponent);
     remove(this._buttonShowMoreComponent);
     remove(this._sortComponent);
+    remove(this._statisticsList);
+    remove(this._filmsSectionComponent);
 
     if (resetRenderedFilmCount) {
       this._renderedFilmCount = FilmCount.STEP;
@@ -197,6 +212,11 @@ export default class MovieList {
     render(this._filmsSectionComponent, this._filmsLoading);
   }
 
+  _renderStats() {
+    this._statisticsList = new UserStatisticView(filter[FilterType.HISTORY](this._filmsModel.getFilms()));
+    render(this._listContainer, this._statisticsList);
+  }
+
   _renderMovieList() {
 
     if (this._isLoading) {
@@ -209,7 +229,9 @@ export default class MovieList {
       this._renderNoFilmsPlug();
       return;
     }
+
     this._renderSort();
+
     this._renderListContainer();
 
     if (this._noFilmsComponent !== null) {

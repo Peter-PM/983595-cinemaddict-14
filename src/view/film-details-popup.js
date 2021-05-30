@@ -1,18 +1,14 @@
 import he from 'he';
-import {timeAdapter, dateFormatPopup, dateFormatComments} from '../utils/date.js';
+import {getTimeAdapter, formatDatePopup, formatDateComments} from '../utils/date.js';
 import SmartView from './smart.js';
 import {clickCtrlEnter, SHAKE_ANIMATION_TIMEOUT} from '../utils/constants.js';
 
 const createFilmPopupTemplate = (filmCard) => {
-  const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription, comments, isDisabled} = filmCard;
+  const {poster, title, originalTitle, rating, director, writers, actors, duration, country, genre, reliseDate, description, ageRating, isWatchlist, isWatched, isFavorite, localEmotion, localDescription, localComments, isDisabled} = filmCard;
   const genres = genre;
 
   const createGenreList = () => {
-    let strigGenre = '';
-    genre.forEach((item) => {
-      strigGenre = strigGenre + `<span class="film-details__genre">${item}</span>`;
-    });
-    return strigGenre;
+    return genre.map((item) => `<span class="film-details__genre">${item}</span>`).join('');
   };
 
   const createDetailsTable = () => {
@@ -31,11 +27,11 @@ const createFilmPopupTemplate = (filmCard) => {
       },
       {
         term: 'Release Date',
-        cell: dateFormatPopup(reliseDate),
+        cell: formatDatePopup(reliseDate),
       },
       {
         term: 'Runtime',
-        cell: timeAdapter(duration),
+        cell: getTimeAdapter(duration),
       },
       {
         term: 'Country',
@@ -89,7 +85,7 @@ const createFilmPopupTemplate = (filmCard) => {
 
   const createComments = () => {
 
-    return comments.map(({id, author, comment, date, emotion, isDeleting, isError}) =>
+    return localComments.map(({id, author, comment, date, emotion, isDeleting, isError}) =>
       `<li class="film-details__comment ${isError ? 'shake' : ''}">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
@@ -98,7 +94,7 @@ const createFilmPopupTemplate = (filmCard) => {
           <p class="film-details__comment-text">${comment}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${author}</span>
-            <span class="film-details__comment-day">${dateFormatComments(date)}</span>
+            <span class="film-details__comment-day">${formatDateComments(date)}</span>
             <button class="film-details__comment-delete" data-comment-id="${id}" ${isDeleting ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
           </p>
         </div>
@@ -152,7 +148,7 @@ const createFilmPopupTemplate = (filmCard) => {
 
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${localComments.length}</span></h3>
 
             <ul class="film-details__comments-list">
               ${createComments()}

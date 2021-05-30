@@ -8,6 +8,7 @@ import MovieListPresenter from './presenter/movie-list.js';
 import FilterMenuPresenter from './presenter/movie-filter.js';
 import Api from './api.js';
 
+
 const AUTHORIZATION = 'Basic GtnhGtnhjdbx2021';
 const END_POINT = 'https://14.ecmascript.pages.academy/cinemaddict/';
 
@@ -22,6 +23,7 @@ const filmsModel = new MoviesModel();
 const filterList = new FilterMenuPresenter(siteMain, filmsModel, filterModel);
 const movieList = new MovieListPresenter(siteMain, filmsModel, filterModel, commentsModel, api);
 
+
 api.getFilms().then((films) => {
   filmsModel.setFilms(UpdateType.INIT, films);
   filterList.init();
@@ -32,7 +34,3 @@ api.getFilms().then((films) => {
   });
 
 movieList.init();
-
-// api.getComments([0]).then((comments) => {
-//   console.log(comments)
-// })
