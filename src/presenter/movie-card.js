@@ -37,7 +37,6 @@ export default class MovieCard {
     this._film = film;
 
     const prevFilmCard = this._filmCard;
-    //this._commentsModel.setComments(this._film.comments);
 
     this._filmCard = new FilmCardView(film);
 
