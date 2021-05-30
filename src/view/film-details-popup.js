@@ -8,11 +8,7 @@ const createFilmPopupTemplate = (filmCard) => {
   const genres = genre;
 
   const createGenreList = () => {
-    let strigGenre = '';
-    genre.forEach((item) => {
-      strigGenre = strigGenre + `<span class="film-details__genre">${item}</span>`;
-    });
-    return strigGenre;
+    return genre.map((item) => `<span class="film-details__genre">${item}</span>`).join('');
   };
 
   const createDetailsTable = () => {

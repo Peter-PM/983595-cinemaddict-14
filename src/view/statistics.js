@@ -6,6 +6,16 @@ import {dateStatisticHours} from '../utils/date.js';
 import {dateStatisticMitutes} from '../utils/date.js';
 import dayjs from 'dayjs';
 
+const ONE = 1;
+const BAR_HEIGHT = 50;
+const FILTER_TYPE = {
+  ALL: 'all',
+  DAY: 'day',
+  WEEK: 'week',
+  MONTH: 'month',
+  YEAR: 'year',
+};
+
 const getGenres = (films) => {
   const allGenres = films.map((film) => film.genre).flat();
   const uniq = [...new Set(allGenres)];
@@ -15,6 +25,7 @@ const getGenres = (films) => {
     data: uniq.map((genre) => allGenres.filter((item) => item === genre).length),
   };
 };
+
 
 const renderChart = (statisticCtx, films) => {
   const genres = getGenres(films);
@@ -53,7 +64,7 @@ const renderChart = (statisticCtx, films) => {
             display: false,
             drawBorder: false,
           },
-          barThickness: 40,
+          barThickness: 24,
         }],
         xAxes: [{
           ticks: {
@@ -76,7 +87,13 @@ const renderChart = (statisticCtx, films) => {
   });
 };
 
-const createUserStatistic = (films) => {
+const createUserStatistic = ({films, currentFilter}, rating) => {
+
+  const getTopGenre = () => {
+    const genres = getGenres(films);
+    const index = genres.data.indexOf(Math.max(...genres.data));
+    return genres.labels[index];
+  };
 
   const createTotalDurations = () => {
     let duration = 0;
@@ -87,30 +104,34 @@ const createUserStatistic = (films) => {
   };
   const totalTime = createTotalDurations();
 
+  const getHeight = () => {
+    return getGenres(films).labels.length * BAR_HEIGHT;
+  };
+
   return (
     `<section class="statistic">
       <p class="statistic__rank">
         Your rank
         <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-        <span class="statistic__rank-label">${calculationRating(films.length)}</span>
+        <span class="statistic__rank-label">${rating}</span>
       </p>
 
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
         <p class="statistic__filters-description">Show stats:</p>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all" ${currentFilter === FILTER_TYPE.ALL ? 'checked' : ''}>
         <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="day">
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="day" ${currentFilter === FILTER_TYPE.DAY ? 'checked' : ''}>
         <label for="statistic-today" class="statistic__filters-label">Today</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week">
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${currentFilter === FILTER_TYPE.WEEK ? 'checked' : ''}>
         <label for="statistic-week" class="statistic__filters-label">Week</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month">
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${currentFilter === FILTER_TYPE.MONTH ? 'checked' : ''}>
         <label for="statistic-month" class="statistic__filters-label">Month</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year">
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${currentFilter === FILTER_TYPE.YEAR ? 'checked' : ''}>
         <label for="statistic-year" class="statistic__filters-label">Year</label>
       </form>
 
@@ -125,12 +146,12 @@ const createUserStatistic = (films) => {
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Top genre</h4>
-          <p class="statistic__item-text">Sci-Fi</p>
+          <p class="statistic__item-text">${getTopGenre() ? `${getTopGenre()}` : ''}</p>
         </li>
       </ul>
 
       <div class="statistic__chart-wrap">
-        <canvas class="statistic__chart" width="1000" height=""></canvas>
+        <canvas class="statistic__chart" width="1000" height="${getHeight()}"></canvas>
       </div>
 
     </section>`
@@ -142,13 +163,15 @@ export default class UserStatistic extends SmartView {
   constructor(films) {
     super();
     this._films = films;
-
-    this._currentFilter = 'All';
+    this._data = {
+      films,
+      currentFilter: FILTER_TYPE.ALL,
+    };
 
     this._dayChart = null;
+    this._userRating = calculationRating(this._films.length);
 
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
-    this._setCharts = this._setCharts.bind(this);
 
     this._setCharts();
   }
@@ -163,20 +186,18 @@ export default class UserStatistic extends SmartView {
   _dataChangeHandler(evt) {
     const value = evt.target.value;
 
-    const films = this._films.filter((film) => {
-      return dayjs(film.watchedDate) >= dayjs().subtract(1, value).toDate();
-    });
-    this.updateData({
-      films: films,
+    const films = value !== FILTER_TYPE.ALL
+      ? this._films.filter((film) => dayjs(film.watchedDate) >= dayjs().subtract(ONE, value).toDate())
+      : this._films;
+
+    this.updateStats({
+      films,
+      currentFilter: value,
     });
   }
 
   getTemplate() {
-    return createUserStatistic(this._films);
-  }
-
-  _changeDate(dateFrom, type) {
-    return dayjs().subtract(dateFrom, type).toDate();
+    return createUserStatistic(this._data, this._userRating);
   }
 
   restoreHandlers() {
@@ -192,7 +213,7 @@ export default class UserStatistic extends SmartView {
 
     const daysCtx = this.getElement().querySelector('.statistic__chart');
 
-    this._daysChart = renderChart(daysCtx, this._films);
+    this._daysChart = renderChart(daysCtx, this._data.films);
   }
 }
 
