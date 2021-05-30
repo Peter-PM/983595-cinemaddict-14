@@ -123,7 +123,7 @@ const createUserStatistic = ({films, currentFilter}, rating) => {
         <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
         <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-getToday" value="day" ${currentFilter === FilterType.DAY ? 'checked' : ''}>
-        <label for="statistic-getToday" class="statistic__filters-label">getToday</label>
+        <label for="statistic-getToday" class="statistic__filters-label">Today</label>
 
         <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${currentFilter === FilterType.WEEK ? 'checked' : ''}>
         <label for="statistic-week" class="statistic__filters-label">Week</label>
