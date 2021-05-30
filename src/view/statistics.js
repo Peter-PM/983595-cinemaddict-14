@@ -2,13 +2,13 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart.js';
 import {calculationRating} from '../utils/common.js';
-import {dateStatisticHours} from '../utils/date.js';
-import {dateStatisticMitutes} from '../utils/date.js';
+import {getStatisticHours} from '../utils/date.js';
+import {getStatisticMitutes} from '../utils/date.js';
 import dayjs from 'dayjs';
 
 const ONE = 1;
 const BAR_HEIGHT = 50;
-const FILTER_TYPE = {
+const FilterType = {
   ALL: 'all',
   DAY: 'day',
   WEEK: 'week',
@@ -119,19 +119,19 @@ const createUserStatistic = ({films, currentFilter}, rating) => {
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
         <p class="statistic__filters-description">Show stats:</p>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all" ${currentFilter === FILTER_TYPE.ALL ? 'checked' : ''}>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all" ${currentFilter === FilterType.ALL ? 'checked' : ''}>
         <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="day" ${currentFilter === FILTER_TYPE.DAY ? 'checked' : ''}>
-        <label for="statistic-today" class="statistic__filters-label">Today</label>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-getToday" value="day" ${currentFilter === FilterType.DAY ? 'checked' : ''}>
+        <label for="statistic-getToday" class="statistic__filters-label">getToday</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${currentFilter === FILTER_TYPE.WEEK ? 'checked' : ''}>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${currentFilter === FilterType.WEEK ? 'checked' : ''}>
         <label for="statistic-week" class="statistic__filters-label">Week</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${currentFilter === FILTER_TYPE.MONTH ? 'checked' : ''}>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${currentFilter === FilterType.MONTH ? 'checked' : ''}>
         <label for="statistic-month" class="statistic__filters-label">Month</label>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${currentFilter === FILTER_TYPE.YEAR ? 'checked' : ''}>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${currentFilter === FilterType.YEAR ? 'checked' : ''}>
         <label for="statistic-year" class="statistic__filters-label">Year</label>
       </form>
 
@@ -142,7 +142,7 @@ const createUserStatistic = ({films, currentFilter}, rating) => {
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Total duration</h4>
-          <p class="statistic__item-text">${dateStatisticHours(totalTime)}<span class="statistic__item-description">h</span> ${dateStatisticMitutes(totalTime)} <span class="statistic__item-description">m</span></p>
+          <p class="statistic__item-text">${getStatisticHours(totalTime)}<span class="statistic__item-description">h</span> ${getStatisticMitutes(totalTime)} <span class="statistic__item-description">m</span></p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Top genre</h4>
@@ -165,7 +165,7 @@ export default class UserStatistic extends SmartView {
     this._films = films;
     this._data = {
       films,
-      currentFilter: FILTER_TYPE.ALL,
+      currentFilter: FilterType.ALL,
     };
 
     this._dayChart = null;
@@ -186,7 +186,7 @@ export default class UserStatistic extends SmartView {
   _dataChangeHandler(evt) {
     const value = evt.target.value;
 
-    const films = value !== FILTER_TYPE.ALL
+    const films = value !== FilterType.ALL
       ? this._films.filter((film) => dayjs(film.watchedDate) >= dayjs().subtract(ONE, value).toDate())
       : this._films;
 

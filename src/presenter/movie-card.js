@@ -37,7 +37,7 @@ export default class MovieCard {
     this._film = film;
 
     const prevFilmCard = this._filmCard;
-    this._commentsModel.setComments(this._film.comments);
+    //this._commentsModel.setComments(this._film.comments);
 
     this._filmCard = new FilmCardView(film);
 
@@ -65,7 +65,7 @@ export default class MovieCard {
     this._api.getComments(this._film.id).then((comments) => {
 
       this._commentsModel.setComments(comments);
-      this._film.comments = this._commentsModel.getComments();
+      this._film.localComments = this._commentsModel.getComments();
       this._filmPopup = new FilmPopupView(this._film);
 
       if (prevPopup) {
@@ -114,7 +114,7 @@ export default class MovieCard {
       this._commentsModel.changeFlagError(commentId);
       this._commentsModel.changeFlagDeliting(commentId);
       this._filmPopup.updateData({
-        comments: this._commentsModel.getComments(),
+        localComments: this._commentsModel.getComments(),
       });
     }, SHAKE_ANIMATION_TIMEOUT);
   }
@@ -129,7 +129,7 @@ export default class MovieCard {
       case State.DELETING:
         this._commentsModel.changeFlagError(commentId);
         this._filmPopup.updateData({
-          comments: this._commentsModel.getComments(),
+          localComments: this._commentsModel.getComments(),
         });
         break;
       case State.ABORTING:
@@ -156,12 +156,12 @@ export default class MovieCard {
         response.comments,
       );
       this._filmPopup.updateData({
-        comments: this._commentsModel.getComments(),
+        localComments: this._commentsModel.getComments(),
         localEmotion: '',
         localDescription: '',
         isDisabled: false,
       });
-      this._film.comments = this._commentsModel.getComments();
+      this._film.localComments = this._commentsModel.getComments();
       this.init(this._film);
     })
       .catch(() => {
@@ -172,7 +172,7 @@ export default class MovieCard {
   _commentDeleteClick(commentId) {
     this._commentsModel.changeFlagDeliting(commentId);
     this._filmPopup.updateData({
-      comments: this._commentsModel.getComments(),
+      localComments: this._commentsModel.getComments(),
     });
     this._api.deleteComment(commentId)
       .then(() => {
@@ -182,9 +182,9 @@ export default class MovieCard {
           commentId,
         );
         this._filmPopup.updateData({
-          comments: this._commentsModel.getComments(),
+          localComments: this._commentsModel.getComments(),
         });
-        this._film.comments = this._commentsModel.getComments();
+        this._film.localComments = this._commentsModel.getComments();
         this.init(this._film);
       })
       .catch(() => {

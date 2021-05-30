@@ -1,10 +1,10 @@
-import {dateFormatYYYY, timeAdapter} from '../utils/date.js';
+import {formatDateYear, getTimeAdapter} from '../utils/date.js';
 import AbstractView from './abstract.js';
 
 const createFilmCardTemplate = (filmCard) => {
   const MAX_LENGTH_DESCRIPTION = 139;
   const {poster, title, rating, duration, genre, reliseDate, description, comments, isWatchlist, isWatched, isFavorite} = filmCard;
-  const date = dateFormatYYYY(reliseDate);
+  const date = formatDateYear(reliseDate);
   const numberComments = comments.length;
 
   const createButtons = () => {
@@ -38,7 +38,7 @@ const createFilmCardTemplate = (filmCard) => {
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${date}</span>
-        <span class="film-card__duration">${timeAdapter(duration)}</span>
+        <span class="film-card__duration">${getTimeAdapter(duration)}</span>
         <span class="film-card__genre">${genre.join(', ')}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">

@@ -25,7 +25,7 @@ export default class Comments extends Observer {
     const index = this._comments.findIndex((comment) => comment.id === commentId);
 
     if (index === -1) {
-      throw new Error('Can\'t update unexisting film');
+      throw new Error('Can\'t update unexisting comment');
     }
     this._comments[index].isDeleting = !this._comments[index].isDeleting;
 
@@ -36,7 +36,7 @@ export default class Comments extends Observer {
     const index = this._comments.findIndex((comment) => comment.id === commentId);
 
     if (index === -1) {
-      throw new Error('Can\'t update unexisting film');
+      throw new Error('Can\'t update unexisting comment');
     }
     this._comments[index].isError = !this._comments[index].isError;
 
