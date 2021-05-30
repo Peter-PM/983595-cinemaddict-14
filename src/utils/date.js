@@ -23,3 +23,11 @@ export const today = () => {
   const day = dayjs();
   return dateFormatComments(day);
 };
+
+export const dateStatisticHours = (time) => {
+  return Math.floor(time/60);
+};
+
+export const dateStatisticMitutes = (time) => {
+  return dayjs.duration(time, 'm').minutes();
+};

@@ -5,12 +5,6 @@ import {filter} from '../utils/filter.js';
 import {calculationRating} from '../utils/common.js';
 import UserRatingView from '../view/user-rating.js';
 
-const UserRank = {
-  ZERO: 0,
-  NOVISE: 10,
-  FAN: 20,
-};
-
 export default class FilterMenu {
   constructor(filterContainer, filmModel, filterModel) {
     this._filterContainer = filterContainer;
@@ -42,19 +36,6 @@ export default class FilterMenu {
 
     replace(this._filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
-  }
-
-  _calculationRating(number) {
-    if (number === UserRank.ZERO) {
-      return '';
-    }
-    if (number > UserRank.ZERO && number <= UserRank.NOVISE) {
-      return 'Novice';
-    }
-    if (number > UserRank.NOVISE && number <= UserRank.FAN) {
-      return 'Fan';
-    }
-    return 'Movie Buff';
   }
 
   returnUserRank() {

@@ -81,3 +81,10 @@ export const FilterType = {
 };
 
 export const SHAKE_ANIMATION_TIMEOUT = 600;
+
+
+export const UserRank = {
+  ZERO: 0,
+  NOVISE: 10,
+  FAN: 20,
+};

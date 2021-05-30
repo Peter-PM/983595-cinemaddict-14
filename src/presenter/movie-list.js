@@ -111,7 +111,7 @@ export default class MovieList {
         this._renderMovieList();
         break;
       case UpdateType.MAJOR:
-        if(data === FilterType.STATISTIC) {
+        if (data === FilterType.STATISTIC) {
           this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
           this._renderStats();
           break;
@@ -213,7 +213,7 @@ export default class MovieList {
   }
 
   _renderStats() {
-    this._statisticsList = new UserStatisticView(this._filmsModel.getFilms());
+    this._statisticsList = new UserStatisticView(filter[FilterType.HISTORY](this._filmsModel.getFilms()));
     render(this._listContainer, this._statisticsList);
   }
 

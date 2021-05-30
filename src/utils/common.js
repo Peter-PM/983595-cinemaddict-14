@@ -1,4 +1,4 @@
-
+import {UserRank} from './constants.js';
 export const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
 
@@ -11,12 +11,6 @@ export const updateItem = (items, update) => {
     update,
     ...items.slice(index + 1),
   ];
-};
-
-const UserRank = {
-  ZERO: 0,
-  NOVISE: 10,
-  FAN: 20,
 };
 
 export const calculationRating = (number) => {
