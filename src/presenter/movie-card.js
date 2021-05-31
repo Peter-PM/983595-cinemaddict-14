@@ -263,5 +263,6 @@ export default class MovieCard {
   destroy() {
     remove(this._filmCard);
     remove(this._filmPopup);
+    document.querySelector('body').classList.remove('hide-overflow');
   }
 }
