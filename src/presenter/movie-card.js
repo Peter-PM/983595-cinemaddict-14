@@ -71,6 +71,7 @@ export default class MovieCard {
         prevPopup.remove();
       }
 
+      document.addEventListener('keydown', this._handleEscKeyDown);
       this._filmPopup.setClickCloseBtnHandler(this._handleCloseBtnClick);
       this._filmPopup.setClickWatchlistHandler(this._handleWatchlistClick);
       this._filmPopup.setClickWatchedHandler(this._handleWatchedClick);
@@ -87,12 +88,10 @@ export default class MovieCard {
       evt.preventDefault();
       this._filmPopup.clickCloseHandler(evt);
       document.removeEventListener('keydown', this._handleEscKeyDown);
-
     }
   }
 
   _handleClick() {
-    document.addEventListener('keydown', this._handleEscKeyDown);
     this._renderPopup();
   }
 

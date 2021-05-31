@@ -155,11 +155,7 @@ export default class MovieList {
     remove(this._statisticsList);
     remove(this._filmsSectionComponent);
 
-    if (resetRenderedFilmCount) {
-      this._renderedFilmCount = FilmCount.STEP;
-    } else {
-      this._renderedFilmCount = Math.min(filmCount, this._renderedFilmCount);
-    }
+    this._renderedFilmCount = resetRenderedFilmCount ? FilmCount.STEP : Math.min(filmCount, this._renderedFilmCount);
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
