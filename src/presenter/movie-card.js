@@ -1,7 +1,7 @@
-import {render, replace, remove} from '../utils/render.js';
+import { render, replace, remove } from '../utils/render.js';
 import FilmCardView from '../view/film-card.js';
 import FilmPopupView from '../view/film-details-popup.js';
-import {clickEsc, UpdateType, UserAction, SHAKE_ANIMATION_TIMEOUT} from '../utils/constants.js';
+import { clickEsc, UpdateType, UserAction, SHAKE_ANIMATION_TIMEOUT } from '../utils/constants.js';
 
 const State = {
   DISABLING: 'DISABLED',
@@ -193,9 +193,7 @@ export default class MovieCard {
   }
 
   _handleWatchlistClick() {
-    this._changeData(
-      UserAction.UPDATE_FILM,
-      this._handleFilterType('Watchlist'),
+    this._api.updateFilm(
       Object.assign(
         {},
         this._film,
@@ -203,13 +201,22 @@ export default class MovieCard {
           isWatchlist: !this._film.isWatchlist,
         },
       ),
-    );
+    ).then((response) => {
+      this._changeData(
+        UserAction.UPDATE_FILM,
+        this._handleFilterType('Watchlist'),
+        response,
+      );
+    })
+      .catch(() => {
+        this._filmPopup.updateData({
+          isWatchlist: this._film.isWatchlist,
+        });
+      });
   }
 
   _handleWatchedClick() {
-    this._changeData(
-      UserAction.UPDATE_FILM,
-      this._handleFilterType('History'),
+    this._api.updateFilm(
       Object.assign(
         {},
         this._film,
@@ -217,13 +224,22 @@ export default class MovieCard {
           isWatched: !this._film.isWatched,
         },
       ),
-    );
+    ).then((response) => {
+      this._changeData(
+        UserAction.UPDATE_FILM,
+        this._handleFilterType('History'),
+        response,
+      );
+    })
+      .catch(() => {
+        this._filmPopup.updateData({
+          isWatched: this._film.isWatched,
+        });
+      });
   }
 
   _handleFavoritesClick() {
-    this._changeData(
-      UserAction.UPDATE_FILM,
-      this._handleFilterType('Favorites'),
+    this._api.updateFilm(
       Object.assign(
         {},
         this._film,
@@ -231,7 +247,18 @@ export default class MovieCard {
           isFavorite: !this._film.isFavorite,
         },
       ),
-    );
+    ).then((response) => {
+      this._changeData(
+        UserAction.UPDATE_FILM,
+        this._handleFilterType('Favorites'),
+        response,
+      );
+    })
+      .catch(() => {
+        this._filmPopup.updateData({
+          isFavorite: this._film.isFavorite,
+        });
+      });
   }
 
   destroy() {
