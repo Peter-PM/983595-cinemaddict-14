@@ -56,7 +56,7 @@ export default class Movies extends Observer {
         isFavorite: film.user_details.favorite,
         watchedDate: film.user_details.watching_date,
         comments: film.comments,
-        localComments: null,
+        localComments: film.comments,
         localEmotion: null,
         localDescription: null,
         isDisabled: false,
